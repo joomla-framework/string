@@ -13,8 +13,12 @@
     },
     "autoload": {
     	"psr-4": {
-    		"Joomla\\String\\": "src/",
-            "Joomla\\String\\Tests\\": "Tests/"
+    		"Joomla\\String\\": "src/"
     	}
+    },
+    "autoload-dev": {
+        "psr-4": {
+            "Joomla\\String\\Tests\\": "Tests/"
+        }
     }
 }
