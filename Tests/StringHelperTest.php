@@ -6,17 +6,17 @@
 
 namespace Joomla\String\Tests;
 
-use Joomla\String\String;
+use Joomla\String\StringHelper;
 
 /**
- * Test class for String.
+ * Test class for StringHelper.
  *
  * @since  1.0
  */
-class StringTest extends \PHPUnit_Framework_TestCase
+class StringHelperTest extends \PHPUnit_Framework_TestCase
 {
 	/**
-	 * @var    String
+	 * @var    StringHelper
 	 * @since  1.0
 	 */
 	protected $object;
@@ -509,7 +509,7 @@ class StringTest extends \PHPUnit_Framework_TestCase
 	 *
 	 * @return  void
 	 *
-	 * @covers        Joomla\String\String::increment
+	 * @covers        Joomla\String\Stringhelper::increment
 	 * @dataProvider  seedTestIncrement
 	 * @since         1.0
 	 */
@@ -517,7 +517,7 @@ class StringTest extends \PHPUnit_Framework_TestCase
 	{
 		$this->assertEquals(
 			$expected,
-			String::increment($string, $style, $number)
+			Stringhelper::increment($string, $style, $number)
 		);
 	}
 
@@ -529,7 +529,7 @@ class StringTest extends \PHPUnit_Framework_TestCase
 	 *
 	 * @return  void
 	 *
-	 * @covers        Joomla\String\String::is_ascii
+	 * @covers        Joomla\String\Stringhelper::is_ascii
 	 * @dataProvider  seedTestIs_ascii
 	 * @since         1.2.0
 	 */
@@ -537,7 +537,7 @@ class StringTest extends \PHPUnit_Framework_TestCase
 	{
 		$this->assertEquals(
 			$expected,
-			String::is_ascii($string)
+			Stringhelper::is_ascii($string)
 		);
 	}
 
@@ -551,13 +551,13 @@ class StringTest extends \PHPUnit_Framework_TestCase
 	 *
 	 * @return  void
 	 *
-	 * @covers        Joomla\String\String::strpos
+	 * @covers        Joomla\String\StringHelper::strpos
 	 * @dataProvider  seedTestStrpos
 	 * @since         1.0
 	 */
 	public function testStrpos($expect, $haystack, $needle, $offset = 0)
 	{
-		$actual = String::strpos($haystack, $needle, $offset);
+		$actual = StringHelper::strpos($haystack, $needle, $offset);
 		$this->assertEquals($expect, $actual);
 	}
 
@@ -571,13 +571,13 @@ class StringTest extends \PHPUnit_Framework_TestCase
 	 *
 	 * @return  array
 	 *
-	 * @covers        Joomla\String\String::strrpos
+	 * @covers        Joomla\String\StringHelper::strrpos
 	 * @dataProvider  seedTestGetStrrpos
 	 * @since         1.0
 	 */
 	public function testStrrpos($expect, $haystack, $needle, $offset = 0)
 	{
-		$actual = String::strrpos($haystack, $needle, $offset);
+		$actual = StringHelper::strrpos($haystack, $needle, $offset);
 		$this->assertEquals($expect, $actual);
 	}
 
@@ -591,13 +591,13 @@ class StringTest extends \PHPUnit_Framework_TestCase
 	 *
 	 * @return  array
 	 *
-	 * @covers        Joomla\String\String::substr
+	 * @covers        Joomla\String\StringHelper::substr
 	 * @dataProvider  seedTestSubstr
 	 * @since         1.0
 	 */
 	public function testSubstr($expect, $string, $start, $length = false)
 	{
-		$actual = String::substr($string, $start, $length);
+		$actual = StringHelper::substr($string, $start, $length);
 		$this->assertEquals($expect, $actual);
 	}
 
@@ -609,13 +609,13 @@ class StringTest extends \PHPUnit_Framework_TestCase
 	 *
 	 * @return  array
 	 *
-	 * @covers        Joomla\String\String::strtolower
+	 * @covers        Joomla\String\StringHelper::strtolower
 	 * @dataProvider  seedTestStrtolower
 	 * @since         1.0
 	 */
 	public function testStrtolower($string, $expect)
 	{
-		$actual = String::strtolower($string);
+		$actual = StringHelper::strtolower($string);
 		$this->assertEquals($expect, $actual);
 	}
 
@@ -627,13 +627,13 @@ class StringTest extends \PHPUnit_Framework_TestCase
 	 *
 	 * @return  array
 	 *
-	 * @covers        Joomla\String\String::strtoupper
+	 * @covers        Joomla\String\StringHelper::strtoupper
 	 * @dataProvider  seedTestStrtoupper
 	 * @since         1.0
 	 */
 	public function testStrtoupper($string, $expect)
 	{
-		$actual = String::strtoupper($string);
+		$actual = StringHelper::strtoupper($string);
 		$this->assertEquals($expect, $actual);
 	}
 
@@ -645,13 +645,13 @@ class StringTest extends \PHPUnit_Framework_TestCase
 	 *
 	 * @return  array
 	 *
-	 * @covers        Joomla\String\String::strlen
+	 * @covers        Joomla\String\StringHelper::strlen
 	 * @dataProvider  seedTestStrlen
 	 * @since         1.0
 	 */
 	public function testStrlen($string, $expect)
 	{
-		$actual = String::strlen($string);
+		$actual = StringHelper::strlen($string);
 		$this->assertEquals($expect, $actual);
 	}
 
@@ -666,13 +666,13 @@ class StringTest extends \PHPUnit_Framework_TestCase
 	 *
 	 * @return  array
 	 *
-	 * @covers        Joomla\String\String::str_ireplace
+	 * @covers        Joomla\String\StringHelper::str_ireplace
 	 * @dataProvider  seedTestStr_ireplace
 	 * @since         1.0
 	 */
 	public function testStr_ireplace($search, $replace, $subject, $count, $expect)
 	{
-		$actual = String::str_ireplace($search, $replace, $subject, $count);
+		$actual = StringHelper::str_ireplace($search, $replace, $subject, $count);
 		$this->assertEquals($expect, $actual);
 	}
 
@@ -685,13 +685,13 @@ class StringTest extends \PHPUnit_Framework_TestCase
 	 *
 	 * @return  array
 	 *
-	 * @covers        Joomla\String\String::str_split
+	 * @covers        Joomla\String\StringHelper::str_split
 	 * @dataProvider  seedTestStr_split
 	 * @since         1.0
 	 */
 	public function testStr_split($string, $split_length, $expect)
 	{
-		$actual = String::str_split($string, $split_length);
+		$actual = StringHelper::str_split($string, $split_length);
 		$this->assertEquals($expect, $actual);
 	}
 
@@ -705,7 +705,7 @@ class StringTest extends \PHPUnit_Framework_TestCase
 	 *
 	 * @return  array
 	 *
-	 * @covers        Joomla\String\String::strcasecmp
+	 * @covers        Joomla\String\StringHelper::strcasecmp
 	 * @dataProvider  seedTestStrcasecmp
 	 * @since         1.0
 	 */
@@ -727,7 +727,7 @@ class StringTest extends \PHPUnit_Framework_TestCase
 		}
 		else
 		{
-			$actual = String::strcasecmp($string1, $string2, $locale);
+			$actual = StringHelper::strcasecmp($string1, $string2, $locale);
 
 			if ($actual != 0)
 			{
@@ -748,7 +748,7 @@ class StringTest extends \PHPUnit_Framework_TestCase
 	 *
 	 * @return  array
 	 *
-	 * @covers        Joomla\String\String::strcmp
+	 * @covers        Joomla\String\StringHelper::strcmp
 	 * @dataProvider  seedTestStrcmp
 	 * @since         1.0
 	 */
@@ -771,7 +771,7 @@ class StringTest extends \PHPUnit_Framework_TestCase
 		}
 		else
 		{
-			$actual = String::strcmp($string1, $string2, $locale);
+			$actual = StringHelper::strcmp($string1, $string2, $locale);
 
 			if ($actual != 0)
 			{
@@ -793,13 +793,13 @@ class StringTest extends \PHPUnit_Framework_TestCase
 	 *
 	 * @return  array
 	 *
-	 * @covers        Joomla\String\String::strcspn
+	 * @covers        Joomla\String\StringHelper::strcspn
 	 * @dataProvider  seedTestStrcspn
 	 * @since         1.0
 	 */
 	public function testStrcspn($haystack, $needles, $start, $len, $expect)
 	{
-		$actual = String::strcspn($haystack, $needles, $start, $len);
+		$actual = StringHelper::strcspn($haystack, $needles, $start, $len);
 		$this->assertEquals($expect, $actual);
 	}
 
@@ -812,13 +812,13 @@ class StringTest extends \PHPUnit_Framework_TestCase
 	 *
 	 * @return  array
 	 *
-	 * @covers        Joomla\String\String::stristr
+	 * @covers        Joomla\String\StringHelper::stristr
 	 * @dataProvider  seedTestStristr
 	 * @since         1.0
 	 */
 	public function testStristr($haystack, $needle, $expect)
 	{
-		$actual = String::stristr($haystack, $needle);
+		$actual = StringHelper::stristr($haystack, $needle);
 		$this->assertEquals($expect, $actual);
 	}
 
@@ -830,13 +830,13 @@ class StringTest extends \PHPUnit_Framework_TestCase
 	 *
 	 * @return  array
 	 *
-	 * @covers        Joomla\String\String::strrev
+	 * @covers        Joomla\String\StringHelper::strrev
 	 * @dataProvider  seedTestStrrev
 	 * @since         1.0
 	 */
 	public function testStrrev($string, $expect)
 	{
-		$actual = String::strrev($string);
+		$actual = StringHelper::strrev($string);
 		$this->assertEquals($expect, $actual);
 	}
 
@@ -851,13 +851,13 @@ class StringTest extends \PHPUnit_Framework_TestCase
 	 *
 	 * @return  array
 	 *
-	 * @covers        Joomla\String\String::strspn
+	 * @covers        Joomla\String\StringHelper::strspn
 	 * @dataProvider  seedTestStrspn
 	 * @since         1.0
 	 */
 	public function testStrspn($subject, $mask, $start, $length, $expect)
 	{
-		$actual = String::strspn($subject, $mask, $start, $length);
+		$actual = StringHelper::strspn($subject, $mask, $start, $length);
 		$this->assertEquals($expect, $actual);
 	}
 
@@ -872,13 +872,13 @@ class StringTest extends \PHPUnit_Framework_TestCase
 	 *
 	 * @return  array
 	 *
-	 * @covers        Joomla\String\String::substr_replace
+	 * @covers        Joomla\String\StringHelper::substr_replace
 	 * @dataProvider  seedTestSubstr_replace
 	 * @since         1.0
 	 */
 	public function testSubstr_replace($expect, $string, $replacement, $start, $length)
 	{
-		$actual = String::substr_replace($string, $replacement, $start, $length);
+		$actual = StringHelper::substr_replace($string, $replacement, $start, $length);
 		$this->assertEquals($expect, $actual);
 	}
 
@@ -891,7 +891,7 @@ class StringTest extends \PHPUnit_Framework_TestCase
 	 *
 	 * @return  array
 	 *
-	 * @covers        Joomla\String\String::ltrim
+	 * @covers        Joomla\String\StringHelper::ltrim
 	 * @dataProvider  seedTestLtrim
 	 * @since         1.0
 	 */
@@ -899,11 +899,11 @@ class StringTest extends \PHPUnit_Framework_TestCase
 	{
 		if ($charlist === null)
 		{
-			$actual = String::ltrim($string);
+			$actual = StringHelper::ltrim($string);
 		}
 		else
 		{
-			$actual = String::ltrim($string, $charlist);
+			$actual = StringHelper::ltrim($string, $charlist);
 		}
 
 		$this->assertEquals($expect, $actual);
@@ -918,7 +918,7 @@ class StringTest extends \PHPUnit_Framework_TestCase
 	 *
 	 * @return  array
 	 *
-	 * @covers        Joomla\String\String::rtrim
+	 * @covers        Joomla\String\StringHelper::rtrim
 	 * @dataProvider  seedTestRtrim
 	 * @since         1.0
 	 */
@@ -926,11 +926,11 @@ class StringTest extends \PHPUnit_Framework_TestCase
 	{
 		if ($charlist === null)
 		{
-			$actual = String::rtrim($string);
+			$actual = StringHelper::rtrim($string);
 		}
 		else
 		{
-			$actual = String::rtrim($string, $charlist);
+			$actual = StringHelper::rtrim($string, $charlist);
 		}
 
 		$this->assertEquals($expect, $actual);
@@ -945,7 +945,7 @@ class StringTest extends \PHPUnit_Framework_TestCase
 	 *
 	 * @return  array
 	 *
-	 * @covers        Joomla\String\String::trim
+	 * @covers        Joomla\String\StringHelper::trim
 	 * @dataProvider  seedTestTrim
 	 * @since         1.0
 	 */
@@ -953,11 +953,11 @@ class StringTest extends \PHPUnit_Framework_TestCase
 	{
 		if ($charlist === null)
 		{
-			$actual = String::trim($string);
+			$actual = StringHelper::trim($string);
 		}
 		else
 		{
-			$actual = String::trim($string, $charlist);
+			$actual = StringHelper::trim($string, $charlist);
 		}
 
 		$this->assertEquals($expect, $actual);
@@ -973,13 +973,13 @@ class StringTest extends \PHPUnit_Framework_TestCase
 	 *
 	 * @return  array
 	 *
-	 * @covers        Joomla\String\String::ucfirst
+	 * @covers        Joomla\String\StringHelper::ucfirst
 	 * @dataProvider  seedTestUcfirst
 	 * @since         1.0
 	 */
 	public function testUcfirst($string, $delimiter, $newDelimiter, $expect)
 	{
-		$actual = String::ucfirst($string, $delimiter, $newDelimiter);
+		$actual = StringHelper::ucfirst($string, $delimiter, $newDelimiter);
 		$this->assertEquals($expect, $actual);
 	}
 
@@ -991,13 +991,13 @@ class StringTest extends \PHPUnit_Framework_TestCase
 	 *
 	 * @return  array
 	 *
-	 * @covers        Joomla\String\String::ucwords
+	 * @covers        Joomla\String\StringHelper::ucwords
 	 * @dataProvider  seedTestUcwords
 	 * @since         1.0
 	 */
 	public function testUcwords($string, $expect)
 	{
-		$actual = String::ucwords($string);
+		$actual = StringHelper::ucwords($string);
 		$this->assertEquals($expect, $actual);
 	}
 
@@ -1011,13 +1011,13 @@ class StringTest extends \PHPUnit_Framework_TestCase
 	 *
 	 * @return  array
 	 *
-	 * @covers        Joomla\String\String::transcode
+	 * @covers        Joomla\String\StringHelper::transcode
 	 * @dataProvider  seedTestTranscode
 	 * @since         1.0
 	 */
 	public function testTranscode($source, $from_encoding, $to_encoding, $expect)
 	{
-		$actual = String::transcode($source, $from_encoding, $to_encoding);
+		$actual = StringHelper::transcode($source, $from_encoding, $to_encoding);
 		$this->assertEquals($expect, $actual);
 	}
 
@@ -1029,13 +1029,13 @@ class StringTest extends \PHPUnit_Framework_TestCase
 	 *
 	 * @return  array
 	 *
-	 * @covers        Joomla\String\String::valid
+	 * @covers        Joomla\String\StringHelper::valid
 	 * @dataProvider  seedTestValid
 	 * @since         1.0
 	 */
 	public function testValid($string, $expect)
 	{
-		$actual = String::valid($string);
+		$actual = StringHelper::valid($string);
 		$this->assertEquals($expect, $actual);
 	}
 
@@ -1047,13 +1047,13 @@ class StringTest extends \PHPUnit_Framework_TestCase
 	 *
 	 * @return  array
 	 *
-	 * @covers        Joomla\String\String::unicode_to_utf8
+	 * @covers        Joomla\String\StringHelper::unicode_to_utf8
 	 * @dataProvider  seedTestUnicodeToUtf8
 	 * @since         1.2.0
 	 */
 	public function testUnicodeToUtf8($string, $expect)
 	{
-		$actual = String::unicode_to_utf8($string);
+		$actual = StringHelper::unicode_to_utf8($string);
 		$this->assertEquals($expect, $actual);
 	}
 
@@ -1065,13 +1065,13 @@ class StringTest extends \PHPUnit_Framework_TestCase
 	 *
 	 * @return  array
 	 *
-	 * @covers        Joomla\String\String::unicode_to_utf16
+	 * @covers        Joomla\String\StringHelper::unicode_to_utf16
 	 * @dataProvider  seedTestUnicodeToUtf16
 	 * @since         1.2.0
 	 */
 	public function testUnicodeToUtf16($string, $expect)
 	{
-		$actual = String::unicode_to_utf16($string);
+		$actual = StringHelper::unicode_to_utf16($string);
 		$this->assertEquals($expect, $actual);
 	}
 
@@ -1083,13 +1083,13 @@ class StringTest extends \PHPUnit_Framework_TestCase
 	 *
 	 * @return  array
 	 *
-	 * @covers        Joomla\String\String::compliant
+	 * @covers        Joomla\String\StringHelper::compliant
 	 * @dataProvider  seedTestValid
 	 * @since         1.0
 	 */
 	public function testCompliant($string, $expect)
 	{
-		$actual = String::compliant($string);
+		$actual = StringHelper::compliant($string);
 		$this->assertEquals($expect, $actual);
 	}
 }
