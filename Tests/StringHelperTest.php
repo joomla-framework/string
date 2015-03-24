@@ -509,7 +509,7 @@ class StringHelperTest extends \PHPUnit_Framework_TestCase
 	 *
 	 * @return  void
 	 *
-	 * @covers        Joomla\String\Stringhelper::increment
+	 * @covers        Joomla\String\StringHelper::increment
 	 * @dataProvider  seedTestIncrement
 	 * @since         1.0
 	 */
@@ -517,7 +517,7 @@ class StringHelperTest extends \PHPUnit_Framework_TestCase
 	{
 		$this->assertEquals(
 			$expected,
-			Stringhelper::increment($string, $style, $number)
+			StringHelper::increment($string, $style, $number)
 		);
 	}
 
@@ -529,7 +529,7 @@ class StringHelperTest extends \PHPUnit_Framework_TestCase
 	 *
 	 * @return  void
 	 *
-	 * @covers        Joomla\String\Stringhelper::is_ascii
+	 * @covers        Joomla\String\StringHelper::is_ascii
 	 * @dataProvider  seedTestIs_ascii
 	 * @since         1.2.0
 	 */
@@ -537,7 +537,7 @@ class StringHelperTest extends \PHPUnit_Framework_TestCase
 	{
 		$this->assertEquals(
 			$expected,
-			Stringhelper::is_ascii($string)
+			StringHelper::is_ascii($string)
 		);
 	}
 
