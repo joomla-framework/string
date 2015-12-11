@@ -423,6 +423,7 @@ class Inflector
 		}
 
 		$this->setCache($word, $inflected);
+
 		return false;
 	}
 
