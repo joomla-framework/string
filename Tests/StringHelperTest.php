@@ -16,12 +16,6 @@ use Joomla\String\StringHelper;
 class StringHelperTest extends \PHPUnit_Framework_TestCase
 {
 	/**
-	 * @var    StringHelper
-	 * @since  1.0
-	 */
-	protected $object;
-
-	/**
 	 * Test...
 	 *
 	 * @return  array
