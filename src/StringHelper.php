@@ -45,16 +45,16 @@ abstract class StringHelper
 	 * @var    array
 	 * @since  1.3.0
 	 */
-	protected static $incrementStyles = array(
-		'dash' => array(
+	protected static $incrementStyles = [
+		'dash'    => [
 			'#-(\d+)$#',
 			'-%d'
-		),
-		'default' => array(
-			array('#\((\d+)\)$#', '#\(\d+\)$#'),
-			array(' (%d)', '(%d)'),
-		),
-	);
+		],
+		'default' => [
+			['#\((\d+)\)$#', '#\(\d+\)$#'],
+			[' (%d)', '(%d)'],
+		],
+	];
 
 	/**
 	 * Increments a trailing number in a string.
