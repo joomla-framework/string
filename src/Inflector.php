@@ -433,12 +433,11 @@ class Inflector
 
 		if ($inflected !== false)
 		{
-			$this->setCache($word, $inflected);
-
 			return $inflected;
 		}
 
-		// Dead code
+		$this->setCache($word, $inflected);
+
 		return false;
 	}
 
