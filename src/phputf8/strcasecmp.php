@@ -15,9 +15,10 @@
 * @see utf8_strtolower
 * @package utf8
 */
-function utf8_strcasecmp($strX, $strY) {
-    $strX = utf8_strtolower($strX);
-    $strY = utf8_strtolower($strY);
-    return strcmp($strX, $strY);
+if (!function_exists('utf8_strcasecmp')) {
+    function utf8_strcasecmp($strX, $strY) {
+        $strX = utf8_strtolower($strX);
+        $strY = utf8_strtolower($strY);
+        return strcmp($strX, $strY);
+    }
 }
-
