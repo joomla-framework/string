@@ -264,7 +264,7 @@ class Inflector
 	 *
 	 * @since   1.0
 	 */
-	public function addWord($singular, $plural = null)
+	public function addWord($singular, $plural = '')
 	{
 		$this->setCache($singular, $plural);
 
