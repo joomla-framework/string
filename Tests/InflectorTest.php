@@ -141,22 +141,22 @@ class InflectorTest extends TestCase
 		// Add string.
 		$this->inflector->addCountableRule('foo');
 
-		$rules = TestHelper::getValue($this->inflector, 'rules');
+		$countable = TestHelper::getValue($this->inflector, 'countable');
 
 		$this->assertContains(
 			'foo',
-			$rules['countable'],
+			$countable['rules'],
 			'Checks a countable rule was added.'
 		);
 
 		// Add array.
 		$this->inflector->addCountableRule(array('goo', 'car'));
 
-		$rules = TestHelper::getValue($this->inflector, 'rules');
+		$countable = TestHelper::getValue($this->inflector, 'countable');
 
 		$this->assertContains(
 			'car',
-			$rules['countable'],
+			$countable['rules'],
 			'Checks a countable rule was added by array.'
 		);
 	}

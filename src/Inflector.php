@@ -32,10 +32,10 @@ class Inflector extends DoctrineInflector
 	 * The inflector rules for countability.
 	 *
 	 * @var    array
-	 * @since  1.0
+	 * @since  __DEPLOY_VERSION__
 	 */
-	private $rules = [
-		'countable' => [
+	private static $countable = [
+		'rules' => [
 			'id',
 			'hits',
 			'clicks',
@@ -73,7 +73,7 @@ class Inflector extends DoctrineInflector
 			foreach ($data as $rule)
 			{
 				// Ensure a string is pushed.
-				array_push($this->rules[$ruleType], (string) $rule);
+				array_push(self::$countable['rules'], (string) $rule);
 			}
 		}
 		else
@@ -257,7 +257,7 @@ class Inflector extends DoctrineInflector
 	 */
 	public function isCountable($word)
 	{
-		return in_array($word, $this->rules['countable']);
+		return in_array($word, self::$countable['rules']);
 	}
 
 	/**
