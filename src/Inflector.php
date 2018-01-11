@@ -90,6 +90,7 @@ class Inflector extends DoctrineInflector
 	 * @return  $this
 	 *
 	 * @since   1.0
+	 * @deprecated  3.0  Use Joomla\String\Inflector::rules() instead.
 	 */
 	public function addCountableRule($data)
 	{
@@ -116,6 +117,7 @@ class Inflector extends DoctrineInflector
 	 * @return  $this
 	 *
 	 * @since   1.0
+	 * @deprecated  3.0  Use Doctrine\Common\Inflector\Inflector::rules() instead.
 	 */
 	public function addWord($singular, $plural = '')
 	{
@@ -172,6 +174,7 @@ class Inflector extends DoctrineInflector
 	 * @return  $this
 	 *
 	 * @since   1.0
+	 * @deprecated  3.0  Use Doctrine\Common\Inflector\Inflector::rules() instead.
 	 */
 	public function addPluraliseRule($data)
 	{
@@ -197,6 +200,7 @@ class Inflector extends DoctrineInflector
 	 * @return  $this
 	 *
 	 * @since   1.0
+	 * @deprecated  3.0  Use Doctrine\Common\Inflector\Inflector::rules() instead.
 	 */
 	public function addSingulariseRule($data)
 	{
@@ -222,6 +226,7 @@ class Inflector extends DoctrineInflector
 	 * @return  static
 	 *
 	 * @since   1.0
+	 * @deprecated  3.0  Use static methods without a class instance instead.
 	 */
 	public static function getInstance($new = false)
 	{
@@ -296,6 +301,7 @@ class Inflector extends DoctrineInflector
 	 * @return  string  The word in plural form.
 	 *
 	 * @since   1.0
+	 * @deprecated  3.0  Use Doctrine\Common\Inflector\Inflector::pluralize() instead.
 	 */
 	public function toPlural($word)
 	{
@@ -319,6 +325,7 @@ class Inflector extends DoctrineInflector
 	 * @return  string  The word in singular form.
 	 *
 	 * @since   1.0
+	 * @deprecated  3.0  Use Doctrine\Common\Inflector\Inflector::singularize() instead.
 	 */
 	public function toSingular($word)
 	{
