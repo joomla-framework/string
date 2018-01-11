@@ -9,12 +9,14 @@
         "php": "~7.0"
     },
     "require-dev": {
+        "doctrine/inflector": "~1.2",
         "joomla/test": "~1.0",
         "phpunit/phpunit": "~6.3",
         "squizlabs/php_codesniffer": "1.*"
     },
     "suggest": {
-        "ext-mbstring": "For improved processing"
+        "ext-mbstring": "For improved processing",
+        "doctrine/inflector": "To use the string inflector"
     },
     "autoload": {
         "psr-4": {

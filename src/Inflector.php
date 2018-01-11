@@ -8,7 +8,7 @@
 
 namespace Joomla\String;
 
-use InvalidArgumentException;
+use Doctrine\Common\Inflector\Inflector as DoctrineInflector;
 
 /**
  * Joomla Framework String Inflector Class
@@ -28,93 +28,18 @@ class Inflector
 	private static $instance;
 
 	/**
-	 * The inflector rules for singularisation, pluralisation and countability.
+	 * The inflector rules for countability.
 	 *
 	 * @var    array
 	 * @since  1.0
 	 */
 	private $rules = [
-		'singular'  => [
-			'/(matr)ices$/i'                                                          => '\1ix',
-			'/(vert|ind)ices$/i'                                                      => '\1ex',
-			'/(alumn|bacill|cact|foc|fung|nucle|radi|stimul|syllab|termin|viri?)i$/i' => '\1us',
-			'/([ftw]ax)es/i'                                                          => '\1',
-			'/(cris|ax|test)es$/i'                                                    => '\1is',
-			'/(shoe|slave)s$/i'                                                       => '\1',
-			'/(o)es$/i'                                                               => '\1',
-			'/([^aeiouy]|qu)ies$/i'                                                   => '\1y',
-			'/$1ses$/i'                                                               => '\s',
-			'/ses$/i'                                                                 => '\s',
-			'/eaus$/'                                                                 => 'eau',
-			'/^(.*us)$/'                                                              => '\\1',
-			'/s$/i'                                                                   => '',
-		],
-		'plural'    => [
-			'/([m|l])ouse$/i'                                                        => '\1ice',
-			'/(matr|vert|ind)(ix|ex)$/i'                                             => '\1ices',
-			'/(x|ch|ss|sh)$/i'                                                       => '\1es',
-			'/([^aeiouy]|qu)y$/i'                                                    => '\1ies',
-			'/([^aeiouy]|qu)ies$/i'                                                  => '\1y',
-			'/(?:([^f])fe|([lr])f)$/i'                                               => '\1\2ves',
-			'/sis$/i'                                                                => 'ses',
-			'/([ti])um$/i'                                                           => '\1a',
-			'/(buffal|tomat)o$/i'                                                    => '\1\2oes',
-			'/(alumn|bacill|cact|foc|fung|nucle|radi|stimul|syllab|termin|vir)us$/i' => '\1i',
-			'/us$/i'                                                                 => 'uses',
-			'/(ax|cris|test)is$/i'                                                   => '\1es',
-			'/s$/i'                                                                  => 's',
-			'/$/'                                                                    => 's',
-		],
 		'countable' => [
 			'id',
 			'hits',
 			'clicks',
 		],
 	];
-
-	/**
-	 * Cached inflections.
-	 *
-	 * The array is in the form [singular => plural]
-	 *
-	 * @var    array
-	 * @since  1.0
-	 */
-	private $cache = [];
-
-	/**
-	 * Protected constructor.
-	 *
-	 * @since  1.0
-	 */
-	protected function __construct()
-	{
-		// Pre=populate the irregual singular/plural.
-		$this
-			->addWord('deer')
-			->addWord('moose')
-			->addWord('sheep')
-			->addWord('bison')
-			->addWord('salmon')
-			->addWord('pike')
-			->addWord('trout')
-			->addWord('fish')
-			->addWord('swine')
-
-			->addWord('alias', 'aliases')
-			->addWord('bus', 'buses')
-			->addWord('foot', 'feet')
-			->addWord('goose', 'geese')
-			->addWord('hive', 'hives')
-			->addWord('louse', 'lice')
-			->addWord('man', 'men')
-			->addWord('mouse', 'mice')
-			->addWord('ox', 'oxen')
-			->addWord('quiz', 'quizes')
-			->addWord('status', 'statuses')
-			->addWord('tooth', 'teeth')
-			->addWord('woman', 'women');
-	}
 
 	/**
 	 * Adds inflection regex rules to the inflector.
@@ -125,7 +50,7 @@ class Inflector
 	 * @return  void
 	 *
 	 * @since   1.0
-	 * @throws  InvalidArgumentException
+	 * @throws  \InvalidArgumentException
 	 */
 	private function addRule($data, string $ruleType)
 	{
@@ -135,107 +60,25 @@ class Inflector
 		}
 		elseif (!is_array($data))
 		{
-			// Do not translate.
-			throw new InvalidArgumentException('Invalid inflector rule data.');
+			throw new \InvalidArgumentException('Invalid inflector rule data.');
+		}
+		elseif (!in_array($ruleType, ['singular', 'plural', 'countable']))
+		{
+			throw new \InvalidArgumentException('Unsupported rule type.');
 		}
 
-		foreach ($data as $rule)
+		if ($ruleType === 'countable')
 		{
-			// Ensure a string is pushed.
-			array_push($this->rules[$ruleType], (string) $rule);
-		}
-	}
-
-	/**
-	 * Gets an inflected word from the cache where the singular form is supplied.
-	 *
-	 * @param   string  $singular  A singular form of a word.
-	 *
-	 * @return  mixed  The cached inflection or false if none found.
-	 *
-	 * @since   1.0
-	 */
-	private function getCachedPlural(string $singular)
-	{
-		$singular = StringHelper::strtolower($singular);
-
-		// Check if the word is in cache.
-		if (isset($this->cache[$singular]))
-		{
-			return $this->cache[$singular];
-		}
-
-		return false;
-	}
-
-	/**
-	 * Gets an inflected word from the cache where the plural form is supplied.
-	 *
-	 * @param   string  $plural  A plural form of a word.
-	 *
-	 * @return  mixed  The cached inflection or false if none found.
-	 *
-	 * @since   1.0
-	 */
-	private function getCachedSingular(string $plural)
-	{
-		return array_search(StringHelper::strtolower($plural), $this->cache);
-	}
-
-	/**
-	 * Execute a regex from rules.
-	 *
-	 * The 'plural' rule type expects a singular word.
-	 * The 'singular' rule type expects a plural word.
-	 *
-	 * @param   string  $word      The string input.
-	 * @param   string  $ruleType  String (eg, singular|plural)
-	 *
-	 * @return  mixed  An inflected string, or false if no rule could be applied.
-	 *
-	 * @since   1.0
-	 */
-	private function matchRegexRule(string $word, string $ruleType)
-	{
-		// Cycle through the regex rules.
-		foreach ($this->rules[$ruleType] as $regex => $replacement)
-		{
-			$matches = 0;
-			$matchedWord = preg_replace($regex, $replacement, $word, -1, $matches);
-
-			if ($matches > 0)
+			foreach ($data as $rule)
 			{
-				return $matchedWord;
+				// Ensure a string is pushed.
+				array_push($this->rules[$ruleType], (string) $rule);
 			}
-		}
-
-		return false;
-	}
-
-	/**
-	 * Sets an inflected word in the cache.
-	 *
-	 * @param   string  $singular  The singular form of the word.
-	 * @param   string  $plural    The plural form of the word. If omitted, it is assumed the singular and plural are identical.
-	 *
-	 * @return  void
-	 *
-	 * @since   1.0
-	 */
-	private function setCache(string $singular, string $plural = '')
-	{
-		$singular = StringHelper::strtolower($singular);
-
-		if ($plural === '')
-		{
-			$plural = $singular;
 		}
 		else
 		{
-			$plural = StringHelper::strtolower($plural);
+			DoctrineInflector::rules($ruleType, $data);
 		}
-
-		$this->cache[$singular] = $plural;
 	}
 
 	/**
@@ -266,7 +109,38 @@ class Inflector
 	 */
 	public function addWord($singular, $plural = '')
 	{
-		$this->setCache($singular, $plural);
+		if ($plural !== '')
+		{
+			DoctrineInflector::rules(
+				'plural',
+				[
+					'irregular' => [$plural => $singular]
+				]
+			);
+
+			DoctrineInflector::rules(
+				'singular',
+				[
+					'irregular' => [$singular => $plural]
+				]
+			);
+		}
+		else
+		{
+			DoctrineInflector::rules(
+				'plural',
+				[
+					'uninflected' => [$singular]
+				]
+			);
+
+			DoctrineInflector::rules(
+				'singular',
+				[
+					'uninflected' => [$singular]
+				]
+			);
+		}
 
 		return $this;
 	}
@@ -352,23 +226,7 @@ class Inflector
 	 */
 	public function isPlural($word)
 	{
-		// Try the cache for a known inflection.
-		$inflection = $this->getCachedSingular($word);
-
-		if ($inflection !== false)
-		{
-			return true;
-		}
-
-		$singularWord = $this->toSingular($word);
-
-		if ($singularWord === false)
-		{
-			return false;
-		}
-
-		// Compute the inflection to cache the values, and compare.
-		return $this->toPlural($singularWord) == $word;
+		return $this->toPlural($this->toSingular($word)) === $word;
 	}
 
 	/**
@@ -382,23 +240,7 @@ class Inflector
 	 */
 	public function isSingular($word)
 	{
-		// Try the cache for a known inflection.
-		$inflection = $this->getCachedPlural($word);
-
-		if ($inflection !== false)
-		{
-			return true;
-		}
-
-		$pluralWord = $this->toPlural($word);
-
-		if ($pluralWord === false)
-		{
-			return false;
-		}
-
-		// Compute the inflection to cache the values, and compare.
-		return $this->toSingular($pluralWord) == $word;
+		return $this->toSingular($word) === $word;
 	}
 
 	/**
@@ -406,38 +248,13 @@ class Inflector
 	 *
 	 * @param   string  $word  The singular word to pluralise.
 	 *
-	 * @return  mixed  An inflected string, or false if no rule could be applied.
+	 * @return  string  The word in plural form.
 	 *
 	 * @since   1.0
 	 */
 	public function toPlural($word)
 	{
-		// Try to get the cached plural form from the singular.
-		$cache = $this->getCachedPlural($word);
-
-		if ($cache !== false)
-		{
-			return $cache;
-		}
-
-		// Check if the word is a known singular.
-		if ($this->getCachedSingular($word))
-		{
-			return false;
-		}
-
-		// Compute the inflection.
-		$inflected = $this->matchRegexRule($word, 'plural');
-
-		if ($inflected !== false)
-		{
-			$this->setCache($word, $inflected);
-
-			return $inflected;
-		}
-
-		// Dead code
-		return false;
+		return DoctrineInflector::pluralize($word);
 	}
 
 	/**
@@ -445,36 +262,12 @@ class Inflector
 	 *
 	 * @param   string  $word  The plural word to singularise.
 	 *
-	 * @return  mixed  An inflected string, or false if no rule could be applied.
+	 * @return  string  The word in singular form.
 	 *
 	 * @since   1.0
 	 */
 	public function toSingular($word)
 	{
-		// Try to get the cached singular form from the plural.
-		$cache = $this->getCachedSingular($word);
-
-		if ($cache !== false)
-		{
-			return $cache;
-		}
-
-		// Check if the word is a known plural.
-		if ($this->getCachedPlural($word))
-		{
-			return false;
-		}
-
-		// Compute the inflection.
-		$inflected = $this->matchRegexRule($word, 'singular');
-
-		if ($inflected !== false)
-		{
-			$this->setCache($inflected, $word);
-
-			return $inflected;
-		}
-
-		return false;
+		return DoctrineInflector::singularize($word);
 	}
 }
