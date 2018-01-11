@@ -17,13 +17,14 @@ use Doctrine\Common\Inflector\Inflector as DoctrineInflector;
  *
  * @since  1.0
  */
-class Inflector
+class Inflector extends DoctrineInflector
 {
 	/**
 	 * The singleton instance.
 	 *
 	 * @var    Inflector
 	 * @since  1.0
+	 * @deprecated  3.0
 	 */
 	private static $instance;
 
@@ -92,6 +93,15 @@ class Inflector
 	 */
 	public function addCountableRule($data)
 	{
+		@trigger_error(
+			sprintf(
+				'%1$s() is deprecated and will be removed in 3.0, use %2$s::rules() instead.',
+				__METHOD__,
+				__CLASS__
+			),
+			E_USER_DEPRECATED
+		);
+
 		$this->addRule($data, 'countable');
 
 		return $this;
@@ -109,6 +119,15 @@ class Inflector
 	 */
 	public function addWord($singular, $plural = '')
 	{
+		@trigger_error(
+			sprintf(
+				'%1$s() is deprecated and will be removed in 3.0, use %2$s::rules() instead.',
+				__METHOD__,
+				DoctrineInflector::class
+			),
+			E_USER_DEPRECATED
+		);
+
 		if ($plural !== '')
 		{
 			DoctrineInflector::rules(
@@ -156,6 +175,15 @@ class Inflector
 	 */
 	public function addPluraliseRule($data)
 	{
+		@trigger_error(
+			sprintf(
+				'%1$s() is deprecated and will be removed in 3.0, use %2$s::rules() instead.',
+				__METHOD__,
+				DoctrineInflector::class
+			),
+			E_USER_DEPRECATED
+		);
+
 		$this->addRule($data, 'plural');
 
 		return $this;
@@ -172,6 +200,15 @@ class Inflector
 	 */
 	public function addSingulariseRule($data)
 	{
+		@trigger_error(
+			sprintf(
+				'%1$s() is deprecated and will be removed in 3.0, use %2$s::rules() instead.',
+				__METHOD__,
+				DoctrineInflector::class
+			),
+			E_USER_DEPRECATED
+		);
+
 		$this->addRule($data, 'singular');
 
 		return $this;
@@ -188,6 +225,14 @@ class Inflector
 	 */
 	public static function getInstance($new = false)
 	{
+		@trigger_error(
+			sprintf(
+				'%1$s() is deprecated and will be removed in 3.0.',
+				__METHOD__
+			),
+			E_USER_DEPRECATED
+		);
+
 		if ($new)
 		{
 			return new static;
@@ -254,7 +299,16 @@ class Inflector
 	 */
 	public function toPlural($word)
 	{
-		return DoctrineInflector::pluralize($word);
+		@trigger_error(
+			sprintf(
+				'%1$s() is deprecated and will be removed in 3.0, use %2$s::pluralize() instead.',
+				__METHOD__,
+				DoctrineInflector::class
+			),
+			E_USER_DEPRECATED
+		);
+
+		return static::pluralize($word);
 	}
 
 	/**
@@ -268,6 +322,15 @@ class Inflector
 	 */
 	public function toSingular($word)
 	{
+		@trigger_error(
+			sprintf(
+				'%1$s() is deprecated and will be removed in 3.0, use %2$s::singularize() instead.',
+				__METHOD__,
+				DoctrineInflector::class
+			),
+			E_USER_DEPRECATED
+		);
+
 		return DoctrineInflector::singularize($word);
 	}
 }
