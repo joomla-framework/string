@@ -90,19 +90,9 @@ class Inflector extends DoctrineInflector
 	 * @return  $this
 	 *
 	 * @since   1.0
-	 * @deprecated  3.0  Use Joomla\String\Inflector::rules() instead.
 	 */
 	public function addCountableRule($data)
 	{
-		@trigger_error(
-			sprintf(
-				'%1$s() is deprecated and will be removed in 3.0, use %2$s::rules() instead.',
-				__METHOD__,
-				__CLASS__
-			),
-			E_USER_DEPRECATED
-		);
-
 		$this->addRule($data, 'countable');
 
 		return $this;
