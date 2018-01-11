@@ -78,7 +78,7 @@ class Inflector extends DoctrineInflector
 		}
 		else
 		{
-			DoctrineInflector::rules($ruleType, $data);
+			static::rules($ruleType, $data);
 		}
 	}
 
@@ -122,14 +122,14 @@ class Inflector extends DoctrineInflector
 
 		if ($plural !== '')
 		{
-			DoctrineInflector::rules(
+			static::rules(
 				'plural',
 				[
 					'irregular' => [$plural => $singular]
 				]
 			);
 
-			DoctrineInflector::rules(
+			static::rules(
 				'singular',
 				[
 					'irregular' => [$singular => $plural]
@@ -138,14 +138,14 @@ class Inflector extends DoctrineInflector
 		}
 		else
 		{
-			DoctrineInflector::rules(
+			static::rules(
 				'plural',
 				[
 					'uninflected' => [$singular]
 				]
 			);
 
-			DoctrineInflector::rules(
+			static::rules(
 				'singular',
 				[
 					'uninflected' => [$singular]
@@ -328,6 +328,6 @@ class Inflector extends DoctrineInflector
 			E_USER_DEPRECATED
 		);
 
-		return DoctrineInflector::singularize($word);
+		return static::singularize($word);
 	}
 }
