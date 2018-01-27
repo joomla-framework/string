@@ -73,7 +73,6 @@ class InflectorTest extends TestCase
 
 			// Ablaut plurals
 			array('foot', 'feet'),
-			array('goose', 'geese'),
 			array('louse', 'lice'),
 			array('man', 'men'),
 			array('mouse', 'mice'),
