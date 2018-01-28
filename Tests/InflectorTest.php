@@ -6,6 +6,7 @@
 
 namespace Joomla\String\Tests;
 
+use Doctrine\Common\Inflector\Inflector as DoctrineInflector;
 use Joomla\String\Inflector;
 use Joomla\Test\TestHelper;
 use PHPUnit\Framework\TestCase;
@@ -63,7 +64,7 @@ class InflectorTest extends TestCase
 
 			// Irregular plurals
 			array('ox', 'oxen'),
-			array('quiz', 'quizes'),
+			array('quiz', 'quizzes'),
 			array('status', 'statuses'),
 			array('matrix', 'matrices'),
 			array('index', 'indices'),
@@ -72,7 +73,6 @@ class InflectorTest extends TestCase
 
 			// Ablaut plurals
 			array('foot', 'feet'),
-			array('goose', 'geese'),
 			array('louse', 'lice'),
 			array('man', 'men'),
 			array('mouse', 'mice'),
@@ -95,56 +95,22 @@ class InflectorTest extends TestCase
 		parent::setUp();
 
 		$this->inflector = Inflector::getInstance(true);
+		DoctrineInflector::reset();
 	}
 
 	/**
-	 * Method to test Inflector::addRule().
+	 * Tears down the fixture, for example, close a network connection.
+	 * This method is called after a test is executed.
 	 *
 	 * @return  void
 	 *
-	 * @covers  Joomla\String\Inflector::addRule
-	 * @since   1.0
+	 * @since   __DEPLOY_VERSION__
 	 */
-	public function testAddRule()
+	protected function tearDown()
 	{
-		// Case 1
-		TestHelper::invoke($this->inflector, 'addRule', '/foo/', 'singular');
+		DoctrineInflector::reset();
 
-		$rules = TestHelper::getValue($this->inflector, 'rules');
-
-		$this->assertContains(
-			'/foo/',
-			$rules['singular'],
-			'Checks if the singular rule was added correctly.'
-		);
-
-		// Case 2
-		TestHelper::invoke($this->inflector, 'addRule', '/bar/', 'plural');
-
-		$rules = TestHelper::getValue($this->inflector, 'rules');
-
-		$this->assertContains(
-			'/bar/',
-			$rules['plural'],
-			'Checks if the plural rule was added correctly.'
-		);
-
-		// Case 3
-		TestHelper::invoke($this->inflector, 'addRule', array('/goo/', '/car/'), 'singular');
-
-		$rules = TestHelper::getValue($this->inflector, 'rules');
-
-		$this->assertContains(
-			'/goo/',
-			$rules['singular'],
-			'Checks if an array of rules was added correctly (1).'
-		);
-
-		$this->assertContains(
-			'/car/',
-			$rules['singular'],
-			'Checks if an array of rules was added correctly (2).'
-		);
+		parent::tearDown();
 	}
 
 	/**
@@ -162,115 +128,6 @@ class InflectorTest extends TestCase
 	}
 
 	/**
-	 * Method to test Inflector::getCachedPlural().
-	 *
-	 * @return  void
-	 *
-	 * @covers  Joomla\String\Inflector::getCachedPlural
-	 * @since   1.0
-	 */
-	public function testGetCachedPlural()
-	{
-		// Reset the cache.
-		TestHelper::setValue($this->inflector, 'cache', array('foo' => 'bar'));
-
-		$this->assertFalse(
-			TestHelper::invoke($this->inflector, 'getCachedPlural', 'bar'),
-			'Checks for an uncached plural.'
-		);
-
-		$this->assertEquals(
-			'bar',
-			TestHelper::invoke($this->inflector, 'getCachedPlural', 'foo'),
-			'Checks for a cached plural word.'
-		);
-	}
-
-	/**
-	 * Method to test Inflector::getCachedSingular().
-	 *
-	 * @return  void
-	 *
-	 * @covers  Joomla\String\Inflector::getCachedSingular
-	 * @since   1.0
-	 */
-	public function testGetCachedSingular()
-	{
-		// Reset the cache.
-		TestHelper::setValue($this->inflector, 'cache', array('foo' => 'bar'));
-
-		$this->assertFalse(
-			TestHelper::invoke($this->inflector, 'getCachedSingular', 'foo'),
-			'Checks for an uncached singular.'
-		);
-
-		$this->assertThat(
-			TestHelper::invoke($this->inflector, 'getCachedSingular', 'bar'),
-			$this->equalTo('foo'),
-			'Checks for a cached singular word.'
-		);
-	}
-
-	/**
-	 * Method to test Inflector::matchRegexRule().
-	 *
-	 * @return  void
-	 *
-	 * @covers  Joomla\String\Inflector::matchRegexRule
-	 * @since   1.0
-	 */
-	public function testMatchRegexRule()
-	{
-		$this->assertThat(
-			TestHelper::invoke($this->inflector, 'matchRegexRule', 'xyz', 'plural'),
-			$this->equalTo('xyzs'),
-			'Checks pluralising against the basic regex.'
-		);
-
-		$this->assertThat(
-			TestHelper::invoke($this->inflector, 'matchRegexRule', 'xyzs', 'singular'),
-			$this->equalTo('xyz'),
-			'Checks singularising against the basic regex.'
-		);
-
-		$this->assertFalse(
-			TestHelper::invoke($this->inflector, 'matchRegexRule', 'xyz', 'singular'),
-			'Checks singularising against an unmatched regex.'
-		);
-	}
-
-	/**
-	 * Method to test Inflector::setCache().
-	 *
-	 * @return  void
-	 *
-	 * @covers  Joomla\String\Inflector::setCache
-	 * @since   1.0
-	 */
-	public function testSetCache()
-	{
-		TestHelper::invoke($this->inflector, 'setCache', 'foo', 'bar');
-
-		$cache = TestHelper::getValue($this->inflector, 'cache');
-
-		$this->assertThat(
-			$cache['foo'],
-			$this->equalTo('bar'),
-			'Checks the cache was set.'
-		);
-
-		TestHelper::invoke($this->inflector, 'setCache', 'foo', 'car');
-
-		$cache = TestHelper::getValue($this->inflector, 'cache');
-
-		$this->assertThat(
-			$cache['foo'],
-			$this->equalTo('car'),
-			'Checks an existing value in the cache was reset.'
-		);
-	}
-
-	/**
 	 * Method to test Inflector::addCountableRule().
 	 *
 	 * @return  void
@@ -283,22 +140,22 @@ class InflectorTest extends TestCase
 		// Add string.
 		$this->inflector->addCountableRule('foo');
 
-		$rules = TestHelper::getValue($this->inflector, 'rules');
+		$countable = TestHelper::getValue($this->inflector, 'countable');
 
 		$this->assertContains(
 			'foo',
-			$rules['countable'],
+			$countable['rules'],
 			'Checks a countable rule was added.'
 		);
 
 		// Add array.
 		$this->inflector->addCountableRule(array('goo', 'car'));
 
-		$rules = TestHelper::getValue($this->inflector, 'rules');
+		$countable = TestHelper::getValue($this->inflector, 'countable');
 
 		$this->assertContains(
 			'car',
-			$rules['countable'],
+			$countable['rules'],
 			'Checks a countable rule was added by array.'
 		);
 	}
@@ -311,34 +168,53 @@ class InflectorTest extends TestCase
 	 * @covers  Joomla\String\Inflector::addWord
 	 * @since   1.2.0
 	 */
-	public function testAddWord()
+	public function testAddWordWithoutPlural()
 	{
-		$this->assertEquals(
+		$this->assertSame(
 			$this->inflector,
 			$this->inflector->addWord('foo')
 		);
 
-		$cache = TestHelper::getValue($this->inflector, 'cache');
+		$plural = TestHelper::getValue(DoctrineInflector::class, 'plural');
 
-		$this->assertArrayHasKey('foo', $cache);
-
-		$this->assertEquals(
-			'foo',
-			$cache['foo']
+		$this->assertTrue(
+			in_array('foo', $plural['uninflected'])
 		);
 
+		$singular = TestHelper::getValue(DoctrineInflector::class, 'singular');
+
+		$this->assertTrue(
+			in_array('foo', $singular['uninflected'])
+		);
+	}
+
+	/**
+	 * Method to test Inflector::addWord().
+	 *
+	 * @return  void
+	 *
+	 * @covers  Joomla\String\Inflector::addWord
+	 * @since   1.2.0
+	 */
+	public function testAddWordWithPlural()
+	{
 		$this->assertEquals(
 			$this->inflector,
 			$this->inflector->addWord('bar', 'foo')
 		);
 
-		$cache = TestHelper::getValue($this->inflector, 'cache');
+		$plural = TestHelper::getValue(DoctrineInflector::class, 'plural');
 
-		$this->assertArrayHasKey('bar', $cache);
-
-		$this->assertEquals(
+		$this->assertArrayHasKey(
 			'foo',
-			$cache['bar']
+			$plural['irregular']
+		);
+
+		$singular = TestHelper::getValue(DoctrineInflector::class, 'singular');
+
+		$this->assertArrayHasKey(
+			'bar',
+			$singular['irregular']
 		);
 	}
 
@@ -352,19 +228,17 @@ class InflectorTest extends TestCase
 	 */
 	public function testAddPluraliseRule()
 	{
-		$chain = $this->inflector->addPluraliseRule(array('/foo/', '/bar/'));
-
-		$this->assertThat(
-			$chain,
-			$this->identicalTo($this->inflector),
+		$this->assertSame(
+			$this->inflector->addPluraliseRule(['/^(custom)$/i' => '\1izables']),
+			$this->inflector,
 			'Checks chaining.'
 		);
 
-		$rules = TestHelper::getValue($this->inflector, 'rules');
+		$plural = TestHelper::getValue(DoctrineInflector::class, 'plural');
 
-		$this->assertCOntains(
-			'/bar/',
-			$rules['plural'],
+		$this->assertArrayHasKey(
+			'/^(custom)$/i',
+			$plural['rules'],
 			'Checks a pluralisation rule was added.'
 		);
 	}
@@ -379,19 +253,17 @@ class InflectorTest extends TestCase
 	 */
 	public function testAddSingulariseRule()
 	{
-		$chain = $this->inflector->addSingulariseRule(array('/foo/', '/bar/'));
-
-		$this->assertThat(
-			$chain,
-			$this->identicalTo($this->inflector),
+		$this->assertSame(
+			$this->inflector->addSingulariseRule(['/^(inflec|contribu)tors$/i' => '\1ta']),
+			$this->inflector,
 			'Checks chaining.'
 		);
 
-		$rules = TestHelper::getValue($this->inflector, 'rules');
+		$singular = TestHelper::getValue(DoctrineInflector::class, 'singular');
 
-		$this->assertContains(
-			'/bar/',
-			$rules['singular'],
+		$this->assertArrayHasKey(
+			'/^(inflec|contribu)tors$/i',
+			$singular['rules'],
 			'Checks a singularisation rule was added.'
 		);
 	}
@@ -464,14 +336,14 @@ class InflectorTest extends TestCase
 	{
 		$this->assertTrue(
 			$this->inflector->isPlural($plural),
-			'Checks the plural is a plural.'
+			"'$plural' should be reported as plural"
 		);
 
-		if ($singular != $plural)
+		if ($singular !== $plural)
 		{
 			$this->assertFalse(
 				$this->inflector->isPlural($singular),
-				'Checks the singular is not plural.'
+				"'$singular' should not be reported as a plural form in comparison to '$plural'"
 			);
 		}
 	}
@@ -492,14 +364,14 @@ class InflectorTest extends TestCase
 	{
 		$this->assertTrue(
 			$this->inflector->isSingular($singular),
-			'Checks the singular is a singular.'
+			"'$singular' should be reported as singular"
 		);
 
-		if ($singular != $plural)
+		if ($singular !== $plural)
 		{
 			$this->assertFalse(
 				$this->inflector->isSingular($plural),
-				'Checks the plural is not singular.'
+				"'$plural' should not be reported as a singular form in comparison to '$singular'"
 			);
 		}
 	}
@@ -518,9 +390,10 @@ class InflectorTest extends TestCase
 	 */
 	public function testToPlural($singular, $plural)
 	{
-		$this->assertThat(
+		$this->assertSame(
+			$plural,
 			$this->inflector->toPlural($singular),
-			$this->equalTo($plural)
+			"'$plural' should be the plural form of '$singular'"
 		);
 	}
 
@@ -534,11 +407,15 @@ class InflectorTest extends TestCase
 	 */
 	public function testToPluralAlreadyPlural()
 	{
-		$this->assertFalse($this->inflector->toPlural('buses'));
+		$this->assertSame(
+			'buses',
+			$this->inflector->toPlural('buses'),
+			"'buses' should not be pluralised'"
+		);
 	}
 
 	/**
-	 * Method to test Inflector::toPlural().
+	 * Method to test Inflector::toSingular().
 	 *
 	 * @param   string  $singular  The singular form of a word.
 	 * @param   string  $plural    The plural form of a word.
@@ -551,25 +428,27 @@ class InflectorTest extends TestCase
 	 */
 	public function testToSingular($singular, $plural)
 	{
-		$this->assertThat(
+		$this->assertSame(
+			$singular,
 			$this->inflector->toSingular($plural),
-			$this->equalTo($singular)
+			"'$singular' should be the singular form of '$plural'"
 		);
 	}
 
 	/**
-	 * Method to test Inflector::toPlural().
+	 * Method to test Inflector::toSingular().
 	 *
 	 * @return  void
 	 *
 	 * @covers  Joomla\String\Inflector::toSingular
 	 * @since   1.2.0
 	 */
-	public function testToSingularRetFalse()
+	public function testToSingularAlreadySingular()
 	{
-		// Assertion for already singular
-		$this->assertFalse($this->inflector->toSingular('bus'));
-
-		$this->assertFalse($this->inflector->toSingular('foo'));
+		$this->assertSame(
+			'bus',
+			$this->inflector->toSingular('bus'),
+			"'bus' should not be singularised'"
+		);
 	}
 }
