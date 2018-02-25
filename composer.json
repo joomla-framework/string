@@ -10,9 +10,9 @@
     },
     "require-dev": {
         "doctrine/inflector": "~1.2",
+        "joomla/coding-standards": "~2.0@alpha",
         "joomla/test": "~1.0",
-        "phpunit/phpunit": "~6.3",
-        "squizlabs/php_codesniffer": "1.*"
+        "phpunit/phpunit": "~6.3"
     },
     "suggest": {
         "ext-mbstring": "For improved processing",
