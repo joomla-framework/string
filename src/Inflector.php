@@ -55,11 +55,11 @@ class Inflector extends DoctrineInflector
 	 */
 	private function addRule($data, string $ruleType)
 	{
-		if (is_string($data))
+		if (\is_string($data))
 		{
 			$data = [$data];
 		}
-		elseif (!is_array($data))
+		elseif (!\is_array($data))
 		{
 			throw new \InvalidArgumentException('Invalid inflector rule data.');
 		}
@@ -233,7 +233,7 @@ class Inflector extends DoctrineInflector
 			return new static;
 		}
 
-		if (!is_object(self::$instance))
+		if (!\is_object(self::$instance))
 		{
 			self::$instance = new static;
 		}
@@ -252,7 +252,7 @@ class Inflector extends DoctrineInflector
 	 */
 	public function isCountable($word)
 	{
-		return in_array($word, self::$countable['rules']);
+		return \in_array($word, self::$countable['rules']);
 	}
 
 	/**
