@@ -53,7 +53,7 @@ abstract class StringHelper
 	 */
 	public static function increment($string, $style = 'default', $n = 0)
 	{
-		$styleSpec = isset(static::$incrementStyles[$style]) ? static::$incrementStyles[$style] : static::$incrementStyles['default'];
+		$styleSpec = static::$incrementStyles[$style] ?? static::$incrementStyles['default'];
 
 		// Regular expression search and replace patterns.
 		if (\is_array($styleSpec[0]))

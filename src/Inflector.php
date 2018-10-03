@@ -63,7 +63,7 @@ class Inflector extends DoctrineInflector
 		{
 			throw new \InvalidArgumentException('Invalid inflector rule data.');
 		}
-		elseif (!in_array($ruleType, ['singular', 'plural', 'countable']))
+		elseif (!\in_array($ruleType, ['singular', 'plural', 'countable']))
 		{
 			throw new \InvalidArgumentException('Unsupported rule type.');
 		}
@@ -125,14 +125,14 @@ class Inflector extends DoctrineInflector
 			static::rules(
 				'plural',
 				[
-					'irregular' => [$plural => $singular]
+					'irregular' => [$plural => $singular],
 				]
 			);
 
 			static::rules(
 				'singular',
 				[
-					'irregular' => [$singular => $plural]
+					'irregular' => [$singular => $plural],
 				]
 			);
 		}
@@ -141,14 +141,14 @@ class Inflector extends DoctrineInflector
 			static::rules(
 				'plural',
 				[
-					'uninflected' => [$singular]
+					'uninflected' => [$singular],
 				]
 			);
 
 			static::rules(
 				'singular',
 				[
-					'uninflected' => [$singular]
+					'uninflected' => [$singular],
 				]
 			);
 		}
