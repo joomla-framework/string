@@ -27,7 +27,7 @@ abstract class StringHelper
 	protected static $incrementStyles = [
 		'dash'    => [
 			'#-(\d+)$#',
-			'-%d'
+			'-%d',
 		],
 		'default' => [
 			['#\((\d+)\)$#', '#\(\d+\)$#'],
@@ -58,7 +58,7 @@ abstract class StringHelper
 		// Regular expression search and replace patterns.
 		if (\is_array($styleSpec[0]))
 		{
-			$rxSearch = $styleSpec[0][0];
+			$rxSearch  = $styleSpec[0][0];
 			$rxReplace = $styleSpec[0][1];
 		}
 		else
@@ -80,7 +80,7 @@ abstract class StringHelper
 		// Check if we are incrementing an existing pattern, or appending a new one.
 		if (preg_match($rxSearch, $string, $matches))
 		{
-			$n = empty($n) ? ($matches[1] + 1) : $n;
+			$n      = empty($n) ? ($matches[1] + 1) : $n;
 			$string = preg_replace($rxReplace, sprintf($oldFormat, $n), $string);
 		}
 		else
@@ -721,8 +721,6 @@ abstract class StringHelper
 					return iconv($fromEncoding, $toEncoding . '//IGNORE//TRANSLIT', $source);
 			}
 		}
-
-		return null;
 	}
 
 	/**
@@ -776,7 +774,7 @@ abstract class StringHelper
 	 */
 	public static function unicode_to_utf8($str)
 	{
-		if (extension_loaded('mbstring'))
+		if (\extension_loaded('mbstring'))
 		{
 			return preg_replace_callback(
 				'/\\\\u([0-9a-fA-F]{4})/',
@@ -802,7 +800,7 @@ abstract class StringHelper
 	 */
 	public static function unicode_to_utf16($str)
 	{
-		if (extension_loaded('mbstring'))
+		if (\extension_loaded('mbstring'))
 		{
 			return preg_replace_callback(
 				'/\\\\u([0-9a-fA-F]{4})/',
