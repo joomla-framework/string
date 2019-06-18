@@ -20,65 +20,58 @@ use PHPUnit\Framework\TestCase;
 class InflectorTest extends TestCase
 {
 	/**
-	 * @var    Inflector
-	 * @since  1.0
+	 * @var  Inflector
 	 */
 	protected $inflector;
 
 	/**
 	 * Method to seed data to testIsCountable.
 	 *
-	 * @return  array
-	 *
-	 * @since   1.0
+	 * @return  \Generator
 	 */
-	public function seedIsCountable()
+	public function seedIsCountable(): \Generator
 	{
-		return array(
-			array('id', true),
-			array('title', false),
-		);
+		yield ['id', true];
+		yield ['title', false];
 	}
 
 	/**
 	 * Method to seed data to testToPlural.
 	 *
-	 * @return  array
+	 * @return  \Generator
 	 *
 	 * @since   1.0
 	 */
-	public function seedSinglePlural()
+	public function seedSinglePlural(): \Generator
 	{
-		return array(
-			// Regular plurals
-			array('bus', 'buses'),
-			array('notify', 'notifies'),
-			array('click', 'clicks'),
+		// Regular plurals
+		yield ['bus', 'buses'];
+		yield ['notify', 'notifies'];
+		yield ['click', 'clicks'];
 
-			// Almost regular plurals.
-			array('photo', 'photos'),
-			array('zero', 'zeros'),
+		// Almost regular plurals.
+		yield ['photo', 'photos'];
+		yield ['zero', 'zeros'];
 
-			// Irregular identicals
-			array('salmon', 'salmon'),
+		// Irregular identicals
+		yield ['salmon', 'salmon'];
 
-			// Irregular plurals
-			array('ox', 'oxen'),
-			array('quiz', 'quizzes'),
-			array('status', 'statuses'),
-			array('matrix', 'matrices'),
-			array('index', 'indices'),
-			array('vertex', 'vertices'),
-			array('hive', 'hives'),
+		// Irregular plurals
+		yield ['ox', 'oxen'];
+		yield ['quiz', 'quizzes'];
+		yield ['status', 'statuses'];
+		yield ['matrix', 'matrices'];
+		yield ['index', 'indices'];
+		yield ['vertex', 'vertices'];
+		yield ['hive', 'hives'];
 
-			// Ablaut plurals
-			array('foot', 'feet'),
-			array('louse', 'lice'),
-			array('man', 'men'),
-			array('mouse', 'mice'),
-			array('tooth', 'teeth'),
-			array('woman', 'women'),
-		);
+		// Ablaut plurals
+		yield ['foot', 'feet'];
+		yield ['louse', 'lice'];
+		yield ['man', 'men'];
+		yield ['mouse', 'mice'];
+		yield ['tooth', 'teeth'];
+		yield ['woman', 'women'];
 	}
 
 	/**
@@ -87,10 +80,8 @@ class InflectorTest extends TestCase
 	 * This method is called before a test is executed.
 	 *
 	 * @return  void
-	 *
-	 * @since   1.0
 	 */
-	protected function setUp()
+	protected function setUp(): void
 	{
 		parent::setUp();
 
@@ -103,10 +94,8 @@ class InflectorTest extends TestCase
 	 * This method is called after a test is executed.
 	 *
 	 * @return  void
-	 *
-	 * @since   __DEPLOY_VERSION__
 	 */
-	protected function tearDown()
+	protected function tearDown(): void
 	{
 		DoctrineInflector::reset();
 
@@ -119,11 +108,12 @@ class InflectorTest extends TestCase
 	 * @return  void
 	 *
 	 * @covers  Joomla\String\Inflector::addRule
-	 * @expectedException  InvalidArgumentException
 	 * @since   1.0
 	 */
 	public function testAddRuleException()
 	{
+		$this->expectException(\InvalidArgumentException::class);
+
 		TestHelper::invoke($this->inflector, 'addRule', new \stdClass, 'singular');
 	}
 

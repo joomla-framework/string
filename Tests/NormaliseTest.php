@@ -19,163 +19,147 @@ class NormaliseTest extends TestCase
 	/**
 	 * Method to seed data to testFromCamelCase.
 	 *
-	 * @return  array
+	 * @return  \Generator
 	 *
 	 * @since   1.0
 	 */
-	public function seedTestFromCamelCase()
+	public function seedTestFromCamelCase(): \Generator
 	{
-		return array(
-			// Note: string, expected
-			array('FooBarABCDef', array('Foo', 'Bar', 'ABC', 'Def')),
-			array('JFooBar', array('J', 'Foo', 'Bar')),
-			array('J001FooBar002', array('J001', 'Foo', 'Bar002')),
-			array('abcDef', array('abc', 'Def')),
-			array('abc_defGhi_Jkl', array('abc_def', 'Ghi_Jkl')),
-			array('ThisIsA_NASAAstronaut', array('This', 'Is', 'A_NASA', 'Astronaut')),
-			array('JohnFitzgerald_Kennedy', array('John', 'Fitzgerald_Kennedy')),
-		);
+		// Note: string, expected
+		yield ['FooBarABCDef', ['Foo', 'Bar', 'ABC', 'Def']];
+		yield ['JFooBar', ['J', 'Foo', 'Bar']];
+		yield ['J001FooBar002', ['J001', 'Foo', 'Bar002']];
+		yield ['abcDef', ['abc', 'Def']];
+		yield ['abc_defGhi_Jkl', ['abc_def', 'Ghi_Jkl']];
+		yield ['ThisIsA_NASAAstronaut', ['This', 'Is', 'A_NASA', 'Astronaut']];
+		yield ['JohnFitzgerald_Kennedy', ['John', 'Fitzgerald_Kennedy']];
 	}
 
 	/**
 	 * Method to seed data to testFromCamelCase.
 	 *
-	 * @return  array
+	 * @return  \Generator
 	 *
 	 * @since   1.0
 	 */
-	public function seedTestFromCamelCase_nongrouped()
+	public function seedTestFromCamelCase_nongrouped(): \Generator
 	{
-		return array(
-			array('Foo Bar', 'FooBar'),
-			array('foo Bar', 'fooBar'),
-			array('Foobar', 'Foobar'),
-			array('foobar', 'foobar')
-		);
+		yield ['Foo Bar', 'FooBar'];
+		yield ['foo Bar', 'fooBar'];
+		yield ['Foobar', 'Foobar'];
+		yield ['foobar', 'foobar'];
 	}
 
 	/**
 	 * Method to seed data to testToCamelCase.
 	 *
-	 * @return  array
+	 * @return  \Generator
 	 *
 	 * @since   1.0
 	 */
-	public function seedTestToCamelCase()
+	public function seedTestToCamelCase(): \Generator
 	{
-		return array(
-			array('FooBar', 'Foo Bar'),
-			array('FooBar', 'Foo-Bar'),
-			array('FooBar', 'Foo_Bar'),
-			array('FooBar', 'foo bar'),
-			array('FooBar', 'foo-bar'),
-			array('FooBar', 'foo_bar'),
-		);
+		yield ['FooBar', 'Foo Bar'];
+		yield ['FooBar', 'Foo-Bar'];
+		yield ['FooBar', 'Foo_Bar'];
+		yield ['FooBar', 'foo bar'];
+		yield ['FooBar', 'foo-bar'];
+		yield ['FooBar', 'foo_bar'];
 	}
 
 	/**
 	 * Method to seed data to testToDashSeparated.
 	 *
-	 * @return  array
+	 * @return  \Generator
 	 *
 	 * @since   1.0
 	 */
-	public function seedTestToDashSeparated()
+	public function seedTestToDashSeparated(): \Generator
 	{
-		return array(
-			array('Foo-Bar', 'Foo Bar'),
-			array('Foo-Bar', 'Foo-Bar'),
-			array('Foo-Bar', 'Foo_Bar'),
-			array('foo-bar', 'foo bar'),
-			array('foo-bar', 'foo-bar'),
-			array('foo-bar', 'foo_bar'),
-			array('foo-bar', 'foo   bar'),
-			array('foo-bar', 'foo---bar'),
-			array('foo-bar', 'foo___bar'),
-		);
+		yield ['Foo-Bar', 'Foo Bar'];
+		yield ['Foo-Bar', 'Foo-Bar'];
+		yield ['Foo-Bar', 'Foo_Bar'];
+		yield ['foo-bar', 'foo bar'];
+		yield ['foo-bar', 'foo-bar'];
+		yield ['foo-bar', 'foo_bar'];
+		yield ['foo-bar', 'foo   bar'];
+		yield ['foo-bar', 'foo---bar'];
+		yield ['foo-bar', 'foo___bar'];
 	}
 
 	/**
 	 * Method to seed data to testToSpaceSeparated.
 	 *
-	 * @return  array
+	 * @return  \Generator
 	 *
 	 * @since   1.0
 	 */
-	public function seedTestToSpaceSeparated()
+	public function seedTestToSpaceSeparated(): \Generator
 	{
-		return array(
-			array('Foo Bar', 'Foo Bar'),
-			array('Foo Bar', 'Foo-Bar'),
-			array('Foo Bar', 'Foo_Bar'),
-			array('foo bar', 'foo bar'),
-			array('foo bar', 'foo-bar'),
-			array('foo bar', 'foo_bar'),
-			array('foo bar', 'foo   bar'),
-			array('foo bar', 'foo---bar'),
-			array('foo bar', 'foo___bar'),
-		);
+		yield ['Foo Bar', 'Foo Bar'];
+		yield ['Foo Bar', 'Foo-Bar'];
+		yield ['Foo Bar', 'Foo_Bar'];
+		yield ['foo bar', 'foo bar'];
+		yield ['foo bar', 'foo-bar'];
+		yield ['foo bar', 'foo_bar'];
+		yield ['foo bar', 'foo   bar'];
+		yield ['foo bar', 'foo---bar'];
+		yield ['foo bar', 'foo___bar'];
 	}
 
 	/**
 	 * Method to seed data to testToUnderscoreSeparated.
 	 *
-	 * @return  array
+	 * @return  \Generator
 	 *
 	 * @since   1.0
 	 */
-	public function seedTestToUnderscoreSeparated()
+	public function seedTestToUnderscoreSeparated(): \Generator
 	{
-		return array(
-			array('Foo_Bar', 'Foo Bar'),
-			array('Foo_Bar', 'Foo-Bar'),
-			array('Foo_Bar', 'Foo_Bar'),
-			array('foo_bar', 'foo bar'),
-			array('foo_bar', 'foo-bar'),
-			array('foo_bar', 'foo_bar'),
-			array('foo_bar', 'foo   bar'),
-			array('foo_bar', 'foo---bar'),
-			array('foo_bar', 'foo___bar'),
-		);
+		yield ['Foo_Bar', 'Foo Bar'];
+		yield ['Foo_Bar', 'Foo-Bar'];
+		yield ['Foo_Bar', 'Foo_Bar'];
+		yield ['foo_bar', 'foo bar'];
+		yield ['foo_bar', 'foo-bar'];
+		yield ['foo_bar', 'foo_bar'];
+		yield ['foo_bar', 'foo   bar'];
+		yield ['foo_bar', 'foo---bar'];
+		yield ['foo_bar', 'foo___bar'];
 	}
 
 	/**
 	 * Method to seed data to testToVariable.
 	 *
-	 * @return  array
+	 * @return  \Generator
 	 *
 	 * @since   1.0
 	 */
-	public function seedTestToVariable()
+	public function seedTestToVariable(): \Generator
 	{
-		return array(
-			array('myFooBar', 'My Foo Bar'),
-			array('myFooBar', 'My Foo-Bar'),
-			array('myFooBar', 'My Foo_Bar'),
-			array('myFooBar', 'my foo bar'),
-			array('myFooBar', 'my foo-bar'),
-			array('myFooBar', 'my foo_bar'),
-			array('abc3def4', '1abc3def4'),
-		);
+		yield ['myFooBar', 'My Foo Bar'];
+		yield ['myFooBar', 'My Foo-Bar'];
+		yield ['myFooBar', 'My Foo_Bar'];
+		yield ['myFooBar', 'my foo bar'];
+		yield ['myFooBar', 'my foo-bar'];
+		yield ['myFooBar', 'my foo_bar'];
+		yield ['abc3def4', '1abc3def4'];
 	}
 
 	/**
 	 * Method to seed data to testToKey.
 	 *
-	 * @return  array
+	 * @return  \Generator
 	 *
 	 * @since   1.0
 	 */
-	public function seedTestToKey()
+	public function seedTestToKey(): \Generator
 	{
-		return array(
-			array('foo_bar', 'Foo Bar'),
-			array('foo_bar', 'Foo-Bar'),
-			array('foo_bar', 'Foo_Bar'),
-			array('foo_bar', 'foo bar'),
-			array('foo_bar', 'foo-bar'),
-			array('foo_bar', 'foo_bar'),
-		);
+		yield ['foo_bar', 'Foo Bar'];
+		yield ['foo_bar', 'Foo-Bar'];
+		yield ['foo_bar', 'Foo_Bar'];
+		yield ['foo_bar', 'foo bar'];
+		yield ['foo_bar', 'foo-bar'];
+		yield ['foo_bar', 'foo_bar'];
 	}
 
 	/**
