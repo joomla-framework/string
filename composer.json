@@ -6,7 +6,7 @@
     "homepage": "https://github.com/joomla-framework/string",
     "license": "GPL-2.0-or-later",
     "require": {
-        "php": "~7.2"
+        "php": "^7.2.5"
     },
     "require-dev": {
         "doctrine/inflector": "~1.2",
