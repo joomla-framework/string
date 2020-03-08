@@ -120,18 +120,13 @@ abstract class Normalise
 	public static function toVariable($input)
 	{
 		// Remove dashes and underscores, then convert to camel case.
-		$input = static::toSpaceSeparated($input);
 		$input = static::toCamelCase($input);
 
 		// Remove leading digits.
 		$input = preg_replace('#^[0-9]+#', '', $input);
 
 		// Lowercase the first character.
-		$first = substr($input, 0, 1);
-		$first = strtolower($first);
-
-		// Replace the first character with the lowercase character.
-		$input = substr_replace($input, $first, 0, 1);
+		$input = lcfirst($input);
 
 		return $input;
 	}
