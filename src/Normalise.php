@@ -33,7 +33,7 @@ abstract class Normalise
 	 * @param   string   $input    The string input (ASCII only).
 	 * @param   boolean  $grouped  Optionally allows splitting on groups of uppercase characters.
 	 *
-	 * @return  string  The space separated string.
+	 * @return  array|string  The space separated string, as an array if grouped.
 	 *
 	 * @since   1.0
 	 */
@@ -143,8 +143,6 @@ abstract class Normalise
 	public static function toKey($input)
 	{
 		// Remove spaces and dashes, then convert to lower case.
-		$input = static::toUnderscoreSeparated($input);
-
-		return strtolower($input);
+		return strtolower(static::toUnderscoreSeparated($input));
 	}
 }

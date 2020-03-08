@@ -103,12 +103,7 @@ class InflectorTest extends TestCase
 	}
 
 	/**
-	 * Method to test Inflector::addRule().
-	 *
-	 * @return  void
-	 *
-	 * @covers  Joomla\String\Inflector::addRule
-	 * @since   1.0
+	 * @testdox  A rule cannot be added to the inflector if it is of an unsupported type
 	 */
 	public function testAddRuleException()
 	{
@@ -118,12 +113,7 @@ class InflectorTest extends TestCase
 	}
 
 	/**
-	 * Method to test Inflector::addCountableRule().
-	 *
-	 * @return  void
-	 *
-	 * @covers  Joomla\String\Inflector::addCountableRule
-	 * @since   1.0
+	 * @testdox  A countable rule can be added to the inflector
 	 */
 	public function testAddCountableRule()
 	{
@@ -151,12 +141,7 @@ class InflectorTest extends TestCase
 	}
 
 	/**
-	 * Method to test Inflector::addWord().
-	 *
-	 * @return  void
-	 *
-	 * @covers  Joomla\String\Inflector::addWord
-	 * @since   1.2.0
+	 * @testdox  A word can be added to the inflector without a plural form
 	 */
 	public function testAddWordWithoutPlural()
 	{
@@ -179,12 +164,7 @@ class InflectorTest extends TestCase
 	}
 
 	/**
-	 * Method to test Inflector::addWord().
-	 *
-	 * @return  void
-	 *
-	 * @covers  Joomla\String\Inflector::addWord
-	 * @since   1.2.0
+	 * @testdox  A word can be added to the inflector with a plural form
 	 */
 	public function testAddWordWithPlural()
 	{
@@ -209,12 +189,7 @@ class InflectorTest extends TestCase
 	}
 
 	/**
-	 * Method to test Inflector::addPluraliseRule().
-	 *
-	 * @return  void
-	 *
-	 * @covers  Joomla\String\Inflector::addPluraliseRule
-	 * @since   1.0
+	 * @testdox  A pluralisation rule can be added to the inflector
 	 */
 	public function testAddPluraliseRule()
 	{
@@ -234,12 +209,7 @@ class InflectorTest extends TestCase
 	}
 
 	/**
-	 * Method to test Inflector::addSingulariseRule().
-	 *
-	 * @return  void
-	 *
-	 * @covers  Joomla\String\Inflector::addSingulariseRule
-	 * @since   1.0
+	 * @testdox  A singularisation rule can be added to the inflector
 	 */
 	public function testAddSingulariseRule()
 	{
@@ -259,70 +229,48 @@ class InflectorTest extends TestCase
 	}
 
 	/**
-	 * Method to test Inflector::getInstance().
-	 *
-	 * @return  void
-	 *
-	 * @covers  Joomla\String\Inflector::getInstance
-	 * @since   1.0
+	 * @testdox  The singleton instance of the inflector can be retrieved
 	 */
 	public function testGetInstance()
 	{
 		$this->assertInstanceOf(
-			'Joomla\\String\\Inflector',
+			Inflector::class,
 			Inflector::getInstance(),
 			'Check getInstance returns the right class.'
 		);
 
-		// Inject an instance an test.
-		TestHelper::setValue($this->inflector, 'instance', new \stdClass);
-
-		$this->assertThat(
+		$this->assertNotSame(
 			Inflector::getInstance(),
-			$this->equalTo(new \stdClass),
-			'Checks singleton instance is returned.'
-		);
-
-		$this->assertInstanceOf(
-			'Joomla\\String\\Inflector',
 			Inflector::getInstance(true),
-			'Check getInstance a fresh object with true argument even though the instance is set to something else.'
+			'getInstance with the new flag should not return the singleton instance'
 		);
 	}
 
 	/**
-	 * Method to test Inflector::isCountable().
+	 * @testdox  A string is checked to determine if it a countable word
 	 *
 	 * @param   string   $input     A string.
 	 * @param   boolean  $expected  The expected result of the function call.
 	 *
-	 * @return  void
-	 *
-	 * @covers  Joomla\String\Inflector::isCountable
 	 * @dataProvider  seedIsCountable
-	 * @since   1.0
 	 */
-	public function testIsCountable($input, $expected)
+	public function testIsCountable(string $input, bool $expected)
 	{
-		$this->assertThat(
-			$this->inflector->isCountable($input),
-			$this->equalTo($expected)
+		$this->assertEquals(
+			$expected,
+			$this->inflector->isCountable($input)
 		);
 	}
 
 	/**
-	 * Method to test Inflector::isPlural().
+	 * @testdox  A string is checked to determine if it is in plural form
 	 *
 	 * @param   string  $singular  The singular form of a word.
 	 * @param   string  $plural    The plural form of a word.
 	 *
-	 * @return  void
-	 *
-	 * @covers  Joomla\String\Inflector::isPlural
 	 * @dataProvider  seedSinglePlural
-	 * @since   1.0
 	 */
-	public function testIsPlural($singular, $plural)
+	public function testIsPlural(string $singular, string $plural)
 	{
 		$this->assertTrue(
 			$this->inflector->isPlural($plural),
@@ -339,18 +287,14 @@ class InflectorTest extends TestCase
 	}
 
 	/**
-	 * Method to test Inflector::isSingular().
+	 * @testdox  A string is checked to determine if it is in singular form
 	 *
 	 * @param   string  $singular  The singular form of a word.
 	 * @param   string  $plural    The plural form of a word.
 	 *
-	 * @return  void
-	 *
-	 * @covers  Joomla\String\Inflector::isSingular
 	 * @dataProvider  seedSinglePlural
-	 * @since   1.0
 	 */
-	public function testIsSingular($singular, $plural)
+	public function testIsSingular(string $singular, string $plural)
 	{
 		$this->assertTrue(
 			$this->inflector->isSingular($singular),
@@ -367,18 +311,14 @@ class InflectorTest extends TestCase
 	}
 
 	/**
-	 * Method to test Inflector::toPlural().
+	 * @testdox  A string is converted to its plural form
 	 *
 	 * @param   string  $singular  The singular form of a word.
 	 * @param   string  $plural    The plural form of a word.
 	 *
-	 * @return  void
-	 *
-	 * @covers  Joomla\String\Inflector::toPlural
 	 * @dataProvider  seedSinglePlural
-	 * @since   1.0
 	 */
-	public function testToPlural($singular, $plural)
+	public function testToPlural(string $singular, string $plural)
 	{
 		$this->assertSame(
 			$plural,
@@ -388,12 +328,7 @@ class InflectorTest extends TestCase
 	}
 
 	/**
-	 * Method to test Inflector::toPlural().
-	 *
-	 * @return  void
-	 *
-	 * @covers  Joomla\String\Inflector::toPlural
-	 * @since   1.2.0
+	 * @testdox  A string that is already plural is returned in the same form
 	 */
 	public function testToPluralAlreadyPlural()
 	{
@@ -405,18 +340,14 @@ class InflectorTest extends TestCase
 	}
 
 	/**
-	 * Method to test Inflector::toSingular().
+	 * @testdox  A string is converted to its singular form
 	 *
 	 * @param   string  $singular  The singular form of a word.
 	 * @param   string  $plural    The plural form of a word.
 	 *
-	 * @return  void
-	 *
-	 * @covers  Joomla\String\Inflector::toSingular
 	 * @dataProvider  seedSinglePlural
-	 * @since   1.0
 	 */
-	public function testToSingular($singular, $plural)
+	public function testToSingular(string $singular, string $plural)
 	{
 		$this->assertSame(
 			$singular,
@@ -426,12 +357,7 @@ class InflectorTest extends TestCase
 	}
 
 	/**
-	 * Method to test Inflector::toSingular().
-	 *
-	 * @return  void
-	 *
-	 * @covers  Joomla\String\Inflector::toSingular
-	 * @since   1.2.0
+	 * @testdox  A string that is already singular is returned in the same form
 	 */
 	public function testToSingularAlreadySingular()
 	{

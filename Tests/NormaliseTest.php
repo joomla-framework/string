@@ -163,137 +163,105 @@ class NormaliseTest extends TestCase
 	}
 
 	/**
-	 * Method to test Normalise::fromCamelCase(string, false).
+	 * @testdox  A non-grouped string is converted from its camel case representation
 	 *
 	 * @param   string  $expected  The expected value from the method.
 	 * @param   string  $input     The input value for the method.
 	 *
-	 * @return  void
-	 *
-	 * @covers        Joomla\String\Normalise::fromCamelcase
 	 * @dataProvider  seedTestFromCamelCase_nongrouped
-	 * @since         1.0
 	 */
-	public function testFromCamelCase_nongrouped($expected, $input)
+	public function testFromCamelCase_nongrouped(string $expected, string $input)
 	{
 		$this->assertEquals($expected, Normalise::fromCamelcase($input));
 	}
 
 	/**
-	 * Method to test Normalise::fromCamelCase(string, true).
+	 * @testdox  A grouped string is converted from its camel case representation
 	 *
-	 * @param   string  $input     The input value for the method.
-	 * @param   string  $expected  The expected value from the method.
+	 * @param   string        $input     The input value for the method.
+	 * @param   array|string  $expected  The expected value from the method.
 	 *
-	 * @return  void
-	 *
-	 * @covers        Joomla\String\Normalise::fromCamelcase
 	 * @dataProvider  seedTestFromCamelCase
-	 * @since         1.0
 	 */
-	public function testFromCamelCase_grouped($input, $expected)
+	public function testFromCamelCase_grouped(string $input, $expected)
 	{
 		$this->assertEquals($expected, Normalise::fromCamelcase($input, true));
 	}
 
 	/**
-	 * Method to test Normalise::toCamelCase().
+	 * @testdox  A string is converted to its camel case representation
 	 *
 	 * @param   string  $expected  The expected value from the method.
 	 * @param   string  $input     The input value for the method.
 	 *
-	 * @return  void
-	 *
-	 * @covers        Joomla\String\Normalise::toCamelcase
 	 * @dataProvider  seedTestToCamelCase
-	 * @since         1.0
 	 */
-	public function testToCamelCase($expected, $input)
+	public function testToCamelCase(string $expected, string $input)
 	{
 		$this->assertEquals($expected, Normalise::toCamelcase($input));
 	}
 
 	/**
-	 * Method to test Normalise::toDashSeparated().
+	 * @testdox  A string is converted to its dash separated representation
 	 *
 	 * @param   string  $expected  The expected value from the method.
 	 * @param   string  $input     The input value for the method.
 	 *
-	 * @return  void
-	 *
-	 * @covers        Joomla\String\Normalise::toDashSeparated
 	 * @dataProvider  seedTestToDashSeparated
-	 * @since         1.0
 	 */
-	public function testToDashSeparated($expected, $input)
+	public function testToDashSeparated(string $expected, string $input)
 	{
 		$this->assertEquals($expected, Normalise::toDashSeparated($input));
 	}
 
 	/**
-	 * Method to test Normalise::toSpaceSeparated().
+	 * @testdox  A string is converted to its space separated representation
 	 *
 	 * @param   string  $expected  The expected value from the method.
 	 * @param   string  $input     The input value for the method.
 	 *
-	 * @return  void
-	 *
-	 * @covers        Joomla\String\Normalise::toSpaceSeparated
 	 * @dataProvider  seedTestToSpaceSeparated
-	 * @since         1.0
 	 */
-	public function testToSpaceSeparated($expected, $input)
+	public function testToSpaceSeparated(string $expected, string $input)
 	{
 		$this->assertEquals($expected, Normalise::toSpaceSeparated($input));
 	}
 
 	/**
-	 * Method to test Normalise::toUnderscoreSeparated().
+	 * @testdox  A string is converted to its underscore separated representation
 	 *
 	 * @param   string  $expected  The expected value from the method.
 	 * @param   string  $input     The input value for the method.
 	 *
-	 * @return  void
-	 *
-	 * @covers        Joomla\String\Normalise::toUnderscoreSeparated
 	 * @dataProvider  seedTestToUnderscoreSeparated
-	 * @since         1.0
 	 */
-	public function testToUnderscoreSeparated($expected, $input)
+	public function testToUnderscoreSeparated(string $expected, string $input)
 	{
 		$this->assertEquals($expected, Normalise::toUnderscoreSeparated($input));
 	}
 
 	/**
-	 * Method to test Normalise::toVariable().
+	 * @testdox  A string is converted to a value suitable for use as a variable name
 	 *
 	 * @param   string  $expected  The expected value from the method.
 	 * @param   string  $input     The input value for the method.
 	 *
-	 * @return  void
-	 *
-	 * @covers        Joomla\String\Normalise::toVariable
 	 * @dataProvider  seedTestToVariable
-	 * @since         1.0
 	 */
-	public function testToVariable($expected, $input)
+	public function testToVariable(string $expected, string $input)
 	{
 		$this->assertEquals($expected, Normalise::toVariable($input));
 	}
 
 	/**
-	 * Method to test Normalise::toKey().
+	 * @testdox  A string is converted to a value suitable for use as a key name
 	 *
 	 * @param   string  $expected  The expected value from the method.
 	 * @param   string  $input     The input value for the method.
 	 *
-	 * @return  void
-	 *
-	 * @covers        Joomla\String\Normalise::toKey
 	 * @dataProvider  seedTestToKey
-	 * @since         1.0
 	 */
-	public function testToKey($expected, $input)
+	public function testToKey(string $expected, string $input)
 	{
 		$this->assertEquals($expected, Normalise::toKey($input));
 	}
