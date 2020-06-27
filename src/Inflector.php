@@ -32,7 +32,7 @@ class Inflector extends DoctrineInflector
 	 * The inflector rules for countability.
 	 *
 	 * @var    array
-	 * @since  2.0.0-beta
+	 * @since  2.0.0
 	 */
 	private static $countable = [
 		'rules' => [
