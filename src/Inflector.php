@@ -111,13 +111,12 @@ class Inflector extends DoctrineInflector
 	 */
 	public function addWord($singular, $plural = '')
 	{
-		@trigger_error(
-			sprintf(
-				'%1$s() is deprecated and will be removed in 3.0, use %2$s::rules() instead.',
-				__METHOD__,
-				DoctrineInflector::class
-			),
-			E_USER_DEPRECATED
+		trigger_deprecation(
+			'joomla/string',
+			'2.0.0',
+			'%s() is deprecated and will be removed in 3.0, use %s::rules() instead.',
+			__METHOD__,
+			DoctrineInflector::class
 		);
 
 		if ($plural !== '')
@@ -168,13 +167,12 @@ class Inflector extends DoctrineInflector
 	 */
 	public function addPluraliseRule($data)
 	{
-		@trigger_error(
-			sprintf(
-				'%1$s() is deprecated and will be removed in 3.0, use %2$s::rules() instead.',
-				__METHOD__,
-				DoctrineInflector::class
-			),
-			E_USER_DEPRECATED
+		trigger_deprecation(
+			'joomla/string',
+			'2.0.0',
+			'%s() is deprecated and will be removed in 3.0, use %s::rules() instead.',
+			__METHOD__,
+			DoctrineInflector::class
 		);
 
 		$this->addRule($data, 'plural');
@@ -194,13 +192,12 @@ class Inflector extends DoctrineInflector
 	 */
 	public function addSingulariseRule($data)
 	{
-		@trigger_error(
-			sprintf(
-				'%1$s() is deprecated and will be removed in 3.0, use %2$s::rules() instead.',
-				__METHOD__,
-				DoctrineInflector::class
-			),
-			E_USER_DEPRECATED
+		trigger_deprecation(
+			'joomla/string',
+			'2.0.0',
+			'%s() is deprecated and will be removed in 3.0, use %s::rules() instead.',
+			__METHOD__,
+			DoctrineInflector::class
 		);
 
 		$this->addRule($data, 'singular');
@@ -220,12 +217,11 @@ class Inflector extends DoctrineInflector
 	 */
 	public static function getInstance($new = false)
 	{
-		@trigger_error(
-			sprintf(
-				'%1$s() is deprecated and will be removed in 3.0.',
-				__METHOD__
-			),
-			E_USER_DEPRECATED
+		trigger_deprecation(
+			'joomla/string',
+			'2.0.0',
+			'%s() is deprecated and will be removed in 3.0.',
+			__METHOD__
 		);
 
 		if ($new)
@@ -295,13 +291,12 @@ class Inflector extends DoctrineInflector
 	 */
 	public function toPlural($word)
 	{
-		@trigger_error(
-			sprintf(
-				'%1$s() is deprecated and will be removed in 3.0, use %2$s::pluralize() instead.',
-				__METHOD__,
-				DoctrineInflector::class
-			),
-			E_USER_DEPRECATED
+		trigger_deprecation(
+			'joomla/string',
+			'2.0.0',
+			'%s() is deprecated and will be removed in 3.0, use %s::pluralize() instead.',
+			__METHOD__,
+			DoctrineInflector::class
 		);
 
 		return static::pluralize($word);
@@ -319,13 +314,12 @@ class Inflector extends DoctrineInflector
 	 */
 	public function toSingular($word)
 	{
-		@trigger_error(
-			sprintf(
-				'%1$s() is deprecated and will be removed in 3.0, use %2$s::singularize() instead.',
-				__METHOD__,
-				DoctrineInflector::class
-			),
-			E_USER_DEPRECATED
+		trigger_deprecation(
+			'joomla/string',
+			'2.0.0',
+			'%s() is deprecated and will be removed in 3.0, use %s::singularize() instead.',
+			__METHOD__,
+			DoctrineInflector::class
 		);
 
 		return static::singularize($word);
