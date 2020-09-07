@@ -167,12 +167,6 @@ function utf8_bad_replace($str, $replace = '?') {
 * Return code from utf8_bad_identify() when a five octet sequence is detected.
 * Note: 5 octets sequences are valid UTF-8 but are not supported by Unicode so
 * do not represent a useful character
-*
-* Joomla modification - As of PHP 7.4, curly brace access has been deprecated. As a result this function has been
-* modified to use square brace syntax
-* See https://github.com/php/php-src/commit/d574df63dc375f5fc9202ce5afde23f866b6450a
-* for additional references
-*
 * @see utf8_bad_identify
 * @package utf8
 */
@@ -232,6 +226,12 @@ define('UTF8_BAD_SEQINCOMPLETE',7);
 /**
 * Reports on the type of bad byte found in a UTF-8 string. Returns a
 * status code on the first bad byte found
+*
+* Joomla modification - As of PHP 7.4, curly brace access has been deprecated. As a result this function has been
+* modified to use square brace syntax
+* See https://github.com/php/php-src/commit/d574df63dc375f5fc9202ce5afde23f866b6450a
+* for additional references
+*
 * @author <hsivonen@iki.fi>
 * @param string UTF-8 encoded string
 * @return mixed integer constant describing problem or FALSE if valid UTF-8
