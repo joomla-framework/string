@@ -11,7 +11,7 @@
     },
     "require-dev": {
         "doctrine/inflector": "^1.2",
-        "joomla/coding-standards": "^2.0@alpha",
+        "joomla/coding-standards": "^3.0@dev",
         "joomla/test": "^2.0",
         "phpunit/phpunit": "^8.5|^9.0"
     },
