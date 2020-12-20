@@ -817,12 +817,12 @@ abstract class StringHelper
 		}
 
 		// See if we have successfully set locale to UTF-8
-		if (!stristr($locale, 'UTF-8') && stristr($locale, '_') && preg_match('~\.(\d+)$~', $locale, $m))
+		if (stripos($locale, 'UTF-8') === false && stripos($locale, '_') !== false && preg_match('~\.(\d+)$~', $locale, $m))
 		{
 			return 'CP' . $m[1];
 		}
 
-		if (stristr($locale, 'UTF-8') || stristr($locale, 'utf8'))
+		if (stripos($locale, 'UTF-8') !== false || stripos($locale, 'utf8') !== false)
 		{
 			return 'UTF-8';
 		}
