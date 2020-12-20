@@ -129,7 +129,7 @@ abstract class Normalise
 		$input = self::toCamelCase($input);
 
 		// Remove leading digits.
-		$input = preg_replace('#^[0-9]+#', '', $input);
+		$input = preg_replace('#^\d+#', '', $input);
 
 		// Lowercase the first character.
 		$input = lcfirst($input);
