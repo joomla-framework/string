@@ -690,11 +690,11 @@ class StringHelperTest extends TestCase
 	 */
 	public function testStrcasecmp($string1, $string2, $locale, $expect)
 	{
-		if (substr(php_uname(), 0, 6) == 'Darwin' && $locale != false)
+		if ($locale !== false && strpos(php_uname(), 'Darwin') === 0)
 		{
 			$this->markTestSkipped('Darwin bug prevents foreign conversion from working properly');
 		}
-		elseif ($locale != false && !setlocale(LC_COLLATE, $locale))
+		elseif ($locale !== false && !setlocale(LC_COLLATE, $locale))
 		{
 			$this->markTestSkipped("Locale {$locale} is not available.");
 		}
@@ -725,13 +725,12 @@ class StringHelperTest extends TestCase
 	 */
 	public function testStrcmp($string1, $string2, $locale, $expect)
 	{
-		if (substr(php_uname(), 0, 6) == 'Darwin' && $locale != false)
+		if ($locale !== false && strpos(php_uname(), 'Darwin') === 0)
 		{
 			$this->markTestSkipped('Darwin bug prevents foreign conversion from working properly');
 		}
-		elseif ($locale != false && !setlocale(LC_COLLATE, $locale))
+		elseif ($locale !== false && !setlocale(LC_COLLATE, $locale))
 		{
-			// If the locale is not available, we can't have to transcode the string and can't reliably compare it.
 			$this->markTestSkipped("Locale {$locale} is not available.");
 		}
 		else
