@@ -454,7 +454,7 @@ class InflectorTest extends TestCase
 			'Checks the plural is a plural.'
 		);
 
-		if ($singular != $plural)
+		if ($singular !== $plural)
 		{
 			$this->assertFalse(
 				$this->inflector->isPlural($singular),
@@ -481,7 +481,7 @@ class InflectorTest extends TestCase
 			'Checks the singular is a singular.'
 		);
 
-		if ($singular != $plural)
+		if ($singular !== $plural)
 		{
 			$this->assertFalse(
 				$this->inflector->isSingular($plural),

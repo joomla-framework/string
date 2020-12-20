@@ -373,7 +373,7 @@ abstract class StringHelper
 			$encoding = self::setLocale($locale);
 
 			// If we successfully set encoding it to utf-8 or encoding is sth weird don't recode
-			if ($encoding == 'UTF-8' || $encoding == 'nonrecodable')
+			if ($encoding === 'UTF-8' || $encoding === 'nonrecodable')
 			{
 				return strcoll(utf8_strtolower($str1), utf8_strtolower($str2));
 			}
@@ -410,7 +410,7 @@ abstract class StringHelper
 			$encoding = self::setLocale($locale);
 
 			// If we successfully set encoding it to utf-8 or encoding is sth weird don't recode
-			if ($encoding == 'UTF-8' || $encoding == 'nonrecodable')
+			if ($encoding === 'UTF-8' || $encoding === 'nonrecodable')
 			{
 				return strcoll($str1, $str2);
 			}
