@@ -12,7 +12,7 @@
 namespace Joomla\String;
 
 // PHP mbstring and iconv local configuration
-if (version_compare(PHP_VERSION, '5.6', '>='))
+if (PHP_VERSION_ID >= 50600)
 {
 	@ini_set('default_charset', 'UTF-8');
 }
