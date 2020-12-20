@@ -367,27 +367,7 @@ abstract class StringHelper
 	{
 		if ($locale)
 		{
-			// Get current locale
-			$locale0 = setlocale(LC_COLLATE, 0);
-
-			if (!$locale = setlocale(LC_COLLATE, $locale))
-			{
-				$locale = $locale0;
-			}
-
-			// See if we have successfully set locale to UTF-8
-			if (!stristr($locale, 'UTF-8') && stristr($locale, '_') && preg_match('~\.(\d+)$~', $locale, $m))
-			{
-				$encoding = 'CP' . $m[1];
-			}
-			elseif (stristr($locale, 'UTF-8') || stristr($locale, 'utf8'))
-			{
-				$encoding = 'UTF-8';
-			}
-			else
-			{
-				$encoding = 'nonrecodable';
-			}
+			$encoding = self::setLocale($locale);
 
 			// If we successfully set encoding it to utf-8 or encoding is sth weird don't recode
 			if ($encoding == 'UTF-8' || $encoding == 'nonrecodable')
@@ -424,27 +404,7 @@ abstract class StringHelper
 	{
 		if ($locale)
 		{
-			// Get current locale
-			$locale0 = setlocale(LC_COLLATE, 0);
-
-			if (!$locale = setlocale(LC_COLLATE, $locale))
-			{
-				$locale = $locale0;
-			}
-
-			// See if we have successfully set locale to UTF-8
-			if (!stristr($locale, 'UTF-8') && stristr($locale, '_') && preg_match('~\.(\d+)$~', $locale, $m))
-			{
-				$encoding = 'CP' . $m[1];
-			}
-			elseif (stristr($locale, 'UTF-8') || stristr($locale, 'utf8'))
-			{
-				$encoding = 'UTF-8';
-			}
-			else
-			{
-				$encoding = 'nonrecodable';
-			}
+			$encoding = self::setLocale($locale);
 
 			// If we successfully set encoding it to utf-8 or encoding is sth weird don't recode
 			if ($encoding == 'UTF-8' || $encoding == 'nonrecodable')
@@ -836,5 +796,34 @@ abstract class StringHelper
 		}
 
 		return $str;
+	}
+
+	/**
+	 * @param $locale
+	 *
+	 * @return string
+	 */
+	private static function setLocale($locale)
+	{
+		// Get current locale
+		$locale0 = setlocale(LC_COLLATE, 0);
+
+		if (!$locale = setlocale(LC_COLLATE, $locale))
+		{
+			$locale = $locale0;
+		}
+
+		// See if we have successfully set locale to UTF-8
+		if (!stristr($locale, 'UTF-8') && stristr($locale, '_') && preg_match('~\.(\d+)$~', $locale, $m))
+		{
+			return 'CP' . $m[1];
+		}
+
+		if (stristr($locale, 'UTF-8') || stristr($locale, 'utf8'))
+		{
+			return 'UTF-8';
+		}
+
+		return 'nonrecodable';
 	}
 }
