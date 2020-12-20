@@ -693,7 +693,7 @@ class StringHelperTest extends TestCase
 
 			if ($actual != 0)
 			{
-				$actual = $actual / abs($actual);
+				$actual /= abs($actual);
 			}
 
 			$this->assertEquals($expect, $actual);
@@ -727,7 +727,7 @@ class StringHelperTest extends TestCase
 
 			if ($actual != 0)
 			{
-				$actual = $actual / abs($actual);
+				$actual /= abs($actual);
 			}
 
 			$this->assertEquals($expect, $actual);
