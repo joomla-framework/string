@@ -151,7 +151,7 @@ class InflectorTest extends TestCase
 	 *
 	 * @return  void
 	 *
-	 * @expectedException  InvalidArgumentException
+	 * @expectedException  \InvalidArgumentException
 	 * @since   1.0
 	 */
 	public function testAddRuleException()
