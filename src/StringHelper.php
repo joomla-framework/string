@@ -817,7 +817,7 @@ abstract class StringHelper
 		}
 
 		// See if we have successfully set locale to UTF-8
-		if (stripos($locale, 'UTF-8') === false && stripos($locale, '_') !== false && preg_match('~\.(\d+)$~', $locale, $m))
+		if (stripos($locale, 'UTF-8') === false && strpos($locale, '_') !== false && preg_match('~\.(\d+)$~', $locale, $m))
 		{
 			return 'CP' . $m[1];
 		}
