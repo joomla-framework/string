@@ -742,6 +742,8 @@ abstract class StringHelper
 					return iconv($fromEncoding, $toEncoding . '//IGNORE//TRANSLIT', $source);
 			}
 		}
+
+		return null;
 	}
 
 	/**
