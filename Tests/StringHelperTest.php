@@ -504,7 +504,6 @@ class StringHelperTest extends TestCase
 	 *
 	 * @return  void
 	 *
-	 * @covers        Joomla\String\StringHelper::increment
 	 * @dataProvider  seedTestIncrement
 	 * @since         1.0
 	 */
@@ -524,7 +523,6 @@ class StringHelperTest extends TestCase
 	 *
 	 * @return  void
 	 *
-	 * @covers        Joomla\String\StringHelper::is_ascii
 	 * @dataProvider  seedTestIs_ascii
 	 * @since         1.2.0
 	 */
@@ -546,7 +544,6 @@ class StringHelperTest extends TestCase
 	 *
 	 * @return  void
 	 *
-	 * @covers        Joomla\String\StringHelper::strpos
 	 * @dataProvider  seedTestStrpos
 	 * @since         1.0
 	 */
@@ -564,7 +561,6 @@ class StringHelperTest extends TestCase
 	 * @param   string   $needle    @todo
 	 * @param   integer  $offset    @todo
 	 *
-	 * @covers        Joomla\String\StringHelper::strrpos
 	 * @dataProvider  seedTestGetStrrpos
 	 * @since         1.0
 	 */
@@ -582,7 +578,6 @@ class StringHelperTest extends TestCase
 	 * @param   string    $start   @todo
 	 * @param   bool|int  $length  @todo
 	 *
-	 * @covers        Joomla\String\StringHelper::substr
 	 * @dataProvider  seedTestSubstr
 	 * @since         1.0
 	 */
@@ -598,7 +593,6 @@ class StringHelperTest extends TestCase
 	 * @param   string  $string  @todo
 	 * @param   string  $expect  @todo
 	 *
-	 * @covers        Joomla\String\StringHelper::strtolower
 	 * @dataProvider  seedTestStrtolower
 	 * @since         1.0
 	 */
@@ -614,7 +608,6 @@ class StringHelperTest extends TestCase
 	 * @param   string  $string  @todo
 	 * @param   string  $expect  @todo
 	 *
-	 * @covers        Joomla\String\StringHelper::strtoupper
 	 * @dataProvider  seedTestStrtoupper
 	 * @since         1.0
 	 */
@@ -630,7 +623,6 @@ class StringHelperTest extends TestCase
 	 * @param   string  $string  @todo
 	 * @param   string  $expect  @todo
 	 *
-	 * @covers        Joomla\String\StringHelper::strlen
 	 * @dataProvider  seedTestStrlen
 	 * @since         1.0
 	 */
@@ -649,7 +641,6 @@ class StringHelperTest extends TestCase
 	 * @param   integer  $count    @todo
 	 * @param   string   $expect   @todo
 	 *
-	 * @covers        Joomla\String\StringHelper::str_ireplace
 	 * @dataProvider  seedTestStr_ireplace
 	 * @since         1.0
 	 */
@@ -666,7 +657,6 @@ class StringHelperTest extends TestCase
 	 * @param   string  $split_length  @todo
 	 * @param   string  $expect        @todo
 	 *
-	 * @covers        Joomla\String\StringHelper::str_split
 	 * @dataProvider  seedTestStr_split
 	 * @since         1.0
 	 */
@@ -684,7 +674,6 @@ class StringHelperTest extends TestCase
 	 * @param   string  $locale   @todo
 	 * @param   string  $expect   @todo
 	 *
-	 * @covers        Joomla\String\StringHelper::strcasecmp
 	 * @dataProvider  seedTestStrcasecmp
 	 * @since         1.0
 	 */
@@ -719,7 +708,6 @@ class StringHelperTest extends TestCase
 	 * @param   string  $locale   @todo
 	 * @param   string  $expect   @todo
 	 *
-	 * @covers        Joomla\String\StringHelper::strcmp
 	 * @dataProvider  seedTestStrcmp
 	 * @since         1.0
 	 */
@@ -755,7 +743,6 @@ class StringHelperTest extends TestCase
 	 * @param   integer  $len       @todo
 	 * @param   string   $expect    @todo
 	 *
-	 * @covers        Joomla\String\StringHelper::strcspn
 	 * @dataProvider  seedTestStrcspn
 	 * @since         1.0
 	 */
@@ -772,7 +759,6 @@ class StringHelperTest extends TestCase
 	 * @param   string  $needle    @todo
 	 * @param   string  $expect    @todo
 	 *
-	 * @covers        Joomla\String\StringHelper::stristr
 	 * @dataProvider  seedTestStristr
 	 * @since         1.0
 	 */
@@ -788,7 +774,6 @@ class StringHelperTest extends TestCase
 	 * @param   string  $string  @todo
 	 * @param   string  $expect  @todo
 	 *
-	 * @covers        Joomla\String\StringHelper::strrev
 	 * @dataProvider  seedTestStrrev
 	 * @since         1.0
 	 */
@@ -807,7 +792,6 @@ class StringHelperTest extends TestCase
 	 * @param   integer  $length   @todo
 	 * @param   string   $expect   @todo
 	 *
-	 * @covers        Joomla\String\StringHelper::strspn
 	 * @dataProvider  seedTestStrspn
 	 * @since         1.0
 	 */
@@ -826,7 +810,6 @@ class StringHelperTest extends TestCase
 	 * @param   integer  $start        @todo
 	 * @param   integer  $length       @todo
 	 *
-	 * @covers        Joomla\String\StringHelper::substr_replace
 	 * @dataProvider  seedTestSubstr_replace
 	 * @since         1.0
 	 */
@@ -843,7 +826,6 @@ class StringHelperTest extends TestCase
 	 * @param   string  $charlist  @todo
 	 * @param   string  $expect    @todo
 	 *
-	 * @covers        Joomla\String\StringHelper::ltrim
 	 * @dataProvider  seedTestLtrim
 	 * @since         1.0
 	 */
@@ -868,7 +850,6 @@ class StringHelperTest extends TestCase
 	 * @param   string  $charlist  @todo
 	 * @param   string  $expect    @todo
 	 *
-	 * @covers        Joomla\String\StringHelper::rtrim
 	 * @dataProvider  seedTestRtrim
 	 * @since         1.0
 	 */
@@ -893,7 +874,6 @@ class StringHelperTest extends TestCase
 	 * @param   string  $charlist  @todo
 	 * @param   string  $expect    @todo
 	 *
-	 * @covers        Joomla\String\StringHelper::trim
 	 * @dataProvider  seedTestTrim
 	 * @since         1.0
 	 */
@@ -919,7 +899,6 @@ class StringHelperTest extends TestCase
 	 * @param   string  $newDelimiter  @todo
 	 * @param   string  $expect        @todo
 	 *
-	 * @covers        Joomla\String\StringHelper::ucfirst
 	 * @dataProvider  seedTestUcfirst
 	 * @since         1.0
 	 */
@@ -935,7 +914,6 @@ class StringHelperTest extends TestCase
 	 * @param   string  $string  @todo
 	 * @param   string  $expect  @todo
 	 *
-	 * @covers        Joomla\String\StringHelper::ucwords
 	 * @dataProvider  seedTestUcwords
 	 * @since         1.0
 	 */
@@ -953,7 +931,6 @@ class StringHelperTest extends TestCase
 	 * @param   string  $to_encoding    @todo
 	 * @param   string  $expect         @todo
 	 *
-	 * @covers        Joomla\String\StringHelper::transcode
 	 * @dataProvider  seedTestTranscode
 	 * @since         1.0
 	 */
@@ -969,7 +946,6 @@ class StringHelperTest extends TestCase
 	 * @param   string  $string  @todo
 	 * @param   string  $expect  @todo
 	 *
-	 * @covers        Joomla\String\StringHelper::valid
 	 * @dataProvider  seedTestValid
 	 * @since         1.0
 	 */
@@ -985,7 +961,6 @@ class StringHelperTest extends TestCase
 	 * @param   string  $string  @todo
 	 * @param   string  $expect  @todo
 	 *
-	 * @covers        Joomla\String\StringHelper::unicode_to_utf8
 	 * @dataProvider  seedTestUnicodeToUtf8
 	 * @since         1.2.0
 	 */
@@ -1001,7 +976,6 @@ class StringHelperTest extends TestCase
 	 * @param   string  $string  @todo
 	 * @param   string  $expect  @todo
 	 *
-	 * @covers        Joomla\String\StringHelper::unicode_to_utf16
 	 * @dataProvider  seedTestUnicodeToUtf16
 	 * @since         1.2.0
 	 */
@@ -1017,7 +991,6 @@ class StringHelperTest extends TestCase
 	 * @param   string  $string  @todo
 	 * @param   string  $expect  @todo
 	 *
-	 * @covers        Joomla\String\StringHelper::compliant
 	 * @dataProvider  seedTestValid
 	 * @since         1.0
 	 */
