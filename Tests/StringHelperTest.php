@@ -691,7 +691,7 @@ class StringHelperTest extends TestCase
 		{
 			$actual = StringHelper::strcasecmp($string1, $string2, $locale);
 
-			if ($actual != 0)
+			if ($actual !== 0)
 			{
 				$actual /= abs($actual);
 			}
@@ -725,7 +725,7 @@ class StringHelperTest extends TestCase
 		{
 			$actual = StringHelper::strcmp($string1, $string2, $locale);
 
-			if ($actual != 0)
+			if ($actual !== 0)
 			{
 				$actual /= abs($actual);
 			}

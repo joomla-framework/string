@@ -341,7 +341,7 @@ class Inflector
 	 */
 	public function isCountable($word)
 	{
-		return \in_array($word, $this->rules['countable']);
+		return \in_array($word, $this->rules['countable'], true);
 	}
 
 	/**
@@ -371,7 +371,7 @@ class Inflector
 		}
 
 		// Compute the inflection to cache the values, and compare.
-		return $this->toPlural($singularWord) == $word;
+		return $this->toPlural($singularWord) === $word;
 	}
 
 	/**
@@ -401,7 +401,7 @@ class Inflector
 		}
 
 		// Compute the inflection to cache the values, and compare.
-		return $this->toSingular($pluralWord) == $word;
+		return $this->toSingular($pluralWord) === $word;
 	}
 
 	/**
