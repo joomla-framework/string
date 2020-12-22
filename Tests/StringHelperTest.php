@@ -685,7 +685,7 @@ class StringHelperTest extends TestCase
 		}
 		elseif ($locale !== false && !setlocale(LC_COLLATE, $locale))
 		{
-			$this->markTestSkipped("Locale {$locale} is not available.");
+			$this->markTestSkipped(sprintf("Locale %s is not available.", implode(', ', $locale)));
 		}
 		else
 		{
@@ -719,7 +719,7 @@ class StringHelperTest extends TestCase
 		}
 		elseif ($locale !== false && !setlocale(LC_COLLATE, $locale))
 		{
-			$this->markTestSkipped("Locale {$locale} is not available.");
+			$this->markTestSkipped(sprintf("Locale %s is not available.", implode(', ', $locale)));
 		}
 		else
 		{
