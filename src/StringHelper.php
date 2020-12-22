@@ -802,9 +802,9 @@ abstract class StringHelper
 	}
 
 	/**
-	 * @param  string|array  $locale  The locale to be used
+	 * @param   string|array  $locale  The locale to be used
 	 *
-	 * @return string
+	 * @return  string
 	 *
 	 * @since   __DEPLOY_VERSION__
 	 */
