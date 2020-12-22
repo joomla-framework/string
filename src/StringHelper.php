@@ -802,9 +802,11 @@ abstract class StringHelper
 	}
 
 	/**
-	 * @param $locale
+	 * @param  string|array  $locale  The locale to be used
 	 *
 	 * @return string
+	 *
+	 * @since   __DEPLOY_VERSION__
 	 */
 	private static function setLocale($locale)
 	{
@@ -813,7 +815,7 @@ abstract class StringHelper
 
 		if (!$locale = setlocale(LC_COLLATE, $locale))
 		{
-			$locale = $locale0;
+			$locale = (string) $locale0;
 		}
 
 		// See if we have successfully set locale to UTF-8
