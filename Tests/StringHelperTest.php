@@ -680,7 +680,7 @@ class StringHelperTest extends TestCase
 	 */
 	public function testStrcasecmp($string1, $string2, $locale, $expect)
 	{
-		$this->setLocaleForCmp($locale);
+		$this->setLocale($locale);
 
 		$actual = StringHelper::strcasecmp($string1, $string2, $locale);
 
@@ -705,7 +705,7 @@ class StringHelperTest extends TestCase
 	 */
 	public function testStrcmp($string1, $string2, $locale, $expect)
 	{
-		$this->setLocaleForCmp($locale);
+		$this->setLocale($locale);
 
 		$actual = StringHelper::strcmp($string1, $string2, $locale);
 
