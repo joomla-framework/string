@@ -78,7 +78,7 @@ steps:
 - name: Locale
   image: joomlaprojects/docker-images:php5.3
   commands:
-  - apt install -y locales
+  - ""
   - locale-gen fr_FR.utf8
   - update-locale
   - locale -a
@@ -114,7 +114,7 @@ steps:
 - name: Locale
   image: joomlaprojects/docker-images:php5.3
   commands:
-  - apt install -y locales
+  - ""
   - locale-gen fr_FR.utf8
   - update-locale
   - locale -a
@@ -456,6 +456,6 @@ volumes:
 
 ---
 kind: signature
-hmac: e3f8e65dcafd3f053e150a0648f72e7c231e81c3755187165db0308adbe63030
+hmac: 862b5a059e9ba07fc8a003139605a975bfcb2d9e5757f2f866e1c703d76b4f68
 
 ...
