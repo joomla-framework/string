@@ -16,7 +16,7 @@ local locale(phpversion) = {
     name: "Locale",
     image: "joomlaprojects/docker-images:php" + phpversion,
     commands: [
-        "apt install -y locales",
+        if phpversion != "5.3" then "apt install -y locales",
         "locale-gen fr_FR.utf8",
         "update-locale",
         "locale -a",
