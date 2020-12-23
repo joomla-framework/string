@@ -681,11 +681,11 @@ class StringHelperTest extends TestCase
 	{
 		if ($locale !== false && strpos(php_uname(), 'Darwin') === 0)
 		{
-			$this->markTestSkipped('Darwin bug prevents foreign conversion from working properly');
+			$this->fail('Darwin bug prevents foreign conversion from working properly');
 		}
 		elseif ($locale !== false && !setlocale(LC_COLLATE, $locale))
 		{
-			$this->markTestSkipped(sprintf("Locale %s is not available.", implode(', ', $locale)));
+			$this->fail(sprintf("Locale %s is not available.", implode(', ', $locale)));
 		}
 		else
 		{
@@ -715,11 +715,11 @@ class StringHelperTest extends TestCase
 	{
 		if ($locale !== false && strpos(php_uname(), 'Darwin') === 0)
 		{
-			$this->markTestSkipped('Darwin bug prevents foreign conversion from working properly');
+			$this->fail('Darwin bug prevents foreign conversion from working properly');
 		}
 		elseif ($locale !== false && !setlocale(LC_COLLATE, $locale))
 		{
-			$this->markTestSkipped(sprintf("Locale %s is not available.", implode(', ', $locale)));
+			$this->fail(sprintf("Locale %s is not available.", implode(', ', $locale)));
 		}
 		else
 		{
