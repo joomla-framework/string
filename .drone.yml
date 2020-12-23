@@ -76,6 +76,7 @@ steps:
     path: /tmp/composer-cache
 
 - name: Locale
+  image: joomlaprojects/docker-images:php5.3
   commands:
   - locale-gen fr_FR.utf8
   - update-locale
@@ -110,6 +111,7 @@ steps:
     path: /tmp/composer-cache
 
 - name: Locale
+  image: joomlaprojects/docker-images:php5.3
   commands:
   - locale-gen fr_FR.utf8
   - update-locale
@@ -144,6 +146,7 @@ steps:
     path: /tmp/composer-cache
 
 - name: Locale
+  image: joomlaprojects/docker-images:php5.4
   commands:
   - locale-gen fr_FR.utf8
   - update-locale
@@ -178,6 +181,7 @@ steps:
     path: /tmp/composer-cache
 
 - name: Locale
+  image: joomlaprojects/docker-images:php5.5
   commands:
   - locale-gen fr_FR.utf8
   - update-locale
@@ -212,6 +216,7 @@ steps:
     path: /tmp/composer-cache
 
 - name: Locale
+  image: joomlaprojects/docker-images:php5.6
   commands:
   - locale-gen fr_FR.utf8
   - update-locale
@@ -246,6 +251,7 @@ steps:
     path: /tmp/composer-cache
 
 - name: Locale
+  image: joomlaprojects/docker-images:php7.0
   commands:
   - locale-gen fr_FR.utf8
   - update-locale
@@ -280,6 +286,7 @@ steps:
     path: /tmp/composer-cache
 
 - name: Locale
+  image: joomlaprojects/docker-images:php7.1
   commands:
   - locale-gen fr_FR.utf8
   - update-locale
@@ -314,6 +321,7 @@ steps:
     path: /tmp/composer-cache
 
 - name: Locale
+  image: joomlaprojects/docker-images:php7.2
   commands:
   - locale-gen fr_FR.utf8
   - update-locale
@@ -348,6 +356,7 @@ steps:
     path: /tmp/composer-cache
 
 - name: Locale
+  image: joomlaprojects/docker-images:php7.3
   commands:
   - locale-gen fr_FR.utf8
   - update-locale
@@ -382,6 +391,7 @@ steps:
     path: /tmp/composer-cache
 
 - name: Locale
+  image: joomlaprojects/docker-images:php7.4
   commands:
   - locale-gen fr_FR.utf8
   - update-locale
@@ -416,6 +426,7 @@ steps:
     path: /tmp/composer-cache
 
 - name: Locale
+  image: joomlaprojects/docker-images:php8.0
   commands:
   - locale-gen fr_FR.utf8
   - update-locale
@@ -434,6 +445,6 @@ volumes:
 
 ---
 kind: signature
-hmac: 9190680c60b536c913d8dd1bf64efa25283397cf02b1743e4a46e3fc34344916
+hmac: 0dfcef6fa3cb8a8693ddd4b1bd5f74e2c0e5feb72bec6290d5bcaba68477bbe3
 
 ...
