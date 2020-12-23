@@ -7,6 +7,7 @@
 namespace Joomla\String\Tests;
 
 use Joomla\String\StringHelper;
+use PHPUnit\Framework\Exception;
 use PHPUnit\Framework\TestCase;
 
 /**
@@ -679,25 +680,16 @@ class StringHelperTest extends TestCase
 	 */
 	public function testStrcasecmp($string1, $string2, $locale, $expect)
 	{
-		if ($locale !== false && strpos(php_uname(), 'Darwin') === 0)
-		{
-			$this->fail('Darwin bug prevents foreign conversion from working properly');
-		}
-		elseif ($locale !== false && !setlocale(LC_COLLATE, $locale))
-		{
-			$this->fail(sprintf("Locale %s is not available.", implode(', ', $locale)));
-		}
-		else
-		{
-			$actual = StringHelper::strcasecmp($string1, $string2, $locale);
+		$this->setLocaleForCmp($locale);
 
-			if ($actual !== 0)
-			{
-				$actual /= abs($actual);
-			}
+		$actual = StringHelper::strcasecmp($string1, $string2, $locale);
 
-			$this->assertEquals($expect, $actual);
+		if ($actual !== 0)
+		{
+			$actual /= abs($actual);
 		}
+
+		$this->assertEquals($expect, $actual);
 	}
 
 	/**
@@ -713,25 +705,16 @@ class StringHelperTest extends TestCase
 	 */
 	public function testStrcmp($string1, $string2, $locale, $expect)
 	{
-		if ($locale !== false && strpos(php_uname(), 'Darwin') === 0)
-		{
-			$this->fail('Darwin bug prevents foreign conversion from working properly');
-		}
-		elseif ($locale !== false && !setlocale(LC_COLLATE, $locale))
-		{
-			$this->fail(sprintf("Locale %s is not available.", implode(', ', $locale)));
-		}
-		else
-		{
-			$actual = StringHelper::strcmp($string1, $string2, $locale);
+		$this->setLocaleForCmp($locale);
 
-			if ($actual !== 0)
-			{
-				$actual /= abs($actual);
-			}
+		$actual = StringHelper::strcmp($string1, $string2, $locale);
 
-			$this->assertEquals($expect, $actual);
+		if ($actual !== 0)
+		{
+			$actual /= abs($actual);
 		}
+
+		$this->assertEquals($expect, $actual);
 	}
 
 	/**
@@ -998,5 +981,42 @@ class StringHelperTest extends TestCase
 	{
 		$actual = StringHelper::compliant($string);
 		$this->assertEquals($expect, $actual);
+	}
+
+	/**
+	 * Partial override of PHPUnit's version.
+	 * It provides better (any) messages for exceptions.
+	 *
+	 * @param   string  $locale
+	 *
+	 * @since   __DEPLOY_VERSION__
+	 * @throws  Exception
+	 */
+	protected function setLocale()
+	{
+		$args = \func_get_args();
+		$locale = end($args);
+
+		if ($locale === false)
+		{
+			return;
+		}
+
+		if (strpos(php_uname(), 'Darwin') === 0)
+		{
+			$this->markTestSkipped('Darwin bug prevents foreign conversion from working properly');
+		}
+
+		if (!\is_array($locale) && !\is_string($locale))
+		{
+			throw new Exception("The locale must be a string or an array of strings.");
+		}
+
+		try
+		{
+			parent::setLocale(LC_COLLATE, $locale);
+		} catch (Exception $exception) {
+			throw new Exception($exception->getMessage() . " Available locales:\n" . shell_exec("locale -a"));
+		}
 	}
 }
