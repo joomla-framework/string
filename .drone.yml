@@ -75,6 +75,12 @@ steps:
   - name: composer-cache
     path: /tmp/composer-cache
 
+- name: Locale
+  commands:
+  - locale-gen fr_FR.utf8
+  - update-locale
+  - locale -a
+
 - name: PHPUnit
   image: joomlaprojects/docker-images:php5.3
   commands:
@@ -102,6 +108,12 @@ steps:
   volumes:
   - name: composer-cache
     path: /tmp/composer-cache
+
+- name: Locale
+  commands:
+  - locale-gen fr_FR.utf8
+  - update-locale
+  - locale -a
 
 - name: PHPUnit
   image: joomlaprojects/docker-images:php5.3
@@ -131,6 +143,12 @@ steps:
   - name: composer-cache
     path: /tmp/composer-cache
 
+- name: Locale
+  commands:
+  - locale-gen fr_FR.utf8
+  - update-locale
+  - locale -a
+
 - name: PHPUnit
   image: joomlaprojects/docker-images:php5.4
   commands:
@@ -158,6 +176,12 @@ steps:
   volumes:
   - name: composer-cache
     path: /tmp/composer-cache
+
+- name: Locale
+  commands:
+  - locale-gen fr_FR.utf8
+  - update-locale
+  - locale -a
 
 - name: PHPUnit
   image: joomlaprojects/docker-images:php5.5
@@ -187,6 +211,12 @@ steps:
   - name: composer-cache
     path: /tmp/composer-cache
 
+- name: Locale
+  commands:
+  - locale-gen fr_FR.utf8
+  - update-locale
+  - locale -a
+
 - name: PHPUnit
   image: joomlaprojects/docker-images:php5.6
   commands:
@@ -214,6 +244,12 @@ steps:
   volumes:
   - name: composer-cache
     path: /tmp/composer-cache
+
+- name: Locale
+  commands:
+  - locale-gen fr_FR.utf8
+  - update-locale
+  - locale -a
 
 - name: PHPUnit
   image: joomlaprojects/docker-images:php7.0
@@ -243,6 +279,12 @@ steps:
   - name: composer-cache
     path: /tmp/composer-cache
 
+- name: Locale
+  commands:
+  - locale-gen fr_FR.utf8
+  - update-locale
+  - locale -a
+
 - name: PHPUnit
   image: joomlaprojects/docker-images:php7.1
   commands:
@@ -270,6 +312,12 @@ steps:
   volumes:
   - name: composer-cache
     path: /tmp/composer-cache
+
+- name: Locale
+  commands:
+  - locale-gen fr_FR.utf8
+  - update-locale
+  - locale -a
 
 - name: PHPUnit
   image: joomlaprojects/docker-images:php7.2
@@ -299,6 +347,12 @@ steps:
   - name: composer-cache
     path: /tmp/composer-cache
 
+- name: Locale
+  commands:
+  - locale-gen fr_FR.utf8
+  - update-locale
+  - locale -a
+
 - name: PHPUnit
   image: joomlaprojects/docker-images:php7.3
   commands:
@@ -326,6 +380,12 @@ steps:
   volumes:
   - name: composer-cache
     path: /tmp/composer-cache
+
+- name: Locale
+  commands:
+  - locale-gen fr_FR.utf8
+  - update-locale
+  - locale -a
 
 - name: PHPUnit
   image: joomlaprojects/docker-images:php7.4
@@ -355,6 +415,12 @@ steps:
   - name: composer-cache
     path: /tmp/composer-cache
 
+- name: Locale
+  commands:
+  - locale-gen fr_FR.utf8
+  - update-locale
+  - locale -a
+
 - name: PHPUnit
   image: joomlaprojects/docker-images:php8.0
   commands:
@@ -368,6 +434,6 @@ volumes:
 
 ---
 kind: signature
-hmac: bcd686cd053fd91aff1bb22c260e9f2f41efef8a869cbc0db2deae0894bb2fd9
+hmac: 9190680c60b536c913d8dd1bf64efa25283397cf02b1743e4a46e3fc34344916
 
 ...

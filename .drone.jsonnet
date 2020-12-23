@@ -12,6 +12,15 @@ local hostvolumes = [
     },
 ];
 
+local locale(name) = {
+    name: "Locale",
+    commands: [
+        "locale-gen " + name,
+        "update-locale",
+        "locale -a",
+    ]
+};
+
 local composer(phpversion, params) = {
     name: "composer",
     image: "joomlaprojects/docker-images:php" + phpversion,
@@ -35,6 +44,7 @@ local pipeline(name, phpversion, params) = {
     volumes: hostvolumes,
     steps: [
         composer(phpversion, params),
+        locale("fr_FR.utf8"),
         phpunit(phpversion)
     ],
 };
@@ -121,6 +131,7 @@ local pipeline(name, phpversion, params) = {
                     "composer update phpunit/phpunit-mock-objects"
                 ]
             },
+            locale("fr_FR.utf8"),
             phpunit("5.3")
         ]
     },
