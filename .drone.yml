@@ -78,6 +78,7 @@ steps:
 - name: Locale
   image: joomlaprojects/docker-images:php5.3
   commands:
+  - apt install locales
   - locale-gen fr_FR.utf8
   - update-locale
   - locale -a
@@ -113,6 +114,7 @@ steps:
 - name: Locale
   image: joomlaprojects/docker-images:php5.3
   commands:
+  - apt install locales
   - locale-gen fr_FR.utf8
   - update-locale
   - locale -a
@@ -148,6 +150,7 @@ steps:
 - name: Locale
   image: joomlaprojects/docker-images:php5.4
   commands:
+  - apt install locales
   - locale-gen fr_FR.utf8
   - update-locale
   - locale -a
@@ -183,6 +186,7 @@ steps:
 - name: Locale
   image: joomlaprojects/docker-images:php5.5
   commands:
+  - apt install locales
   - locale-gen fr_FR.utf8
   - update-locale
   - locale -a
@@ -218,6 +222,7 @@ steps:
 - name: Locale
   image: joomlaprojects/docker-images:php5.6
   commands:
+  - apt install locales
   - locale-gen fr_FR.utf8
   - update-locale
   - locale -a
@@ -253,6 +258,7 @@ steps:
 - name: Locale
   image: joomlaprojects/docker-images:php7.0
   commands:
+  - apt install locales
   - locale-gen fr_FR.utf8
   - update-locale
   - locale -a
@@ -288,6 +294,7 @@ steps:
 - name: Locale
   image: joomlaprojects/docker-images:php7.1
   commands:
+  - apt install locales
   - locale-gen fr_FR.utf8
   - update-locale
   - locale -a
@@ -323,6 +330,7 @@ steps:
 - name: Locale
   image: joomlaprojects/docker-images:php7.2
   commands:
+  - apt install locales
   - locale-gen fr_FR.utf8
   - update-locale
   - locale -a
@@ -358,6 +366,7 @@ steps:
 - name: Locale
   image: joomlaprojects/docker-images:php7.3
   commands:
+  - apt install locales
   - locale-gen fr_FR.utf8
   - update-locale
   - locale -a
@@ -393,6 +402,7 @@ steps:
 - name: Locale
   image: joomlaprojects/docker-images:php7.4
   commands:
+  - apt install locales
   - locale-gen fr_FR.utf8
   - update-locale
   - locale -a
@@ -428,6 +438,7 @@ steps:
 - name: Locale
   image: joomlaprojects/docker-images:php8.0
   commands:
+  - apt install locales
   - locale-gen fr_FR.utf8
   - update-locale
   - locale -a
@@ -445,6 +456,6 @@ volumes:
 
 ---
 kind: signature
-hmac: 0dfcef6fa3cb8a8693ddd4b1bd5f74e2c0e5feb72bec6290d5bcaba68477bbe3
+hmac: 36ccfa57f4d348c1f67ad91855d558ffd0f7f6228acad879e21d860669694348
 
 ...
