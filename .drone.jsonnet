@@ -12,17 +12,6 @@ local hostvolumes = [
     },
 ];
 
-local locale(phpversion) = {
-    name: "Locale",
-    image: "joomlaprojects/docker-images:php" + phpversion,
-    commands: [
-        if phpversion != "5.3" then "apt install -y locales && sed -i 's/^# *\\(fr_FR.UTF-8\\)/\\1/' /etc/locale.gen && locale-gen",
-        if phpversion == "5.3" then "locale-gen fr_FR.utf8",
-        "update-locale",
-        "locale -a",
-    ]
-};
-
 local composer(phpversion, params) = {
     name: "composer",
     image: "joomlaprojects/docker-images:php" + phpversion,
@@ -37,7 +26,13 @@ local phpunit(phpversion) = {
     name: "PHPUnit",
     image: "joomlaprojects/docker-images:php" + phpversion,
     [if phpversion == "8.0" then "failure"]: "ignore",
-    commands: ["vendor/bin/phpunit"]
+    commands: [
+        if phpversion != "5.3" then "apt install -y locales && sed -i 's/^# *\\(fr_FR.UTF-8\\)/\\1/' /etc/locale.gen && locale-gen",
+        if phpversion == "5.3" then "locale-gen fr_FR.utf8",
+        "update-locale",
+        "locale -a",
+        "vendor/bin/phpunit"
+    ]
 };
 
 local pipeline(name, phpversion, params) = {
@@ -46,7 +41,6 @@ local pipeline(name, phpversion, params) = {
     volumes: hostvolumes,
     steps: [
         composer(phpversion, params),
-        locale(phpversion),
         phpunit(phpversion)
     ],
 };
@@ -133,7 +127,6 @@ local pipeline(name, phpversion, params) = {
                     "composer update phpunit/phpunit-mock-objects"
                 ]
             },
-            locale("5.3"),
             phpunit("5.3")
         ]
     },
