@@ -561,7 +561,7 @@ class StringHelperTest extends TestCase
 	 * @param   string                $search    String to search
 	 * @param   string                $replace   Existing string to replace
 	 * @param   string                $subject   New string to replace with
-	 * @param   integer|null|boolean  $count     Optional count value to be passed by referene
+	 * @param   integer|null|boolean  $count     Optional count value to be passed by reference
 	 * @param   string                $expected  Expected result
 	 *
 	 * @return  array
