@@ -1,15 +1,18 @@
 <?php
+
 /**
  * Part of the Joomla Framework String Package
  *
  * @copyright  Copyright (C) 2005 - 2020 Open Source Matters, Inc. All rights reserved.
  * @license    GNU General Public License version 2 or later; see LICENSE
+ *
+ * @noinspection PhpComposerExtensionStubsInspection
  */
 
 namespace Joomla\String;
 
 // PHP mbstring and iconv local configuration
-if (version_compare(PHP_VERSION, '5.6', '>='))
+if (PHP_VERSION_ID >= 50600)
 {
 	@ini_set('default_charset', 'UTF-8');
 }
@@ -367,30 +370,10 @@ abstract class StringHelper
 	{
 		if ($locale)
 		{
-			// Get current locale
-			$locale0 = setlocale(LC_COLLATE, 0);
-
-			if (!$locale = setlocale(LC_COLLATE, $locale))
-			{
-				$locale = $locale0;
-			}
-
-			// See if we have successfully set locale to UTF-8
-			if (!stristr($locale, 'UTF-8') && stristr($locale, '_') && preg_match('~\.(\d+)$~', $locale, $m))
-			{
-				$encoding = 'CP' . $m[1];
-			}
-			elseif (stristr($locale, 'UTF-8') || stristr($locale, 'utf8'))
-			{
-				$encoding = 'UTF-8';
-			}
-			else
-			{
-				$encoding = 'nonrecodable';
-			}
+			$encoding = self::setLocale($locale);
 
 			// If we successfully set encoding it to utf-8 or encoding is sth weird don't recode
-			if ($encoding == 'UTF-8' || $encoding == 'nonrecodable')
+			if ($encoding === 'UTF-8' || $encoding === 'nonrecodable')
 			{
 				return strcoll(utf8_strtolower($str1), utf8_strtolower($str2));
 			}
@@ -424,30 +407,10 @@ abstract class StringHelper
 	{
 		if ($locale)
 		{
-			// Get current locale
-			$locale0 = setlocale(LC_COLLATE, 0);
-
-			if (!$locale = setlocale(LC_COLLATE, $locale))
-			{
-				$locale = $locale0;
-			}
-
-			// See if we have successfully set locale to UTF-8
-			if (!stristr($locale, 'UTF-8') && stristr($locale, '_') && preg_match('~\.(\d+)$~', $locale, $m))
-			{
-				$encoding = 'CP' . $m[1];
-			}
-			elseif (stristr($locale, 'UTF-8') || stristr($locale, 'utf8'))
-			{
-				$encoding = 'UTF-8';
-			}
-			else
-			{
-				$encoding = 'nonrecodable';
-			}
+			$encoding = self::setLocale($locale);
 
 			// If we successfully set encoding it to utf-8 or encoding is sth weird don't recode
-			if ($encoding == 'UTF-8' || $encoding == 'nonrecodable')
+			if ($encoding === 'UTF-8' || $encoding === 'nonrecodable')
 			{
 				return strcoll($str1, $str2);
 			}
@@ -742,6 +705,8 @@ abstract class StringHelper
 					return iconv($fromEncoding, $toEncoding . '//IGNORE//TRANSLIT', $source);
 			}
 		}
+
+		return null;
 	}
 
 	/**
@@ -834,5 +799,36 @@ abstract class StringHelper
 		}
 
 		return $str;
+	}
+
+	/**
+	 * @param   string|array  $locale  The locale to be used
+	 *
+	 * @return  string
+	 *
+	 * @since   __DEPLOY_VERSION__
+	 */
+	private static function setLocale($locale)
+	{
+		// Get current locale
+		$locale0 = setlocale(LC_COLLATE, 0);
+
+		if (!$locale = setlocale(LC_COLLATE, $locale))
+		{
+			$locale = (string) $locale0;
+		}
+
+		// See if we have successfully set locale to UTF-8
+		if (stripos($locale, 'UTF-8') === false && strpos($locale, '_') !== false && preg_match('~\.(\d+)$~', $locale, $m))
+		{
+			return 'CP' . $m[1];
+		}
+
+		if (stripos($locale, 'UTF-8') !== false || stripos($locale, 'utf8') !== false)
+		{
+			return 'UTF-8';
+		}
+
+		return 'nonrecodable';
 	}
 }

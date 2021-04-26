@@ -7,6 +7,7 @@
 namespace Joomla\String\Tests;
 
 use Joomla\String\StringHelper;
+use PHPUnit\Framework\Exception;
 use PHPUnit\Framework\TestCase;
 
 /**
@@ -504,7 +505,6 @@ class StringHelperTest extends TestCase
 	 *
 	 * @return  void
 	 *
-	 * @covers        Joomla\String\StringHelper::increment
 	 * @dataProvider  seedTestIncrement
 	 * @since         1.0
 	 */
@@ -524,7 +524,6 @@ class StringHelperTest extends TestCase
 	 *
 	 * @return  void
 	 *
-	 * @covers        Joomla\String\StringHelper::is_ascii
 	 * @dataProvider  seedTestIs_ascii
 	 * @since         1.2.0
 	 */
@@ -546,7 +545,6 @@ class StringHelperTest extends TestCase
 	 *
 	 * @return  void
 	 *
-	 * @covers        Joomla\String\StringHelper::strpos
 	 * @dataProvider  seedTestStrpos
 	 * @since         1.0
 	 */
@@ -564,9 +562,6 @@ class StringHelperTest extends TestCase
 	 * @param   string   $needle    @todo
 	 * @param   integer  $offset    @todo
 	 *
-	 * @return  array
-	 *
-	 * @covers        Joomla\String\StringHelper::strrpos
 	 * @dataProvider  seedTestGetStrrpos
 	 * @since         1.0
 	 */
@@ -584,9 +579,6 @@ class StringHelperTest extends TestCase
 	 * @param   string    $start   @todo
 	 * @param   bool|int  $length  @todo
 	 *
-	 * @return  array
-	 *
-	 * @covers        Joomla\String\StringHelper::substr
 	 * @dataProvider  seedTestSubstr
 	 * @since         1.0
 	 */
@@ -602,9 +594,6 @@ class StringHelperTest extends TestCase
 	 * @param   string  $string  @todo
 	 * @param   string  $expect  @todo
 	 *
-	 * @return  array
-	 *
-	 * @covers        Joomla\String\StringHelper::strtolower
 	 * @dataProvider  seedTestStrtolower
 	 * @since         1.0
 	 */
@@ -620,9 +609,6 @@ class StringHelperTest extends TestCase
 	 * @param   string  $string  @todo
 	 * @param   string  $expect  @todo
 	 *
-	 * @return  array
-	 *
-	 * @covers        Joomla\String\StringHelper::strtoupper
 	 * @dataProvider  seedTestStrtoupper
 	 * @since         1.0
 	 */
@@ -638,9 +624,6 @@ class StringHelperTest extends TestCase
 	 * @param   string  $string  @todo
 	 * @param   string  $expect  @todo
 	 *
-	 * @return  array
-	 *
-	 * @covers        Joomla\String\StringHelper::strlen
 	 * @dataProvider  seedTestStrlen
 	 * @since         1.0
 	 */
@@ -659,9 +642,6 @@ class StringHelperTest extends TestCase
 	 * @param   integer  $count    @todo
 	 * @param   string   $expect   @todo
 	 *
-	 * @return  array
-	 *
-	 * @covers        Joomla\String\StringHelper::str_ireplace
 	 * @dataProvider  seedTestStr_ireplace
 	 * @since         1.0
 	 */
@@ -678,9 +658,6 @@ class StringHelperTest extends TestCase
 	 * @param   string  $split_length  @todo
 	 * @param   string  $expect        @todo
 	 *
-	 * @return  array
-	 *
-	 * @covers        Joomla\String\StringHelper::str_split
 	 * @dataProvider  seedTestStr_split
 	 * @since         1.0
 	 */
@@ -698,39 +675,21 @@ class StringHelperTest extends TestCase
 	 * @param   string  $locale   @todo
 	 * @param   string  $expect   @todo
 	 *
-	 * @return  array
-	 *
-	 * @covers        Joomla\String\StringHelper::strcasecmp
 	 * @dataProvider  seedTestStrcasecmp
 	 * @since         1.0
 	 */
 	public function testStrcasecmp($string1, $string2, $locale, $expect)
 	{
-		// Convert the $locale param to a string if it is an array
-		if (\is_array($locale))
+		$this->setLocale($locale);
+
+		$actual = StringHelper::strcasecmp($string1, $string2, $locale);
+
+		if ($actual !== 0)
 		{
-			$locale = "'" . implode("', '", $locale) . "'";
+			$actual /= abs($actual);
 		}
 
-		if (substr(php_uname(), 0, 6) == 'Darwin' && $locale != false)
-		{
-			$this->markTestSkipped('Darwin bug prevents foreign conversion from working properly');
-		}
-		elseif ($locale != false && !setlocale(LC_COLLATE, $locale))
-		{
-			$this->markTestSkipped("Locale {$locale} is not available.");
-		}
-		else
-		{
-			$actual = StringHelper::strcasecmp($string1, $string2, $locale);
-
-			if ($actual != 0)
-			{
-				$actual = $actual / abs($actual);
-			}
-
-			$this->assertEquals($expect, $actual);
-		}
+		$this->assertEquals($expect, $actual);
 	}
 
 	/**
@@ -741,40 +700,21 @@ class StringHelperTest extends TestCase
 	 * @param   string  $locale   @todo
 	 * @param   string  $expect   @todo
 	 *
-	 * @return  array
-	 *
-	 * @covers        Joomla\String\StringHelper::strcmp
 	 * @dataProvider  seedTestStrcmp
 	 * @since         1.0
 	 */
 	public function testStrcmp($string1, $string2, $locale, $expect)
 	{
-		// Convert the $locale param to a string if it is an array
-		if (\is_array($locale))
+		$this->setLocale($locale);
+
+		$actual = StringHelper::strcmp($string1, $string2, $locale);
+
+		if ($actual !== 0)
 		{
-			$locale = "'" . implode("', '", $locale) . "'";
+			$actual /= abs($actual);
 		}
 
-		if (substr(php_uname(), 0, 6) == 'Darwin' && $locale != false)
-		{
-			$this->markTestSkipped('Darwin bug prevents foreign conversion from working properly');
-		}
-		elseif ($locale != false && !setlocale(LC_COLLATE, $locale))
-		{
-			// If the locale is not available, we can't have to transcode the string and can't reliably compare it.
-			$this->markTestSkipped("Locale {$locale} is not available.");
-		}
-		else
-		{
-			$actual = StringHelper::strcmp($string1, $string2, $locale);
-
-			if ($actual != 0)
-			{
-				$actual = $actual / abs($actual);
-			}
-
-			$this->assertEquals($expect, $actual);
-		}
+		$this->assertEquals($expect, $actual);
 	}
 
 	/**
@@ -786,9 +726,6 @@ class StringHelperTest extends TestCase
 	 * @param   integer  $len       @todo
 	 * @param   string   $expect    @todo
 	 *
-	 * @return  array
-	 *
-	 * @covers        Joomla\String\StringHelper::strcspn
 	 * @dataProvider  seedTestStrcspn
 	 * @since         1.0
 	 */
@@ -805,9 +742,6 @@ class StringHelperTest extends TestCase
 	 * @param   string  $needle    @todo
 	 * @param   string  $expect    @todo
 	 *
-	 * @return  array
-	 *
-	 * @covers        Joomla\String\StringHelper::stristr
 	 * @dataProvider  seedTestStristr
 	 * @since         1.0
 	 */
@@ -823,9 +757,6 @@ class StringHelperTest extends TestCase
 	 * @param   string  $string  @todo
 	 * @param   string  $expect  @todo
 	 *
-	 * @return  array
-	 *
-	 * @covers        Joomla\String\StringHelper::strrev
 	 * @dataProvider  seedTestStrrev
 	 * @since         1.0
 	 */
@@ -844,9 +775,6 @@ class StringHelperTest extends TestCase
 	 * @param   integer  $length   @todo
 	 * @param   string   $expect   @todo
 	 *
-	 * @return  array
-	 *
-	 * @covers        Joomla\String\StringHelper::strspn
 	 * @dataProvider  seedTestStrspn
 	 * @since         1.0
 	 */
@@ -865,9 +793,6 @@ class StringHelperTest extends TestCase
 	 * @param   integer  $start        @todo
 	 * @param   integer  $length       @todo
 	 *
-	 * @return  array
-	 *
-	 * @covers        Joomla\String\StringHelper::substr_replace
 	 * @dataProvider  seedTestSubstr_replace
 	 * @since         1.0
 	 */
@@ -884,9 +809,6 @@ class StringHelperTest extends TestCase
 	 * @param   string  $charlist  @todo
 	 * @param   string  $expect    @todo
 	 *
-	 * @return  array
-	 *
-	 * @covers        Joomla\String\StringHelper::ltrim
 	 * @dataProvider  seedTestLtrim
 	 * @since         1.0
 	 */
@@ -911,9 +833,6 @@ class StringHelperTest extends TestCase
 	 * @param   string  $charlist  @todo
 	 * @param   string  $expect    @todo
 	 *
-	 * @return  array
-	 *
-	 * @covers        Joomla\String\StringHelper::rtrim
 	 * @dataProvider  seedTestRtrim
 	 * @since         1.0
 	 */
@@ -938,9 +857,6 @@ class StringHelperTest extends TestCase
 	 * @param   string  $charlist  @todo
 	 * @param   string  $expect    @todo
 	 *
-	 * @return  array
-	 *
-	 * @covers        Joomla\String\StringHelper::trim
 	 * @dataProvider  seedTestTrim
 	 * @since         1.0
 	 */
@@ -966,9 +882,6 @@ class StringHelperTest extends TestCase
 	 * @param   string  $newDelimiter  @todo
 	 * @param   string  $expect        @todo
 	 *
-	 * @return  array
-	 *
-	 * @covers        Joomla\String\StringHelper::ucfirst
 	 * @dataProvider  seedTestUcfirst
 	 * @since         1.0
 	 */
@@ -984,9 +897,6 @@ class StringHelperTest extends TestCase
 	 * @param   string  $string  @todo
 	 * @param   string  $expect  @todo
 	 *
-	 * @return  array
-	 *
-	 * @covers        Joomla\String\StringHelper::ucwords
 	 * @dataProvider  seedTestUcwords
 	 * @since         1.0
 	 */
@@ -1004,9 +914,6 @@ class StringHelperTest extends TestCase
 	 * @param   string  $to_encoding    @todo
 	 * @param   string  $expect         @todo
 	 *
-	 * @return  array
-	 *
-	 * @covers        Joomla\String\StringHelper::transcode
 	 * @dataProvider  seedTestTranscode
 	 * @since         1.0
 	 */
@@ -1022,9 +929,6 @@ class StringHelperTest extends TestCase
 	 * @param   string  $string  @todo
 	 * @param   string  $expect  @todo
 	 *
-	 * @return  array
-	 *
-	 * @covers        Joomla\String\StringHelper::valid
 	 * @dataProvider  seedTestValid
 	 * @since         1.0
 	 */
@@ -1040,9 +944,6 @@ class StringHelperTest extends TestCase
 	 * @param   string  $string  @todo
 	 * @param   string  $expect  @todo
 	 *
-	 * @return  array
-	 *
-	 * @covers        Joomla\String\StringHelper::unicode_to_utf8
 	 * @dataProvider  seedTestUnicodeToUtf8
 	 * @since         1.2.0
 	 */
@@ -1058,9 +959,6 @@ class StringHelperTest extends TestCase
 	 * @param   string  $string  @todo
 	 * @param   string  $expect  @todo
 	 *
-	 * @return  array
-	 *
-	 * @covers        Joomla\String\StringHelper::unicode_to_utf16
 	 * @dataProvider  seedTestUnicodeToUtf16
 	 * @since         1.2.0
 	 */
@@ -1076,9 +974,6 @@ class StringHelperTest extends TestCase
 	 * @param   string  $string  @todo
 	 * @param   string  $expect  @todo
 	 *
-	 * @return  array
-	 *
-	 * @covers        Joomla\String\StringHelper::compliant
 	 * @dataProvider  seedTestValid
 	 * @since         1.0
 	 */
@@ -1086,5 +981,42 @@ class StringHelperTest extends TestCase
 	{
 		$actual = StringHelper::compliant($string);
 		$this->assertEquals($expect, $actual);
+	}
+
+	/**
+	 * Partial override of PHPUnit's version.
+	 * It provides better (any) messages for exceptions.
+	 *
+	 * @param   string  $locale
+	 *
+	 * @since   __DEPLOY_VERSION__
+	 * @throws  Exception
+	 */
+	protected function setLocale()
+	{
+		$args = \func_get_args();
+		$locale = end($args);
+
+		if ($locale === false)
+		{
+			return;
+		}
+
+		if (strpos(php_uname(), 'Darwin') === 0)
+		{
+			$this->markTestSkipped('Darwin bug prevents foreign conversion from working properly');
+		}
+
+		if (!\is_array($locale) && !\is_string($locale))
+		{
+			throw new Exception("The locale must be a string or an array of strings.");
+		}
+
+		try
+		{
+			parent::setLocale(LC_COLLATE, $locale);
+		} catch (Exception $exception) {
+			throw new Exception($exception->getMessage() . " Available locales:\n" . shell_exec("locale -a"));
+		}
 	}
 }

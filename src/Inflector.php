@@ -142,7 +142,7 @@ class Inflector
 		foreach ($data as $rule)
 		{
 			// Ensure a string is pushed.
-			array_push($this->rules[$ruleType], (string) $rule);
+			$this->rules[$ruleType][] = (string) $rule;
 		}
 	}
 
@@ -157,7 +157,7 @@ class Inflector
 	 */
 	private function getCachedPlural($singular)
 	{
-		$singular = StringHelper::strtolower($singular);
+		$singular = (string) StringHelper::strtolower($singular);
 
 		// Check if the word is in cache.
 		if (isset($this->cache[$singular]))
@@ -179,7 +179,7 @@ class Inflector
 	 */
 	private function getCachedSingular($plural)
 	{
-		$plural = StringHelper::strtolower($plural);
+		$plural = (string) StringHelper::strtolower($plural);
 
 		return array_search($plural, $this->cache);
 	}
@@ -226,7 +226,7 @@ class Inflector
 	 */
 	private function setCache($singular, $plural = null)
 	{
-		$singular = StringHelper::strtolower($singular);
+		$singular = (string) StringHelper::strtolower($singular);
 
 		if ($plural === null)
 		{
@@ -234,7 +234,7 @@ class Inflector
 		}
 		else
 		{
-			$plural = StringHelper::strtolower($plural);
+			$plural = (string) StringHelper::strtolower($plural);
 		}
 
 		$this->cache[$singular] = $plural;
@@ -341,7 +341,7 @@ class Inflector
 	 */
 	public function isCountable($word)
 	{
-		return \in_array($word, $this->rules['countable']);
+		return \in_array($word, $this->rules['countable'], true);
 	}
 
 	/**
@@ -371,7 +371,7 @@ class Inflector
 		}
 
 		// Compute the inflection to cache the values, and compare.
-		return $this->toPlural($singularWord) == $word;
+		return $this->toPlural($singularWord) === $word;
 	}
 
 	/**
@@ -401,7 +401,7 @@ class Inflector
 		}
 
 		// Compute the inflection to cache the values, and compare.
-		return $this->toSingular($pluralWord) == $word;
+		return $this->toSingular($pluralWord) === $word;
 	}
 
 	/**

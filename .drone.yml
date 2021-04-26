@@ -78,6 +78,10 @@ steps:
 - name: PHPUnit
   image: joomlaprojects/docker-images:php5.3
   commands:
+  - ""
+  - locale-gen fr_FR.utf8
+  - update-locale
+  - locale -a
   - vendor/bin/phpunit
 
 volumes:
@@ -106,6 +110,10 @@ steps:
 - name: PHPUnit
   image: joomlaprojects/docker-images:php5.3
   commands:
+  - ""
+  - locale-gen fr_FR.utf8
+  - update-locale
+  - locale -a
   - vendor/bin/phpunit
 
 volumes:
@@ -134,6 +142,10 @@ steps:
 - name: PHPUnit
   image: joomlaprojects/docker-images:php5.4
   commands:
+  - apt install -y locales && sed -i 's/^# *\(fr_FR.UTF-8\)/\1/' /etc/locale.gen && locale-gen
+  - ""
+  - update-locale
+  - locale -a
   - vendor/bin/phpunit
 
 volumes:
@@ -162,6 +174,10 @@ steps:
 - name: PHPUnit
   image: joomlaprojects/docker-images:php5.5
   commands:
+  - apt install -y locales && sed -i 's/^# *\(fr_FR.UTF-8\)/\1/' /etc/locale.gen && locale-gen
+  - ""
+  - update-locale
+  - locale -a
   - vendor/bin/phpunit
 
 volumes:
@@ -190,6 +206,10 @@ steps:
 - name: PHPUnit
   image: joomlaprojects/docker-images:php5.6
   commands:
+  - apt install -y locales && sed -i 's/^# *\(fr_FR.UTF-8\)/\1/' /etc/locale.gen && locale-gen
+  - ""
+  - update-locale
+  - locale -a
   - vendor/bin/phpunit
 
 volumes:
@@ -218,6 +238,10 @@ steps:
 - name: PHPUnit
   image: joomlaprojects/docker-images:php7.0
   commands:
+  - apt install -y locales && sed -i 's/^# *\(fr_FR.UTF-8\)/\1/' /etc/locale.gen && locale-gen
+  - ""
+  - update-locale
+  - locale -a
   - vendor/bin/phpunit
 
 volumes:
@@ -246,6 +270,10 @@ steps:
 - name: PHPUnit
   image: joomlaprojects/docker-images:php7.1
   commands:
+  - apt install -y locales && sed -i 's/^# *\(fr_FR.UTF-8\)/\1/' /etc/locale.gen && locale-gen
+  - ""
+  - update-locale
+  - locale -a
   - vendor/bin/phpunit
 
 volumes:
@@ -274,6 +302,10 @@ steps:
 - name: PHPUnit
   image: joomlaprojects/docker-images:php7.2
   commands:
+  - apt install -y locales && sed -i 's/^# *\(fr_FR.UTF-8\)/\1/' /etc/locale.gen && locale-gen
+  - ""
+  - update-locale
+  - locale -a
   - vendor/bin/phpunit
 
 volumes:
@@ -302,6 +334,10 @@ steps:
 - name: PHPUnit
   image: joomlaprojects/docker-images:php7.3
   commands:
+  - apt install -y locales && sed -i 's/^# *\(fr_FR.UTF-8\)/\1/' /etc/locale.gen && locale-gen
+  - ""
+  - update-locale
+  - locale -a
   - vendor/bin/phpunit
 
 volumes:
@@ -330,6 +366,10 @@ steps:
 - name: PHPUnit
   image: joomlaprojects/docker-images:php7.4
   commands:
+  - apt install -y locales && sed -i 's/^# *\(fr_FR.UTF-8\)/\1/' /etc/locale.gen && locale-gen
+  - ""
+  - update-locale
+  - locale -a
   - vendor/bin/phpunit
 
 volumes:
@@ -358,6 +398,10 @@ steps:
 - name: PHPUnit
   image: joomlaprojects/docker-images:php8.0
   commands:
+  - apt install -y locales && sed -i 's/^# *\(fr_FR.UTF-8\)/\1/' /etc/locale.gen && locale-gen
+  - ""
+  - update-locale
+  - locale -a
   - vendor/bin/phpunit
   failure: ignore
 
@@ -368,6 +412,6 @@ volumes:
 
 ---
 kind: signature
-hmac: bcd686cd053fd91aff1bb22c260e9f2f41efef8a869cbc0db2deae0894bb2fd9
+hmac: dd34d9101dfb1b93e84d8ac1b7c80523cae9da31280590cd6132321e05762d9b
 
 ...

@@ -186,7 +186,6 @@ class NormaliseTest extends TestCase
 	 *
 	 * @return  void
 	 *
-	 * @covers        Joomla\String\Normalise::fromCamelcase
 	 * @dataProvider  seedTestFromCamelCase_nongrouped
 	 * @since         1.0
 	 */
@@ -203,7 +202,6 @@ class NormaliseTest extends TestCase
 	 *
 	 * @return  void
 	 *
-	 * @covers        Joomla\String\Normalise::fromCamelcase
 	 * @dataProvider  seedTestFromCamelCase
 	 * @since         1.0
 	 */
@@ -220,7 +218,6 @@ class NormaliseTest extends TestCase
 	 *
 	 * @return  void
 	 *
-	 * @covers        Joomla\String\Normalise::toCamelcase
 	 * @dataProvider  seedTestToCamelCase
 	 * @since         1.0
 	 */
@@ -237,7 +234,6 @@ class NormaliseTest extends TestCase
 	 *
 	 * @return  void
 	 *
-	 * @covers        Joomla\String\Normalise::toDashSeparated
 	 * @dataProvider  seedTestToDashSeparated
 	 * @since         1.0
 	 */
@@ -254,7 +250,6 @@ class NormaliseTest extends TestCase
 	 *
 	 * @return  void
 	 *
-	 * @covers        Joomla\String\Normalise::toSpaceSeparated
 	 * @dataProvider  seedTestToSpaceSeparated
 	 * @since         1.0
 	 */
@@ -271,7 +266,6 @@ class NormaliseTest extends TestCase
 	 *
 	 * @return  void
 	 *
-	 * @covers        Joomla\String\Normalise::toUnderscoreSeparated
 	 * @dataProvider  seedTestToUnderscoreSeparated
 	 * @since         1.0
 	 */
@@ -288,7 +282,6 @@ class NormaliseTest extends TestCase
 	 *
 	 * @return  void
 	 *
-	 * @covers        Joomla\String\Normalise::toVariable
 	 * @dataProvider  seedTestToVariable
 	 * @since         1.0
 	 */
@@ -305,7 +298,6 @@ class NormaliseTest extends TestCase
 	 *
 	 * @return  void
 	 *
-	 * @covers        Joomla\String\Normalise::toKey
 	 * @dataProvider  seedTestToKey
 	 * @since         1.0
 	 */
