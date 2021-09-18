@@ -102,6 +102,7 @@ steps:
   image: joomlaprojects/docker-images:php5.3
   commands:
   - php -v
+  - composer --version
   - composer update --prefer-stable
   volumes:
   - name: composer-cache
@@ -134,6 +135,7 @@ steps:
   image: joomlaprojects/docker-images:php5.4
   commands:
   - php -v
+  - composer --version
   - composer update --prefer-stable
   volumes:
   - name: composer-cache
@@ -166,6 +168,7 @@ steps:
   image: joomlaprojects/docker-images:php5.5
   commands:
   - php -v
+  - composer --version
   - composer update --prefer-stable
   volumes:
   - name: composer-cache
@@ -198,6 +201,7 @@ steps:
   image: joomlaprojects/docker-images:php5.6
   commands:
   - php -v
+  - composer --version
   - composer update --prefer-stable
   volumes:
   - name: composer-cache
@@ -230,6 +234,7 @@ steps:
   image: joomlaprojects/docker-images:php7.0
   commands:
   - php -v
+  - composer --version
   - composer update --prefer-stable
   volumes:
   - name: composer-cache
@@ -262,6 +267,7 @@ steps:
   image: joomlaprojects/docker-images:php7.1
   commands:
   - php -v
+  - composer --version
   - composer update --prefer-stable
   volumes:
   - name: composer-cache
@@ -294,6 +300,7 @@ steps:
   image: joomlaprojects/docker-images:php7.2
   commands:
   - php -v
+  - composer --version
   - composer update --prefer-stable
   volumes:
   - name: composer-cache
@@ -326,6 +333,7 @@ steps:
   image: joomlaprojects/docker-images:php7.3
   commands:
   - php -v
+  - composer --version
   - composer update --prefer-stable
   volumes:
   - name: composer-cache
@@ -358,6 +366,7 @@ steps:
   image: joomlaprojects/docker-images:php7.4
   commands:
   - php -v
+  - composer --version
   - composer update --prefer-stable
   volumes:
   - name: composer-cache
@@ -390,6 +399,7 @@ steps:
   image: joomlaprojects/docker-images:php8.0
   commands:
   - php -v
+  - composer --version
   - composer update --ignore-platform-reqs --prefer-stable
   volumes:
   - name: composer-cache
