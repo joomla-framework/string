@@ -1,4 +1,5 @@
-<?php
+<?php /** @noinspection SpellCheckingInspection */
+
 /**
  * @copyright  Copyright (C) 2005 - 2021 Open Source Matters, Inc. All rights reserved.
  * @license    GNU General Public License version 2 or later; see LICENSE
@@ -35,7 +36,7 @@ class StringHelperTest extends TestCase
 	 *
 	 * @return  \Generator
 	 */
-	public function seedTestIs_ascii(): \Generator
+	public function seedTestIsAscii(): \Generator
 	{
 		yield ['ascii', true];
 		yield ['1024', true];
@@ -51,7 +52,7 @@ class StringHelperTest extends TestCase
 	 *
 	 * @return  \Generator
 	 */
-	public function seedTestStrpos(): \Generator
+	public function seedTestStrPos(): \Generator
 	{
 		yield [3, 'missing', 'sing', 0];
 		yield [false, 'missing', 'sting', 0];
@@ -70,7 +71,7 @@ class StringHelperTest extends TestCase
 	 *
 	 * @since   1.0
 	 */
-	public function seedTestStrrpos(): \Generator
+	public function seedTestStrRPos(): \Generator
 	{
 		yield [3, 'missing', 'sing', 0];
 		yield [false, 'missing', 'sting', 0];
@@ -100,7 +101,7 @@ class StringHelperTest extends TestCase
 	 *
 	 * @return  \Generator
 	 */
-	public function seedTestStrtolower(): \Generator
+	public function seedTestStrToLower(): \Generator
 	{
 		yield ['Joomla! Rocks', 'joomla! rocks'];
 	}
@@ -110,7 +111,7 @@ class StringHelperTest extends TestCase
 	 *
 	 * @return  \Generator
 	 */
-	public function seedTestStrtoupper(): \Generator
+	public function seedTestStrToUpper(): \Generator
 	{
 		yield ['Joomla! Rocks', 'JOOMLA! ROCKS'];
 	}
@@ -120,7 +121,7 @@ class StringHelperTest extends TestCase
 	 *
 	 * @return  \Generator
 	 */
-	public function seedTestStrlen(): \Generator
+	public function seedTestStrLen(): \Generator
 	{
 		yield ['Joomla! Rocks', 13];
 	}
@@ -130,12 +131,18 @@ class StringHelperTest extends TestCase
 	 *
 	 * @return  \Generator
 	 */
-	public function seedTestStr_ireplace(): \Generator
+	public function seedTestStrIReplace(): \Generator
 	{
 		yield ['Pig', 'cow', 'the pig jumped', false, 'the cow jumped'];
 		yield ['Pig', 'cow', 'the pig jumped', true, 'the cow jumped'];
 		yield ['Pig', 'cow', 'the pig jumped over the cow', true, 'the cow jumped over the cow'];
-		yield [['PIG', 'JUMPED'], ['cow', 'hopped'], 'the pig jumped over the pig', true, 'the cow hopped over the cow'];
+		yield [
+			['PIG', 'JUMPED'],
+			['cow', 'hopped'],
+			'the pig jumped over the pig',
+			true,
+			'the cow hopped over the cow'
+		];
 		yield ['шил', 'биш', 'Би шил идэй чадна', true, 'Би биш идэй чадна'];
 		yield ['/', ':', '/test/slashes/', true, ':test:slashes:'];
 	}
@@ -145,7 +152,7 @@ class StringHelperTest extends TestCase
 	 *
 	 * @return  \Generator
 	 */
-	public function seedTestStr_split(): \Generator
+	public function seedTestStrSplit(): \Generator
 	{
 		yield ['string', 1, ['s', 't', 'r', 'i', 'n', 'g']];
 		yield ['string', 2, ['st', 'ri', 'ng']];
@@ -158,18 +165,48 @@ class StringHelperTest extends TestCase
 	 *
 	 * @return  \Generator
 	 */
-	public function seedTestStrcasecmp(): \Generator
+	public function seedTestStrCaseCmp(): \Generator
 	{
 		yield ['THIS IS STRING1', 'this is string1', false, 0];
 		yield ['this is string1', 'this is string2', false, -1];
 		yield ['this is string2', 'this is string1', false, 1];
 		yield ['бгдпт', 'бгдпт', false, 0];
-		yield ['àbc', 'abc', ['fr_FR.utf8', 'fr_FR.UTF-8', 'fr_FR.UTF-8@euro', 'French_Standard', 'french', 'fr_FR', 'fre_FR'], 1];
-		yield ['àbc', 'bcd', ['fr_FR.utf8', 'fr_FR.UTF-8', 'fr_FR.UTF-8@euro', 'French_Standard', 'french', 'fr_FR', 'fre_FR'], -1];
-		yield ['é', 'è', ['fr_FR.utf8', 'fr_FR.UTF-8', 'fr_FR.UTF-8@euro', 'French_Standard', 'french', 'fr_FR', 'fre_FR'], -1];
-		yield ['É', 'é', ['fr_FR.utf8', 'fr_FR.UTF-8', 'fr_FR.UTF-8@euro', 'French_Standard', 'french', 'fr_FR', 'fre_FR'], 0];
-		yield ['œ', 'p', ['fr_FR.utf8', 'fr_FR.UTF-8', 'fr_FR.UTF-8@euro', 'French_Standard', 'french', 'fr_FR', 'fre_FR'], -1];
-		yield ['œ', 'n', ['fr_FR.utf8', 'fr_FR.UTF-8', 'fr_FR.UTF-8@euro', 'French_Standard', 'french', 'fr_FR', 'fre_FR'], 1];
+		yield [
+			'àbc',
+			'abc',
+			['fr_FR.utf8', 'fr_FR.UTF-8', 'fr_FR.UTF-8@euro', 'French_Standard', 'french', 'fr_FR', 'fre_FR'],
+			1
+		];
+		yield [
+			'àbc',
+			'bcd',
+			['fr_FR.utf8', 'fr_FR.UTF-8', 'fr_FR.UTF-8@euro', 'French_Standard', 'french', 'fr_FR', 'fre_FR'],
+			-1
+		];
+		yield [
+			'é',
+			'è',
+			['fr_FR.utf8', 'fr_FR.UTF-8', 'fr_FR.UTF-8@euro', 'French_Standard', 'french', 'fr_FR', 'fre_FR'],
+			-1
+		];
+		yield [
+			'É',
+			'é',
+			['fr_FR.utf8', 'fr_FR.UTF-8', 'fr_FR.UTF-8@euro', 'French_Standard', 'french', 'fr_FR', 'fre_FR'],
+			0
+		];
+		yield [
+			'œ',
+			'p',
+			['fr_FR.utf8', 'fr_FR.UTF-8', 'fr_FR.UTF-8@euro', 'French_Standard', 'french', 'fr_FR', 'fre_FR'],
+			-1
+		];
+		yield [
+			'œ',
+			'n',
+			['fr_FR.utf8', 'fr_FR.UTF-8', 'fr_FR.UTF-8@euro', 'French_Standard', 'french', 'fr_FR', 'fre_FR'],
+			1
+		];
 	}
 
 	/**
@@ -179,21 +216,61 @@ class StringHelperTest extends TestCase
 	 *
 	 * @since   1.0
 	 */
-	public function seedTestStrcmp(): \Generator
+	public function seedTestStrCmp(): \Generator
 	{
 		yield ['THIS IS STRING1', 'this is string1', false, -1];
 		yield ['this is string1', 'this is string2', false, -1];
 		yield ['this is string2', 'this is string1', false, 1];
 		yield ['a', 'B', false, 1];
 		yield ['A', 'b', false, -1];
-		yield ['Àbc', 'abc', ['fr_FR.utf8', 'fr_FR.UTF-8', 'fr_FR.UTF-8@euro', 'French_Standard', 'french', 'fr_FR', 'fre_FR'], 1];
-		yield ['Àbc', 'bcd', ['fr_FR.utf8', 'fr_FR.UTF-8', 'fr_FR.UTF-8@euro', 'French_Standard', 'french', 'fr_FR', 'fre_FR'], -1];
-		yield ['É', 'è', ['fr_FR.utf8', 'fr_FR.UTF-8', 'fr_FR.UTF-8@euro', 'French_Standard', 'french', 'fr_FR', 'fre_FR'], -1];
-		yield ['é', 'È', ['fr_FR.utf8', 'fr_FR.UTF-8', 'fr_FR.UTF-8@euro', 'French_Standard', 'french', 'fr_FR', 'fre_FR'], -1];
-		yield ['Œ', 'p', ['fr_FR.utf8', 'fr_FR.UTF-8', 'fr_FR.UTF-8@euro', 'French_Standard', 'french', 'fr_FR', 'fre_FR'], -1];
-		yield ['Œ', 'n', ['fr_FR.utf8', 'fr_FR.UTF-8', 'fr_FR.UTF-8@euro', 'French_Standard', 'french', 'fr_FR', 'fre_FR'], 1];
-		yield ['œ', 'N', ['fr_FR.utf8', 'fr_FR.UTF-8', 'fr_FR.UTF-8@euro', 'French_Standard', 'french', 'fr_FR', 'fre_FR'], 1];
-		yield ['œ', 'P', ['fr_FR.utf8', 'fr_FR.UTF-8', 'fr_FR.UTF-8@euro', 'French_Standard', 'french', 'fr_FR', 'fre_FR'], -1];
+		yield [
+			'Àbc',
+			'abc',
+			['fr_FR.utf8', 'fr_FR.UTF-8', 'fr_FR.UTF-8@euro', 'French_Standard', 'french', 'fr_FR', 'fre_FR'],
+			1
+		];
+		yield [
+			'Àbc',
+			'bcd',
+			['fr_FR.utf8', 'fr_FR.UTF-8', 'fr_FR.UTF-8@euro', 'French_Standard', 'french', 'fr_FR', 'fre_FR'],
+			-1
+		];
+		yield [
+			'É',
+			'è',
+			['fr_FR.utf8', 'fr_FR.UTF-8', 'fr_FR.UTF-8@euro', 'French_Standard', 'french', 'fr_FR', 'fre_FR'],
+			-1
+		];
+		yield [
+			'é',
+			'È',
+			['fr_FR.utf8', 'fr_FR.UTF-8', 'fr_FR.UTF-8@euro', 'French_Standard', 'french', 'fr_FR', 'fre_FR'],
+			-1
+		];
+		yield [
+			'Œ',
+			'p',
+			['fr_FR.utf8', 'fr_FR.UTF-8', 'fr_FR.UTF-8@euro', 'French_Standard', 'french', 'fr_FR', 'fre_FR'],
+			-1
+		];
+		yield [
+			'Œ',
+			'n',
+			['fr_FR.utf8', 'fr_FR.UTF-8', 'fr_FR.UTF-8@euro', 'French_Standard', 'french', 'fr_FR', 'fre_FR'],
+			1
+		];
+		yield [
+			'œ',
+			'N',
+			['fr_FR.utf8', 'fr_FR.UTF-8', 'fr_FR.UTF-8@euro', 'French_Standard', 'french', 'fr_FR', 'fre_FR'],
+			1
+		];
+		yield [
+			'œ',
+			'P',
+			['fr_FR.utf8', 'fr_FR.UTF-8', 'fr_FR.UTF-8@euro', 'French_Standard', 'french', 'fr_FR', 'fre_FR'],
+			-1
+		];
 	}
 
 	/**
@@ -203,7 +280,7 @@ class StringHelperTest extends TestCase
 	 *
 	 * @since   1.0
 	 */
-	public function seedTestStrcspn(): \Generator
+	public function seedTestStrCSpn(): \Generator
 	{
 		yield ['subject <a> string <a>', '<>', false, false, 8];
 		yield ['Би шил {123} идэй {456} чадна', '}{', null, false, 7];
@@ -217,7 +294,7 @@ class StringHelperTest extends TestCase
 	 *
 	 * @since   1.0
 	 */
-	public function seedTestStristr(): \Generator
+	public function seedTestStrIStr(): \Generator
 	{
 		yield ['haystack', 'needle', false];
 		yield ['before match, after match', 'match', 'match, after match'];
@@ -231,7 +308,7 @@ class StringHelperTest extends TestCase
 	 *
 	 * @since   1.0
 	 */
-	public function seedTestStrrev(): \Generator
+	public function seedTestStrRev(): \Generator
 	{
 		yield ['abc def', 'fed cba'];
 		yield ['Би шил', 'лиш иБ'];
@@ -244,7 +321,7 @@ class StringHelperTest extends TestCase
 	 *
 	 * @since   1.0
 	 */
-	public function seedTestStrspn(): \Generator
+	public function seedTestStrSpn(): \Generator
 	{
 		yield ['A321 Main Street', '0123456789', 1, 2, 2];
 		yield ['321 Main Street', '0123456789', null, 2, 2];
@@ -267,7 +344,7 @@ class StringHelperTest extends TestCase
 	 *
 	 * @since   1.0
 	 */
-	public function seedTestSubstr_replace(): \Generator
+	public function seedTestSubstrReplace(): \Generator
 	{
 		yield ['321 Broadway Avenue', '321 Main Street', 'Broadway Avenue', 4, false];
 		yield ['321 Broadway Street', '321 Main Street', 'Broadway', 4, 4];
@@ -282,7 +359,7 @@ class StringHelperTest extends TestCase
 	 *
 	 * @since   1.0
 	 */
-	public function seedTestLtrim(): \Generator
+	public function seedTestLTrim(): \Generator
 	{
 		yield ['   abc def', false, 'abc def'];
 		yield ['   abc def', '', '   abc def'];
@@ -300,7 +377,7 @@ class StringHelperTest extends TestCase
 	 *
 	 * @since   1.0
 	 */
-	public function seedTestRtrim(): \Generator
+	public function seedTestRTrim(): \Generator
 	{
 		yield ['abc def   ', false, 'abc def'];
 		yield ['abc def   ', '', 'abc def   '];
@@ -420,16 +497,16 @@ class StringHelperTest extends TestCase
 	}
 
 	/**
-	 * @testdox  A string is correctly incremented
+	 * @testdox       A string is correctly incremented
 	 *
 	 * @param   string       $string    The source string.
-	 * @param   string|null  $style     The the style (default|dash).
+	 * @param   string|null  $style     The style (default|dash).
 	 * @param   integer      $number    If supplied, this number is used for the copy, otherwise it is the 'next' number.
 	 * @param   string       $expected  Expected result.
 	 *
 	 * @dataProvider  seedTestIncrement
 	 */
-	public function testIncrement(string $string, ?string $style, int $number, string $expected)
+	public function testIncrement(string $string, ?string $style, int $number, string $expected): void
 	{
 		$this->assertEquals(
 			$expected,
@@ -438,14 +515,14 @@ class StringHelperTest extends TestCase
 	}
 
 	/**
-	 * @testdox  A string is checked to determine if it is ASCII
+	 * @testdox       A string is checked to determine if it is ASCII
 	 *
 	 * @param   string   $string    The string to test.
 	 * @param   boolean  $expected  Expected result.
 	 *
-	 * @dataProvider  seedTestIs_ascii
+	 * @dataProvider  seedTestIsAscii
 	 */
-	public function testIs_ascii(string $string, bool $expected)
+	public function testIsAscii(string $string, bool $expected): void
 	{
 		$this->assertEquals(
 			$expected,
@@ -454,16 +531,16 @@ class StringHelperTest extends TestCase
 	}
 
 	/**
-	 * @testdox  UTF-8 aware strpos() is performed on a string
+	 * @testdox       UTF-8 aware strpos() is performed on a string
 	 *
 	 * @param   string|boolean        $expected  Expected result
 	 * @param   string                $haystack  String being examined
 	 * @param   string                $needle    String being searched for
 	 * @param   integer|null|boolean  $offset    Optional, specifies the position from which the search should be performed
 	 *
-	 * @dataProvider  seedTestStrpos
+	 * @dataProvider  seedTestStrPos
 	 */
-	public function testStrpos($expected, string $haystack, string $needle, $offset = 0)
+	public function testStrPos($expected, string $haystack, string $needle, $offset = 0): void
 	{
 		$this->assertEquals(
 			$expected,
@@ -472,16 +549,16 @@ class StringHelperTest extends TestCase
 	}
 
 	/**
-	 * @testdox  UTF-8 aware strrpos() is performed on a string
+	 * @testdox       UTF-8 aware strrpos() is performed on a string
 	 *
 	 * @param   string|boolean        $expected  Expected result
 	 * @param   string                $haystack  String being examined
 	 * @param   string                $needle    String being searched for
 	 * @param   integer|null|boolean  $offset    Optional, specifies the position from which the search should be performed
 	 *
-	 * @dataProvider  seedTestStrrpos
+	 * @dataProvider  seedTestStrRPos
 	 */
-	public function testStrrpos($expected, string $haystack, string $needle, int $offset = 0)
+	public function testStrRPos($expected, string $haystack, string $needle, int $offset = 0): void
 	{
 		$this->assertEquals(
 			$expected,
@@ -490,16 +567,16 @@ class StringHelperTest extends TestCase
 	}
 
 	/**
-	 * @testdox  UTF-8 aware substr() is performed on a string
+	 * @testdox       UTF-8 aware substr() is performed on a string
 	 *
 	 * @param   string|boolean        $expected  Expected result
 	 * @param   string                $string    String being processed
-	 * @param   integer               $offset    Number of UTF-8 characters offset (from left)
-	 * @param   integer|null|boolean  $offset    Optional, specifies the position from which the search should be performed
+	 * @param   integer               $start     Number of UTF-8 characters offset (from left)
+	 * @param   integer|null|boolean  $length    Optional, specifies the length
 	 *
 	 * @dataProvider  seedTestSubstr
 	 */
-	public function testSubstr($expected, string $string, int $start, $length = false)
+	public function testSubstr($expected, string $string, int $start, $length = false): void
 	{
 		$this->assertEquals(
 			$expected,
@@ -508,14 +585,14 @@ class StringHelperTest extends TestCase
 	}
 
 	/**
-	 * @testdox  UTF-8 aware strtolower() is performed on a string
+	 * @testdox       UTF-8 aware strtolower() is performed on a string
 	 *
 	 * @param   string          $string    String being processed
 	 * @param   string|boolean  $expected  Expected result
 	 *
-	 * @dataProvider  seedTestStrtolower
+	 * @dataProvider  seedTestStrToLower
 	 */
-	public function testStrtolower(string $string, $expected)
+	public function testStrToLower(string $string, $expected): void
 	{
 		$this->assertEquals(
 			$expected,
@@ -524,14 +601,14 @@ class StringHelperTest extends TestCase
 	}
 
 	/**
-	 * @testdox  UTF-8 aware strtoupper() is performed on a string
+	 * @testdox       UTF-8 aware strtoupper() is performed on a string
 	 *
 	 * @param   string          $string    String being processed
 	 * @param   string|boolean  $expected  Expected result
 	 *
-	 * @dataProvider  seedTestStrtoupper
+	 * @dataProvider  seedTestStrToUpper
 	 */
-	public function testStrtoupper($string, $expected)
+	public function testStrToUpper(string $string, $expected): void
 	{
 		$this->assertEquals(
 			$expected,
@@ -540,14 +617,14 @@ class StringHelperTest extends TestCase
 	}
 
 	/**
-	 * @testdox  UTF-8 aware strlen() is performed on a string
+	 * @testdox       UTF-8 aware strlen() is performed on a string
 	 *
 	 * @param   string          $string    String being processed
 	 * @param   string|boolean  $expected  Expected result
 	 *
-	 * @dataProvider  seedTestStrlen
+	 * @dataProvider  seedTestStrLen
 	 */
-	public function testStrlen(string $string, $expected)
+	public function testStrLen(string $string, $expected): void
 	{
 		$this->assertEquals(
 			$expected,
@@ -556,19 +633,19 @@ class StringHelperTest extends TestCase
 	}
 
 	/**
-	 * @testdox  UTF-8 aware str_ireplace() is performed on a string
+	 * @testdox       UTF-8 aware str_ireplace() is performed on a string
 	 *
-	 * @param   string                $search    String to search
-	 * @param   string                $replace   Existing string to replace
+	 * @param   string[]|string       $search    String to search
+	 * @param   string[]|string       $replace   Existing string to replace
 	 * @param   string                $subject   New string to replace with
 	 * @param   integer|null|boolean  $count     Optional count value to be passed by reference
 	 * @param   string                $expected  Expected result
 	 *
-	 * @return  array
+	 * @return  void
 	 *
-	 * @dataProvider  seedTestStr_ireplace
+	 * @dataProvider  seedTestStrIReplace
 	 */
-	public function testStr_ireplace($search, $replace, $subject, $count, $expected)
+	public function testStrIReplace($search, $replace, string $subject, $count, string $expected): void
 	{
 		$this->assertEquals(
 			$expected,
@@ -577,15 +654,15 @@ class StringHelperTest extends TestCase
 	}
 
 	/**
-	 * @testdox  UTF-8 aware str_split() is performed on a string
+	 * @testdox       UTF-8 aware str_split() is performed on a string
 	 *
 	 * @param   string                $string    UTF-8 encoded string to process
 	 * @param   integer               $splitLen  Number to characters to split string by
 	 * @param   array|string|boolean  $expected  Expected result
 	 *
-	 * @dataProvider  seedTestStr_split
+	 * @dataProvider  seedTestStrSplit
 	 */
-	public function testStr_split($string, $splitLen, $expected)
+	public function testStrSplit(string $string, int $splitLen, $expected): void
 	{
 		$this->assertEquals(
 			$expected,
@@ -594,16 +671,16 @@ class StringHelperTest extends TestCase
 	}
 
 	/**
-	 * @testdox  UTF-8 aware strcasecmp() is performed on a string
+	 * @testdox       UTF-8 aware strcasecmp() is performed on a string
 	 *
 	 * @param   string                $string1   String 1 to compare
 	 * @param   string                $string2   String 2 to compare
 	 * @param   array|string|boolean  $locale    The locale used by strcoll or false to use classical comparison
 	 * @param   integer               $expected  Expected result
 	 *
-	 * @dataProvider  seedTestStrcasecmp
+	 * @dataProvider  seedTestStrCaseCmp
 	 */
-	public function testStrcasecmp(string $string1, string $string2, $locale, int $expected)
+	public function testStrCaseCmp(string $string1, string $string2, $locale, int $expected): void
 	{
 		// Convert the $locale param to a string if it is an array
 		if (\is_array($locale))
@@ -611,19 +688,19 @@ class StringHelperTest extends TestCase
 			$locale = "'" . implode("', '", $locale) . "'";
 		}
 
-		if (substr(php_uname(), 0, 6) == 'Darwin' && $locale != false)
+		if ($locale !== false && strpos(php_uname(), 'Darwin') === 0)
 		{
 			$this->markTestSkipped('Darwin bug prevents foreign conversion from working properly');
 		}
 
-		if ($locale != false && !setlocale(LC_COLLATE, $locale))
+		if ($locale !== false && !setlocale(LC_COLLATE, $locale))
 		{
-			$this->markTestSkipped("Locale {$locale} is not available.");
+			$this->markTestSkipped("Locale $locale is not available.");
 		}
 
 		$actual = StringHelper::strcasecmp($string1, $string2, $locale);
 
-		if ($actual != 0)
+		if ($actual !== 0)
 		{
 			$actual /= abs($actual);
 		}
@@ -632,16 +709,16 @@ class StringHelperTest extends TestCase
 	}
 
 	/**
-	 * @testdox  UTF-8 aware strcmp() is performed on a string
+	 * @testdox       UTF-8 aware strcmp() is performed on a string
 	 *
 	 * @param   string   $string1   String 1 to compare
 	 * @param   string   $string2   String 2 to compare
 	 * @param   mixed    $locale    The locale used by strcoll or false to use classical comparison
 	 * @param   integer  $expected  Expected result
 	 *
-	 * @dataProvider  seedTestStrcmp
+	 * @dataProvider  seedTestStrCmp
 	 */
-	public function testStrcmp(string $string1, string $string2, $locale, int $expected)
+	public function testStrCmp(string $string1, string $string2, $locale, int $expected): void
 	{
 		// Convert the $locale param to a string if it is an array
 		if (\is_array($locale))
@@ -649,29 +726,29 @@ class StringHelperTest extends TestCase
 			$locale = "'" . implode("', '", $locale) . "'";
 		}
 
-		if (substr(php_uname(), 0, 6) == 'Darwin' && $locale != false)
+		if ($locale !== false && strpos(php_uname(), 'Darwin') === 0)
 		{
 			$this->markTestSkipped('Darwin bug prevents foreign conversion from working properly');
 		}
 
-		if ($locale != false && !setlocale(LC_COLLATE, $locale))
+		if ($locale !== false && !setlocale(LC_COLLATE, $locale))
 		{
 			// If the locale is not available, we can't have to transcode the string and can't reliably compare it.
-			$this->markTestSkipped("Locale {$locale} is not available.");
+			$this->markTestSkipped("Locale $locale is not available.");
 		}
 
 		$actual = StringHelper::strcmp($string1, $string2, $locale);
 
-		if ($actual != 0)
+		if ($actual !== 0)
 		{
-			$actual = $actual / abs($actual);
+			$actual /= abs($actual);
 		}
 
 		$this->assertEquals($expected, $actual);
 	}
 
 	/**
-	 * @testdox  UTF-8 aware strcspn() is performed on a string
+	 * @testdox       UTF-8 aware strcspn() is performed on a string
 	 *
 	 * @param   string           $haystack  The string to process
 	 * @param   string           $needles   The mask
@@ -679,9 +756,9 @@ class StringHelperTest extends TestCase
 	 * @param   integer|boolean  $len       Optional length
 	 * @param   integer          $expected  Expected result
 	 *
-	 * @dataProvider  seedTestStrcspn
+	 * @dataProvider  seedTestStrCSpn
 	 */
-	public function testStrcspn(string $haystack, string $needles, $start, $len, int $expected)
+	public function testStrCSpn(string $haystack, string $needles, $start, $len, int $expected): void
 	{
 		$this->assertEquals(
 			$expected,
@@ -690,15 +767,15 @@ class StringHelperTest extends TestCase
 	}
 
 	/**
-	 * @testdox  UTF-8 aware stristr() is performed on a string
+	 * @testdox       UTF-8 aware stristr() is performed on a string
 	 *
 	 * @param   string          $haystack  The haystack
 	 * @param   string          $needle    The needle
-	 * @param   string|boolean  $expect    Expected result
+	 * @param   string|boolean  $expected  Expected result
 	 *
-	 * @dataProvider  seedTestStristr
+	 * @dataProvider  seedTestStrIStr
 	 */
-	public function testStristr(string $haystack, string $needle, $expected)
+	public function testStrIStr(string $haystack, string $needle, $expected): void
 	{
 		$this->assertEquals(
 			$expected,
@@ -707,14 +784,14 @@ class StringHelperTest extends TestCase
 	}
 
 	/**
-	 * @testdox  UTF-8 aware strrev() is performed on a string
+	 * @testdox       UTF-8 aware strrev() is performed on a string
 	 *
 	 * @param   string  $string    String to be reversed
 	 * @param   string  $expected  Expected result
 	 *
-	 * @dataProvider  seedTestStrrev
+	 * @dataProvider  seedTestStrRev
 	 */
-	public function testStrrev(string $string, string $expected)
+	public function testStrRev(string $string, string $expected): void
 	{
 		$this->assertEquals(
 			$expected,
@@ -723,17 +800,17 @@ class StringHelperTest extends TestCase
 	}
 
 	/**
-	 * @testdox  UTF-8 aware strspn() is performed on a string
+	 * @testdox       UTF-8 aware strspn() is performed on a string
 	 *
-	 * @param   string        $subject  The haystack
-	 * @param   string        $mask     The mask
-	 * @param   integer|null  $start    Start optional
-	 * @param   integer|null  $length   Length optional
-	 * @param   integer       $expect   Expected result
+	 * @param   string        $subject   The haystack
+	 * @param   string        $mask      The mask
+	 * @param   integer|null  $start     Start optional
+	 * @param   integer|null  $length    Length optional
+	 * @param   integer       $expected  Expected result
 	 *
-	 * @dataProvider  seedTestStrspn
+	 * @dataProvider  seedTestStrSpn
 	 */
-	public function testStrspn(string $subject, string $mask, $start, $length, int $expected)
+	public function testStrSpn(string $subject, string $mask, ?int $start, ?int $length, int $expected): void
 	{
 		$this->assertEquals(
 			$expected,
@@ -742,7 +819,7 @@ class StringHelperTest extends TestCase
 	}
 
 	/**
-	 * @testdox  UTF-8 aware substr_replace() is performed on a string
+	 * @testdox       UTF-8 aware substr_replace() is performed on a string
 	 *
 	 * @param   string                $expected     Expected result
 	 * @param   string                $string       The haystack
@@ -750,9 +827,9 @@ class StringHelperTest extends TestCase
 	 * @param   integer               $start        Start
 	 * @param   integer|boolean|null  $length       Length (optional)
 	 *
-	 * @dataProvider  seedTestSubstr_replace
+	 * @dataProvider  seedTestSubstrReplace
 	 */
-	public function testSubstr_replace(string $expected, string $string, string $replacement, int $start, $length)
+	public function testSubstrReplace(string $expected, string $string, string $replacement, int $start, $length): void
 	{
 		$this->assertEquals(
 			$expected,
@@ -761,15 +838,15 @@ class StringHelperTest extends TestCase
 	}
 
 	/**
-	 * @testdox  UTF-8 aware ltrim() is performed on a string
+	 * @testdox       UTF-8 aware ltrim() is performed on a string
 	 *
 	 * @param   string          $string    The string to be trimmed
 	 * @param   string|boolean  $charlist  The optional charlist of additional characters to trim
 	 * @param   string          $expected  Expected result
 	 *
-	 * @dataProvider  seedTestLtrim
+	 * @dataProvider  seedTestLTrim
 	 */
-	public function testLtrim(string $string, $charlist, string $expected)
+	public function testLTrim(string $string, $charlist, string $expected): void
 	{
 		$this->assertEquals(
 			$expected,
@@ -778,15 +855,15 @@ class StringHelperTest extends TestCase
 	}
 
 	/**
-	 * @testdox  UTF-8 aware rtrim() is performed on a string
+	 * @testdox       UTF-8 aware rtrim() is performed on a string
 	 *
 	 * @param   string          $string    The string to be trimmed
 	 * @param   string|boolean  $charlist  The optional charlist of additional characters to trim
 	 * @param   string          $expected  Expected result
 	 *
-	 * @dataProvider  seedTestRtrim
+	 * @dataProvider  seedTestRTrim
 	 */
-	public function testRtrim(string $string, $charlist, string $expected)
+	public function testRTrim(string $string, $charlist, string $expected): void
 	{
 		$this->assertEquals(
 			$expected,
@@ -795,7 +872,7 @@ class StringHelperTest extends TestCase
 	}
 
 	/**
-	 * @testdox  UTF-8 aware trim() is performed on a string
+	 * @testdox       UTF-8 aware trim() is performed on a string
 	 *
 	 * @param   string          $string    The string to be trimmed
 	 * @param   string|boolean  $charlist  The optional charlist of additional characters to trim
@@ -803,7 +880,7 @@ class StringHelperTest extends TestCase
 	 *
 	 * @dataProvider  seedTestTrim
 	 */
-	public function testTrim(string $string, $charlist, string $expected)
+	public function testTrim(string $string, $charlist, string $expected): void
 	{
 		$this->assertEquals(
 			$expected,
@@ -812,16 +889,16 @@ class StringHelperTest extends TestCase
 	}
 
 	/**
-	 * @testdox  UTF-8 aware ucfirst() is performed on a string
+	 * @testdox       UTF-8 aware ucfirst() is performed on a string
 	 *
 	 * @param   string       $string        String to be processed
-	 * @param   string|null  $delimiter     The words delimiter (null means do not split the string)
-	 * @param   string|null  $newDelimiter  The new words delimiter (null means equal to $delimiter)
+	 * @param   string|null  $delimiter     The delimiter (null means do not split the string)
+	 * @param   string|null  $newDelimiter  The new delimiter (null means equal to $delimiter)
 	 * @param   string       $expected      Expected result
 	 *
 	 * @dataProvider  seedTestUcfirst
 	 */
-	public function testUcfirst(string $string, ?string $delimiter, ?string $newDelimiter, string $expected)
+	public function testUcfirst(string $string, ?string $delimiter, ?string $newDelimiter, string $expected): void
 	{
 		$this->assertEquals(
 			$expected,
@@ -830,14 +907,14 @@ class StringHelperTest extends TestCase
 	}
 
 	/**
-	 * @testdox  UTF-8 aware ucwords() is performed on a string
+	 * @testdox       UTF-8 aware ucwords() is performed on a string
 	 *
 	 * @param   string  $string    String to be processed
 	 * @param   string  $expected  Expected result
 	 *
 	 * @dataProvider  seedTestUcwords
 	 */
-	public function testUcwords(string $string, string $expected)
+	public function testUcwords(string $string, string $expected): void
 	{
 		$this->assertEquals(
 			$expected,
@@ -846,16 +923,16 @@ class StringHelperTest extends TestCase
 	}
 
 	/**
-	 * @testdox  A string is transcoded
+	 * @testdox       A string is transcoded
 	 *
 	 * @param   string       $source        The string to transcode.
 	 * @param   string       $fromEncoding  The source encoding.
 	 * @param   string       $toEncoding    The target encoding.
-	 * @param   string|null  $expect        Expected result.
+	 * @param   string|null  $expected      Expected result.
 	 *
 	 * @dataProvider  seedTestTranscode
 	 */
-	public function testTranscode(string $source, string $fromEncoding, string $toEncoding, ?string $expected)
+	public function testTranscode(string $source, string $fromEncoding, string $toEncoding, ?string $expected): void
 	{
 		$this->assertEquals(
 			$expected,
@@ -864,14 +941,14 @@ class StringHelperTest extends TestCase
 	}
 
 	/**
-	 * @testdox  A string is tested as valid UTF-8
+	 * @testdox       A string is tested as valid UTF-8
 	 *
 	 * @param   string   $string    UTF-8 encoded string.
 	 * @param   boolean  $expected  Expected result.
 	 *
 	 * @dataProvider  seedCompliantStrings
 	 */
-	public function testValid(string $string, bool $expected)
+	public function testValid(string $string, bool $expected): void
 	{
 		$this->assertEquals(
 			$expected,
@@ -880,14 +957,14 @@ class StringHelperTest extends TestCase
 	}
 
 	/**
-	 * @testdox  A string is converted from unicode to UTF-8
+	 * @testdox       A string is converted from unicode to UTF-8
 	 *
-	 * @param   string  $string    Unicode string to convert
+	 * @param   string  $string    The Unicode string to be converted
 	 * @param   string  $expected  Expected result
 	 *
 	 * @dataProvider  seedTestUnicodeToUtf8
 	 */
-	public function testUnicodeToUtf8(string $string, string $expected)
+	public function testUnicodeToUtf8(string $string, string $expected): void
 	{
 		$this->assertEquals(
 			$expected,
@@ -896,14 +973,14 @@ class StringHelperTest extends TestCase
 	}
 
 	/**
-	 * @testdox  A string is converted from unicode to UTF-16
+	 * @testdox       A string is converted from unicode to UTF-16
 	 *
-	 * @param   string  $string    Unicode string to convert
+	 * @param   string  $string    The Unicode string to be converted
 	 * @param   string  $expected  Expected result
 	 *
 	 * @dataProvider  seedTestUnicodeToUtf16
 	 */
-	public function testUnicodeToUtf16(string $string, string $expected)
+	public function testUnicodeToUtf16(string $string, string $expected): void
 	{
 		$this->assertEquals(
 			$expected,
@@ -912,14 +989,14 @@ class StringHelperTest extends TestCase
 	}
 
 	/**
-	 * @testdox  A string is checked for UTF-8 compliance
+	 * @testdox       A string is checked for UTF-8 compliance
 	 *
 	 * @param   string   $string    UTF-8 string to check
 	 * @param   boolean  $expected  Expected result
 	 *
 	 * @dataProvider  seedCompliantStrings
 	 */
-	public function testCompliant(string $string, bool $expected)
+	public function testCompliant(string $string, bool $expected): void
 	{
 		$this->assertEquals(
 			$expected,

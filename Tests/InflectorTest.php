@@ -2,6 +2,9 @@
 /**
  * @copyright  Copyright (C) 2005 - 2021 Open Source Matters, Inc. All rights reserved.
  * @license    GNU General Public License version 2 or later; see LICENSE
+ *
+ * @noinspection PhpDeprecationInspection
+ * @noinspection SpellCheckingInspection
  */
 
 namespace Joomla\String\Tests;
@@ -104,8 +107,9 @@ class InflectorTest extends TestCase
 
 	/**
 	 * @testdox  A rule cannot be added to the inflector if it is of an unsupported type
+	 * @throws \ReflectionException
 	 */
-	public function testAddRuleException()
+	public function testAddRuleException(): void
 	{
 		$this->expectException(\InvalidArgumentException::class);
 
@@ -114,8 +118,9 @@ class InflectorTest extends TestCase
 
 	/**
 	 * @testdox  A countable rule can be added to the inflector
+	 * @throws \ReflectionException
 	 */
-	public function testAddCountableRule()
+	public function testAddCountableRule(): void
 	{
 		// Add string.
 		$this->inflector->addCountableRule('foo');
@@ -142,8 +147,9 @@ class InflectorTest extends TestCase
 
 	/**
 	 * @testdox  A word can be added to the inflector without a plural form
+	 * @throws \ReflectionException
 	 */
-	public function testAddWordWithoutPlural()
+	public function testAddWordWithoutPlural(): void
 	{
 		$this->assertSame(
 			$this->inflector,
@@ -152,21 +158,24 @@ class InflectorTest extends TestCase
 
 		$plural = TestHelper::getValue(DoctrineInflector::class, 'plural');
 
-		$this->assertTrue(
-			in_array('foo', $plural['uninflected'])
+		$this->assertContains(
+			'foo',
+			$plural['uninflected']
 		);
 
 		$singular = TestHelper::getValue(DoctrineInflector::class, 'singular');
 
-		$this->assertTrue(
-			in_array('foo', $singular['uninflected'])
+		$this->assertContains(
+			'foo',
+			$singular['uninflected']
 		);
 	}
 
 	/**
 	 * @testdox  A word can be added to the inflector with a plural form
+	 * @throws \ReflectionException
 	 */
-	public function testAddWordWithPlural()
+	public function testAddWordWithPlural(): void
 	{
 		$this->assertEquals(
 			$this->inflector,
@@ -190,8 +199,9 @@ class InflectorTest extends TestCase
 
 	/**
 	 * @testdox  A pluralisation rule can be added to the inflector
+	 * @throws \ReflectionException
 	 */
-	public function testAddPluraliseRule()
+	public function testAddPluraliseRule(): void
 	{
 		$this->assertSame(
 			$this->inflector->addPluraliseRule(['/^(custom)$/i' => '\1izables']),
@@ -210,8 +220,9 @@ class InflectorTest extends TestCase
 
 	/**
 	 * @testdox  A singularisation rule can be added to the inflector
+	 * @throws \ReflectionException
 	 */
-	public function testAddSingulariseRule()
+	public function testAddSingulariseRule(): void
 	{
 		$this->assertSame(
 			$this->inflector->addSingulariseRule(['/^(inflec|contribu)tors$/i' => '\1ta']),
@@ -231,7 +242,7 @@ class InflectorTest extends TestCase
 	/**
 	 * @testdox  The singleton instance of the inflector can be retrieved
 	 */
-	public function testGetInstance()
+	public function testGetInstance(): void
 	{
 		$this->assertInstanceOf(
 			Inflector::class,
@@ -247,14 +258,14 @@ class InflectorTest extends TestCase
 	}
 
 	/**
-	 * @testdox  A string is checked to determine if it a countable word
+	 * @testdox  A string is checked to determine if it is a countable word
 	 *
 	 * @param   string   $input     A string.
 	 * @param   boolean  $expected  The expected result of the function call.
 	 *
 	 * @dataProvider  seedIsCountable
 	 */
-	public function testIsCountable(string $input, bool $expected)
+	public function testIsCountable(string $input, bool $expected): void
 	{
 		$this->assertEquals(
 			$expected,
@@ -270,7 +281,7 @@ class InflectorTest extends TestCase
 	 *
 	 * @dataProvider  seedSinglePlural
 	 */
-	public function testIsPlural(string $singular, string $plural)
+	public function testIsPlural(string $singular, string $plural): void
 	{
 		$this->assertTrue(
 			$this->inflector->isPlural($plural),
@@ -294,7 +305,7 @@ class InflectorTest extends TestCase
 	 *
 	 * @dataProvider  seedSinglePlural
 	 */
-	public function testIsSingular(string $singular, string $plural)
+	public function testIsSingular(string $singular, string $plural): void
 	{
 		$this->assertTrue(
 			$this->inflector->isSingular($singular),
@@ -318,7 +329,7 @@ class InflectorTest extends TestCase
 	 *
 	 * @dataProvider  seedSinglePlural
 	 */
-	public function testToPlural(string $singular, string $plural)
+	public function testToPlural(string $singular, string $plural): void
 	{
 		$this->assertSame(
 			$plural,
@@ -328,9 +339,9 @@ class InflectorTest extends TestCase
 	}
 
 	/**
-	 * @testdox  A string that is already plural is returned in the same form
+	 * @testdox  A string that is already plural is returned unchanged
 	 */
-	public function testToPluralAlreadyPlural()
+	public function testToPluralAlreadyPlural(): void
 	{
 		$this->assertSame(
 			'buses',
@@ -347,7 +358,7 @@ class InflectorTest extends TestCase
 	 *
 	 * @dataProvider  seedSinglePlural
 	 */
-	public function testToSingular(string $singular, string $plural)
+	public function testToSingular(string $singular, string $plural): void
 	{
 		$this->assertSame(
 			$singular,
@@ -357,9 +368,9 @@ class InflectorTest extends TestCase
 	}
 
 	/**
-	 * @testdox  A string that is already singular is returned in the same form
+	 * @testdox  A string that is already singular is returned unchanged
 	 */
-	public function testToSingularAlreadySingular()
+	public function testToSingularAlreadySingular(): void
 	{
 		$this->assertSame(
 			'bus',

@@ -1,13 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <phpunit bootstrap="vendor/autoload.php" colors="false">
-	<filter>
-		<whitelist processUncoveredFilesFromWhitelist="true">
-			<directory suffix=".php">src</directory>
-			<exclude>
-				<directory suffix=".php">src/phputf8</directory>
-			</exclude>
-		</whitelist>
-	</filter>
 	<testsuites>
 		<testsuite name="Unit">
 			<directory>Tests</directory>

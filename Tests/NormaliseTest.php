@@ -42,7 +42,7 @@ class NormaliseTest extends TestCase
 	 *
 	 * @since   1.0
 	 */
-	public function seedTestFromCamelCase_nongrouped(): \Generator
+	public function seedTestFromCamelCaseNonGrouped(): \Generator
 	{
 		yield ['Foo Bar', 'FooBar'];
 		yield ['foo Bar', 'fooBar'];
@@ -168,9 +168,9 @@ class NormaliseTest extends TestCase
 	 * @param   string  $expected  The expected value from the method.
 	 * @param   string  $input     The input value for the method.
 	 *
-	 * @dataProvider  seedTestFromCamelCase_nongrouped
+	 * @dataProvider  seedTestFromCamelCaseNonGrouped
 	 */
-	public function testFromCamelCase_nongrouped(string $expected, string $input)
+	public function testFromCamelCaseNonGrouped(string $expected, string $input): void
 	{
 		$this->assertEquals($expected, Normalise::fromCamelcase($input));
 	}
@@ -183,7 +183,7 @@ class NormaliseTest extends TestCase
 	 *
 	 * @dataProvider  seedTestFromCamelCase
 	 */
-	public function testFromCamelCase_grouped(string $input, $expected)
+	public function testFromCamelCase_grouped(string $input, $expected): void
 	{
 		$this->assertEquals($expected, Normalise::fromCamelcase($input, true));
 	}
@@ -196,7 +196,7 @@ class NormaliseTest extends TestCase
 	 *
 	 * @dataProvider  seedTestToCamelCase
 	 */
-	public function testToCamelCase(string $expected, string $input)
+	public function testToCamelCase(string $expected, string $input): void
 	{
 		$this->assertEquals($expected, Normalise::toCamelcase($input));
 	}
@@ -209,7 +209,7 @@ class NormaliseTest extends TestCase
 	 *
 	 * @dataProvider  seedTestToDashSeparated
 	 */
-	public function testToDashSeparated(string $expected, string $input)
+	public function testToDashSeparated(string $expected, string $input): void
 	{
 		$this->assertEquals($expected, Normalise::toDashSeparated($input));
 	}
@@ -222,7 +222,7 @@ class NormaliseTest extends TestCase
 	 *
 	 * @dataProvider  seedTestToSpaceSeparated
 	 */
-	public function testToSpaceSeparated(string $expected, string $input)
+	public function testToSpaceSeparated(string $expected, string $input): void
 	{
 		$this->assertEquals($expected, Normalise::toSpaceSeparated($input));
 	}
@@ -235,7 +235,7 @@ class NormaliseTest extends TestCase
 	 *
 	 * @dataProvider  seedTestToUnderscoreSeparated
 	 */
-	public function testToUnderscoreSeparated(string $expected, string $input)
+	public function testToUnderscoreSeparated(string $expected, string $input): void
 	{
 		$this->assertEquals($expected, Normalise::toUnderscoreSeparated($input));
 	}
@@ -248,7 +248,7 @@ class NormaliseTest extends TestCase
 	 *
 	 * @dataProvider  seedTestToVariable
 	 */
-	public function testToVariable(string $expected, string $input)
+	public function testToVariable(string $expected, string $input): void
 	{
 		$this->assertEquals($expected, Normalise::toVariable($input));
 	}
@@ -261,7 +261,7 @@ class NormaliseTest extends TestCase
 	 *
 	 * @dataProvider  seedTestToKey
 	 */
-	public function testToKey(string $expected, string $input)
+	public function testToKey(string $expected, string $input): void
 	{
 		$this->assertEquals($expected, Normalise::toKey($input));
 	}
