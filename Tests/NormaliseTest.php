@@ -17,7 +17,7 @@ use PHPUnit\Framework\TestCase;
 class NormaliseTest extends TestCase
 {
 	/**
-	 * Method to seed data to testFromCamelCase.
+	 * Seed data to testFromCamelCase.
 	 *
 	 * @return  \Generator
 	 *
@@ -36,7 +36,7 @@ class NormaliseTest extends TestCase
 	}
 
 	/**
-	 * Method to seed data to testFromCamelCase.
+	 * Seed data to testFromCamelCase.
 	 *
 	 * @return  \Generator
 	 *
@@ -51,7 +51,7 @@ class NormaliseTest extends TestCase
 	}
 
 	/**
-	 * Method to seed data to testToCamelCase.
+	 * Seed data to testToCamelCase.
 	 *
 	 * @return  \Generator
 	 *
@@ -68,7 +68,7 @@ class NormaliseTest extends TestCase
 	}
 
 	/**
-	 * Method to seed data to testToDashSeparated.
+	 * Seed data to testToDashSeparated.
 	 *
 	 * @return  \Generator
 	 *
@@ -88,7 +88,7 @@ class NormaliseTest extends TestCase
 	}
 
 	/**
-	 * Method to seed data to testToSpaceSeparated.
+	 * Seed data to testToSpaceSeparated.
 	 *
 	 * @return  \Generator
 	 *
@@ -108,7 +108,7 @@ class NormaliseTest extends TestCase
 	}
 
 	/**
-	 * Method to seed data to testToUnderscoreSeparated.
+	 * Seed data to testToUnderscoreSeparated.
 	 *
 	 * @return  \Generator
 	 *
@@ -128,7 +128,7 @@ class NormaliseTest extends TestCase
 	}
 
 	/**
-	 * Method to seed data to testToVariable.
+	 * Seed data to testToVariable.
 	 *
 	 * @return  \Generator
 	 *
@@ -146,7 +146,7 @@ class NormaliseTest extends TestCase
 	}
 
 	/**
-	 * Method to seed data to testToKey.
+	 * Seed data to testToKey.
 	 *
 	 * @return  \Generator
 	 *

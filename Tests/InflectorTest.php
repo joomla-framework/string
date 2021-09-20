@@ -28,7 +28,7 @@ class InflectorTest extends TestCase
 	protected $inflector;
 
 	/**
-	 * Method to seed data to testIsCountable.
+	 * Seed data to testIsCountable.
 	 *
 	 * @return  \Generator
 	 */
@@ -39,7 +39,7 @@ class InflectorTest extends TestCase
 	}
 
 	/**
-	 * Method to seed data to testToPlural.
+	 * Seed data to testToPlural.
 	 *
 	 * @return  \Generator
 	 *
@@ -106,42 +106,48 @@ class InflectorTest extends TestCase
 	}
 
 	/**
-	 * @testdox  A rule cannot be added to the inflector if it is of an unsupported type
-	 * @throws \ReflectionException
+	 * @testdox  A single word can be added to the inflector countable rules
 	 */
-	public function testAddRuleException(): void
+	public function testAddCountableWord(): void
 	{
-		$this->expectException(\InvalidArgumentException::class);
+		$this->assertFalse(
+			$this->inflector->isCountable('foo'),
+			'"foo" should not be known to the inflector by default.'
+		);
 
-		TestHelper::invoke($this->inflector, 'addRule', new \stdClass, 'singular');
+		$this->inflector->addCountableRule('foo');
+
+		$this->assertTrue(
+			$this->inflector->isCountable('foo'),
+			'"foo" should be known to the inflector after being set explicitely.'
+		);
 	}
 
 	/**
-	 * @testdox  A countable rule can be added to the inflector
-	 * @throws \ReflectionException
+	 * @testdox  An array of words can be added to the inflector countable rules
 	 */
-	public function testAddCountableRule(): void
+	public function testAddCountableArray(): void
 	{
-		// Add string.
-		$this->inflector->addCountableRule('foo');
-
-		$countable = TestHelper::getValue($this->inflector, 'countable');
-
-		$this->assertContains(
-			'foo',
-			$countable['rules'],
-			'Checks a countable rule was added.'
+		$this->assertFalse(
+			$this->inflector->isCountable('goo'),
+			'"goo" should not be known to the inflector by default.'
 		);
 
-		// Add array.
-		$this->inflector->addCountableRule(array('goo', 'car'));
+		$this->assertFalse(
+			$this->inflector->isCountable('car'),
+			'"car" should not be known to the inflector by default.'
+		);
 
-		$countable = TestHelper::getValue($this->inflector, 'countable');
+		$this->inflector->addCountableRule(['goo', 'car']);
 
-		$this->assertContains(
-			'car',
-			$countable['rules'],
-			'Checks a countable rule was added by array.'
+		$this->assertTrue(
+			$this->inflector->isCountable('goo'),
+			'"goo" should be known to the inflector after being set explicitely.'
+		);
+
+		$this->assertTrue(
+			$this->inflector->isCountable('car'),
+			'"car" should be known to the inflector after being set explicitely.'
 		);
 	}
 
@@ -199,43 +205,35 @@ class InflectorTest extends TestCase
 
 	/**
 	 * @testdox  A pluralisation rule can be added to the inflector
-	 * @throws \ReflectionException
 	 */
 	public function testAddPluraliseRule(): void
 	{
-		$this->assertSame(
-			$this->inflector->addPluraliseRule(['/^(custom)$/i' => '\1izables']),
-			$this->inflector,
-			'Checks chaining.'
-		);
+		$this->inflector::rules('plural', ['/^(custom)$/i' => '\1izables']);
 
-		$plural = TestHelper::getValue(DoctrineInflector::class, 'plural');
-
-		$this->assertArrayHasKey(
-			'/^(custom)$/i',
-			$plural['rules'],
-			'Checks a pluralisation rule was added.'
+		$this->assertEquals(
+			'customizables',
+			$this->inflector::pluralize('custom'),
+			'"custom" should become "customizables" after being set explicitely.'
 		);
 	}
 
 	/**
 	 * @testdox  A singularisation rule can be added to the inflector
-	 * @throws \ReflectionException
 	 */
 	public function testAddSingulariseRule(): void
 	{
-		$this->assertSame(
-			$this->inflector->addSingulariseRule(['/^(inflec|contribu)tors$/i' => '\1ta']),
-			$this->inflector,
-			'Checks chaining.'
+		$this->inflector::rules('singular', ['/^(inflec|contribu)tors$/i' => '\1ta']);
+
+		$this->assertEquals(
+			'inflecta',
+			$this->inflector::singularize('inflectors'),
+			'"inflectors" should become "inflecta" after being set explicitely.'
 		);
 
-		$singular = TestHelper::getValue(DoctrineInflector::class, 'singular');
-
-		$this->assertArrayHasKey(
-			'/^(inflec|contribu)tors$/i',
-			$singular['rules'],
-			'Checks a singularisation rule was added.'
+		$this->assertEquals(
+			'contributa',
+			$this->inflector::singularize('contributors'),
+			'"contributors" should become "contributa" after being set explicitely.'
 		);
 	}
 

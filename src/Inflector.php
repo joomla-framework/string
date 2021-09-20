@@ -43,46 +43,6 @@ class Inflector extends DoctrineInflector
 	];
 
 	/**
-	 * Adds inflection regex rules to the inflector.
-	 *
-	 * @param   mixed   $data      A string or an array of strings or regex rules to add.
-	 * @param   string  $ruleType  The rule type: singular | plural | countable
-	 *
-	 * @return  void
-	 *
-	 * @since   1.0
-	 * @throws  \InvalidArgumentException
-	 */
-	private function addRule($data, string $ruleType)
-	{
-		if (\is_string($data))
-		{
-			$data = [$data];
-		}
-		elseif (!\is_array($data))
-		{
-			throw new \InvalidArgumentException('Invalid inflector rule data.');
-		}
-		elseif (!\in_array($ruleType, ['singular', 'plural', 'countable']))
-		{
-			throw new \InvalidArgumentException('Unsupported rule type.');
-		}
-
-		if ($ruleType === 'countable')
-		{
-			foreach ($data as $rule)
-			{
-				// Ensure a string is pushed.
-				array_push(self::$countable['rules'], (string) $rule);
-			}
-		}
-		else
-		{
-			static::rules($ruleType, $data);
-		}
-	}
-
-	/**
 	 * Adds a countable word.
 	 *
 	 * @param   mixed  $data  A string or an array of strings to add.
@@ -93,7 +53,15 @@ class Inflector extends DoctrineInflector
 	 */
 	public function addCountableRule($data)
 	{
-		$this->addRule($data, 'countable');
+		if (\is_string($data))
+		{
+			$data = [$data];
+		}
+
+		foreach ($data as $rule)
+		{
+			self::$countable['rules'][] = (string) $rule;
+		}
 
 		return $this;
 	}
@@ -164,6 +132,7 @@ class Inflector extends DoctrineInflector
 	 *
 	 * @since   1.0
 	 * @deprecated  3.0  Use Doctrine\Common\Inflector\Inflector::rules() instead.
+	 * @codeCoverageIgnore
 	 */
 	public function addPluraliseRule($data)
 	{
@@ -175,7 +144,7 @@ class Inflector extends DoctrineInflector
 			DoctrineInflector::class
 		);
 
-		$this->addRule($data, 'plural');
+		static::rules('plural', $data);
 
 		return $this;
 	}
@@ -189,6 +158,7 @@ class Inflector extends DoctrineInflector
 	 *
 	 * @since   1.0
 	 * @deprecated  3.0  Use Doctrine\Common\Inflector\Inflector::rules() instead.
+	 * @codeCoverageIgnore
 	 */
 	public function addSingulariseRule($data)
 	{
@@ -200,7 +170,7 @@ class Inflector extends DoctrineInflector
 			DoctrineInflector::class
 		);
 
-		$this->addRule($data, 'singular');
+		static::rules('singular', $data);
 
 		return $this;
 	}
@@ -248,7 +218,7 @@ class Inflector extends DoctrineInflector
 	 */
 	public function isCountable($word)
 	{
-		return \in_array($word, self::$countable['rules']);
+		return \in_array($word, self::$countable['rules'], true);
 	}
 
 	/**
@@ -262,7 +232,7 @@ class Inflector extends DoctrineInflector
 	 */
 	public function isPlural($word)
 	{
-		return $this->toPlural($this->toSingular($word)) === $word;
+		return static::pluralize(static::singularize($word)) === $word;
 	}
 
 	/**
@@ -276,7 +246,7 @@ class Inflector extends DoctrineInflector
 	 */
 	public function isSingular($word)
 	{
-		return $this->toSingular($word) === $word;
+		return static::singularize($word) === $word;
 	}
 
 	/**
