@@ -731,7 +731,7 @@ abstract class StringHelper
 			);
 		}
 
-		return $str; // @codeCoverageIgnore
+		return $str;
 	}
 
 	/**
@@ -756,11 +756,11 @@ abstract class StringHelper
 			);
 		}
 
-		return $str; // @codeCoverageIgnore
+		return $str;
 	}
 
 	/**
-	 * @param $value
+	 * @param   string[]|string  $value  The value
 	 *
 	 * @return array
 	 */
@@ -779,7 +779,7 @@ abstract class StringHelper
 	}
 
 	/**
-	 * @param   string[]|string  $locale
+	 * @param   string[]|string  $locale  The locale
 	 *
 	 * @return string
 	 */
