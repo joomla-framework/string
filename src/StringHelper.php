@@ -756,7 +756,7 @@ abstract class StringHelper
 	 */
 	public static function unicode_to_utf8($str)
 	{
-		return UTF8::to_utf8_string($str);
+		return UTF8::to_utf8($str);
 	}
 
 	/**
@@ -772,7 +772,7 @@ abstract class StringHelper
 	 */
 	public static function unicode_to_utf16($str)
 	{
-		return UTF8::to_utf8_string($str);
+		return UTF8::to_utf8($str);
 	}
 
 	/**
