@@ -24,13 +24,6 @@
 	"conflict": {
 		"doctrine/inflector": "<1.2"
 	},
-	"replace": {
-		"symfony/polyfill-php72": "1.99",
-		"symfony/polyfill-iconv": "1.99",
-		"symfony/polyfill-intl-grapheme": "1.99",
-		"symfony/polyfill-intl-normalizer": "1.99",
-		"symfony/polyfill-mbstring": "1.99"
-	},
 	"suggest": {
 		"ext-mbstring": "For improved performance",
 		"ext-iconv": "For improved performance",
