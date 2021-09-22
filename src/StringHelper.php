@@ -8,6 +8,8 @@
 
 namespace Joomla\String;
 
+use voku\helper\UTF8;
+
 @ini_set('default_charset', 'UTF-8');
 
 /**
@@ -93,11 +95,12 @@ abstract class StringHelper
 	 *
 	 * @return  boolean True if the string is all ASCII
 	 *
-	 * @since   1.3.0
+	 * @since      1.3.0
+	 * @deprecated 3.0 Please use UTF8::is_ascii() instead.
 	 */
 	public static function is_ascii($str)
 	{
-		return utf8_is_ascii($str);
+		return UTF8::is_ascii($str);
 	}
 
 	/**
@@ -109,12 +112,13 @@ abstract class StringHelper
 	 *
 	 * @return  integer Unicode ordinal for the character
 	 *
-	 * @link    https://www.php.net/ord
-	 * @since   1.4.0
+	 * @link       https://www.php.net/ord
+	 * @since      1.4.0
+	 * @deprecated 3.0 Please use UTF8::ord() instead.
 	 */
 	public static function ord($chr)
 	{
-		return utf8_ord($chr);
+		return UTF8::ord($chr);
 	}
 
 	/**
@@ -132,17 +136,18 @@ abstract class StringHelper
 	 *                           start at 0, and not 1.
 	 *                           Returns false if the needle was not found.
 	 *
-	 * @link    https://www.php.net/strpos
-	 * @since   1.3.0
+	 * @link       https://www.php.net/strpos
+	 * @since      1.3.0
+	 * @deprecated 3.0 Please use UTF8::strpos() instead.
 	 */
 	public static function strpos($haystack, $needle, $offset = null)
 	{
 		if ($offset === null)
 		{
-			return utf8_strpos($haystack, $needle);
+			return UTF8::strpos($haystack, $needle);
 		}
 
-		return utf8_strpos($haystack, $needle, $offset);
+		return UTF8::strpos($haystack, $needle, $offset);
 	}
 
 	/**
@@ -161,12 +166,18 @@ abstract class StringHelper
 	 *                           start at 0, and not 1.
 	 *                           Returns false if the needle was not found.
 	 *
-	 * @link    https://www.php.net/strrpos
-	 * @since   1.3.0
+	 * @link       https://www.php.net/strrpos
+	 * @since      1.3.0
+	 * @deprecated 3.0 Please use UTF8::strrpos() instead.
 	 */
-	public static function strrpos($haystack, $needle, $offset = 0)
+	public static function strrpos($haystack, $needle, $offset = null)
 	{
-		return utf8_strrpos($haystack, $needle, $offset ?? 0);
+		if ($offset === null)
+		{
+			$offset = 0;
+		}
+
+		return UTF8::strrpos($haystack, $needle, $offset);
 	}
 
 	/**
@@ -180,17 +191,18 @@ abstract class StringHelper
 	 *
 	 * @return  string|boolean
 	 *
-	 * @link    https://www.php.net/substr
-	 * @since   1.3.0
+	 * @link       https://www.php.net/substr
+	 * @since      1.3.0
+	 * @deprecated 3.0 Please use UTF8::substr() instead.
 	 */
 	public static function substr($str, $offset, $length = null)
 	{
 		if ($length === null)
 		{
-			return utf8_substr($str, $offset);
+			return UTF8::substr($str, $offset);
 		}
 
-		return utf8_substr($str, $offset, $length);
+		return UTF8::substr($str, $offset, $length);
 	}
 
 	/**
@@ -205,12 +217,13 @@ abstract class StringHelper
 	 *
 	 * @return  string|boolean  Either string in lowercase or FALSE is UTF-8 invalid
 	 *
-	 * @link    https://www.php.net/strtolower
-	 * @since   1.3.0
+	 * @link       https://www.php.net/strtolower
+	 * @since      1.3.0
+	 * @deprecated 3.0 Please use UTF8::strtolower() instead.
 	 */
 	public static function strtolower($str)
 	{
-		return utf8_strtolower($str);
+		return UTF8::strtolower($str);
 	}
 
 	/**
@@ -225,12 +238,13 @@ abstract class StringHelper
 	 *
 	 * @return  string|boolean  Either string in uppercase or FALSE is UTF-8 invalid
 	 *
-	 * @link    https://www.php.net/strtoupper
-	 * @since   1.3.0
+	 * @link       https://www.php.net/strtoupper
+	 * @since      1.3.0
+	 * @deprecated 3.0 Please use UTF8::strtoupper() instead.
 	 */
 	public static function strtoupper($str)
 	{
-		return utf8_strtoupper($str);
+		return UTF8::strtoupper($str);
 	}
 
 	/**
@@ -242,12 +256,13 @@ abstract class StringHelper
 	 *
 	 * @return  integer  Number of UTF-8 characters in string.
 	 *
-	 * @link    https://www.php.net/strlen
-	 * @since   1.3.0
+	 * @link       https://www.php.net/strlen
+	 * @since      1.3.0
+	 * @deprecated 3.0 Please use UTF8::strlen() instead.
 	 */
 	public static function strlen($str)
 	{
-		return utf8_strlen($str);
+		return UTF8::strlen($str);
 	}
 
 	/**
@@ -265,12 +280,13 @@ abstract class StringHelper
 	 *
 	 * @return  string  UTF-8 String
 	 *
-	 * @link    https://www.php.net/str_ireplace
-	 * @since   1.3.0
+	 * @link       https://www.php.net/str_ireplace
+	 * @since      1.3.0
+	 * @deprecated 3.0 Please use UTF8::str_ireplace() instead.
 	 */
 	public static function str_ireplace($search, $replace, $subject, &$count = null)
 	{
-		return utf8_ireplace($search, $replace, $subject, $count);
+		return UTF8::str_ireplace($search, $replace, $subject, $count);
 	}
 
 	/**
@@ -287,12 +303,13 @@ abstract class StringHelper
 	 *
 	 * @return  string
 	 *
-	 * @link    https://www.php.net/str_pad
-	 * @since   1.4.0
+	 * @link       https://www.php.net/str_pad
+	 * @since      1.4.0
+	 * @deprecated 3.0 Please use UTF8::str_pad() instead.
 	 */
 	public static function str_pad($input, $length, $padStr = ' ', $type = STR_PAD_RIGHT)
 	{
-		return utf8_str_pad($input, $length, $padStr, $type);
+		return UTF8::str_pad($input, $length, $padStr, $type);
 	}
 
 	/**
@@ -305,12 +322,13 @@ abstract class StringHelper
 	 *
 	 * @return  array|string|boolean
 	 *
-	 * @link    https://www.php.net/str_split
-	 * @since   1.3.0
+	 * @link       https://www.php.net/str_split
+	 * @since      1.3.0
+	 * @deprecated 3.0 Please use UTF8::str_split() instead.
 	 */
 	public static function str_split($str, $splitLen = 1)
 	{
-		return utf8_str_split($str, $splitLen);
+		return UTF8::str_split($str, $splitLen);
 	}
 
 	/**
@@ -324,16 +342,16 @@ abstract class StringHelper
 	 *
 	 * @return  integer   < 0 if str1 is less than str2; > 0 if str1 is greater than str2, and 0 if they are equal.
 	 *
-	 * @link    https://www.php.net/strcasecmp
-	 * @link    https://www.php.net/strcoll
-	 * @link    https://www.php.net/setlocale
-	 * @since   1.3.0
+	 * @link       https://www.php.net/strcasecmp
+	 * @link       https://www.php.net/strcoll
+	 * @link       https://www.php.net/setlocale
+	 * @since      1.3.0
 	 */
 	public static function strcasecmp($str1, $str2, $locale = false)
 	{
 		if ($locale === false)
 		{
-			return utf8_strcasecmp($str1, $str2);
+			return UTF8::strcasecmp($str1, $str2);
 		}
 
 		$encoding = self::setLocale($locale);
@@ -341,12 +359,12 @@ abstract class StringHelper
 		// If we successfully set encoding it to utf-8 or encoding is sth weird don't recode
 		if ($encoding === 'UTF-8' || $encoding === 'nonrecodable')
 		{
-			return strcoll(utf8_strtolower($str1), utf8_strtolower($str2));
+			return strcoll(UTF8::strtolower($str1), UTF8::strtolower($str2));
 		}
 
 		return strcoll(
-			static::transcode(utf8_strtolower($str1), 'UTF-8', $encoding),
-			static::transcode(utf8_strtolower($str2), 'UTF-8', $encoding)
+			static::transcode(UTF8::strtolower($str1), 'UTF-8', $encoding),
+			static::transcode(UTF8::strtolower($str2), 'UTF-8', $encoding)
 		);
 	}
 
@@ -361,16 +379,17 @@ abstract class StringHelper
 	 *
 	 * @return  integer  < 0 if str1 is less than str2; > 0 if str1 is greater than str2, and 0 if they are equal.
 	 *
-	 * @link    https://www.php.net/strcmp
-	 * @link    https://www.php.net/strcoll
-	 * @link    https://www.php.net/setlocale
-	 * @since   1.3.0
+	 * @link       https://www.php.net/strcmp
+	 * @link       https://www.php.net/strcoll
+	 * @link       https://www.php.net/setlocale
+	 * @since      1.3.0
+	 * @since      __DEPLOY_VERSION__ 'locale' parameter is ignored
 	 */
 	public static function strcmp($str1, $str2, $locale = false)
 	{
 		if ($locale === false)
 		{
-			return strcmp($str1, $str2);
+			return UTF8::strcmp($str1, $str2);
 		}
 
 		$encoding = self::setLocale($locale);
@@ -381,7 +400,10 @@ abstract class StringHelper
 			return strcoll($str1, $str2);
 		}
 
-		return strcoll(static::transcode($str1, 'UTF-8', $encoding), static::transcode($str2, 'UTF-8', $encoding));
+		return strcoll(
+			static::transcode($str1, 'UTF-8', $encoding),
+			static::transcode($str2, 'UTF-8', $encoding)
+		);
 	}
 
 	/**
@@ -396,8 +418,9 @@ abstract class StringHelper
 	 *
 	 * @return  integer  The length of the initial segment of str1 which does not contain any of the characters in str2
 	 *
-	 * @link    https://www.php.net/strcspn
-	 * @since   1.3.0
+	 * @link       https://www.php.net/strcspn
+	 * @since      1.3.0
+	 * @deprecated 3.0 Please use UTF8::strcspn() instead.
 	 */
 	public static function strcspn($str, $mask, $start = null, $length = null)
 	{
@@ -405,13 +428,13 @@ abstract class StringHelper
 		{
 			if ($start === null)
 			{
-				return utf8_strcspn($str, $mask);
+				return UTF8::strcspn($str, $mask);
 			}
 
-			return utf8_strcspn($str, $mask, $start);
+			return UTF8::strcspn($str, $mask, $start);
 		}
 
-		return utf8_strcspn($str, $mask, $start, $length);
+		return UTF8::strcspn($str, $mask, $start, $length);
 	}
 
 	/**
@@ -427,12 +450,13 @@ abstract class StringHelper
 	 *
 	 * @return  string|boolean
 	 *
-	 * @link    https://www.php.net/stristr
-	 * @since   1.3.0
+	 * @link       https://www.php.net/stristr
+	 * @since      1.3.0
+	 * @deprecated 3.0 Please use UTF8::stristr() instead.
 	 */
 	public static function stristr($str, $search)
 	{
-		return utf8_stristr($str, $search);
+		return UTF8::stristr($str, $search);
 	}
 
 	/**
@@ -444,12 +468,13 @@ abstract class StringHelper
 	 *
 	 * @return  string   The string in reverse character order
 	 *
-	 * @link    https://www.php.net/strrev
-	 * @since   1.3.0
+	 * @link       https://www.php.net/strrev
+	 * @since      1.3.0
+	 * @deprecated 3.0 Please use UTF8::strrev() instead.
 	 */
 	public static function strrev($str)
 	{
-		return utf8_strrev($str);
+		return UTF8::strrev($str);
 	}
 
 	/**
@@ -464,8 +489,9 @@ abstract class StringHelper
 	 *
 	 * @return  integer
 	 *
-	 * @link    https://www.php.net/strspn
-	 * @since   1.3.0
+	 * @link       https://www.php.net/strspn
+	 * @since      1.3.0
+	 * @deprecated 3.0 Please use UTF8::strspn() instead.
 	 */
 	public static function strspn($str, $mask, $start = null, $length = null)
 	{
@@ -473,13 +499,13 @@ abstract class StringHelper
 		{
 			if ($start === null)
 			{
-				return utf8_strspn($str, $mask);
+				return UTF8::strspn($str, $mask);
 			}
 
-			return utf8_strspn($str, $mask, $start);
+			return UTF8::strspn($str, $mask, $start);
 		}
 
-		return utf8_strspn($str, $mask, $start, $length);
+		return UTF8::strspn($str, $mask, $start ?? 0, $length);
 	}
 
 	/**
@@ -494,17 +520,18 @@ abstract class StringHelper
 	 *
 	 * @return  string
 	 *
-	 * @link    https://www.php.net/substr_replace
-	 * @since   1.3.0
+	 * @link       https://www.php.net/substr_replace
+	 * @since      1.3.0
+	 * @deprecated 3.0 Please use UTF8::substr_replace() instead.
 	 */
 	public static function substr_replace($str, $repl, $start, $length = null)
 	{
 		if ($length === false)
 		{
-			return utf8_substr_replace($str, $repl, $start);
+			$length = null;
 		}
 
-		return utf8_substr_replace($str, $repl, $start, $length);
+		return UTF8::substr_replace($str, $repl, $start, $length);
 	}
 
 	/**
@@ -515,27 +542,28 @@ abstract class StringHelper
 	 * You only need to use this if you are supplying the char list optional arg, and it contains UTF-8 characters.
 	 * Otherwise, ltrim will work normally on a UTF-8 string.
 	 *
-	 * @param   string          $str       The string to be trimmed
-	 * @param   string|boolean  $charlist  The optional charlist of additional characters to trim
+	 * @param   string               $str       The string to be trimmed
+	 * @param   string|boolean|null  $charlist  The optional charlist of additional characters to trim
 	 *
 	 * @return  string  The trimmed string
 	 *
-	 * @link    https://www.php.net/ltrim
-	 * @since   1.3.0
+	 * @link       https://www.php.net/ltrim
+	 * @since      1.3.0
+	 * @deprecated 3.0 Please use UTF8::ltrim() instead.
 	 */
 	public static function ltrim($str, $charlist = false)
 	{
-		if ($charlist === false)
-		{
-			return utf8_ltrim($str);
-		}
-
-		if (empty($charlist))
+		if ($charlist === '')
 		{
 			return $str;
 		}
 
-		return utf8_ltrim($str, $charlist);
+		if ($charlist === false)
+		{
+			$charlist = null;
+		}
+
+		return UTF8::ltrim($str, $charlist);
 	}
 
 	/**
@@ -546,27 +574,28 @@ abstract class StringHelper
 	 * You only need to use this if you are supplying the char list optional arg, and it contains UTF-8 characters.
 	 * Otherwise, rtrim will work normally on a UTF-8 string.
 	 *
-	 * @param   string          $str       The string to be trimmed
-	 * @param   string|boolean  $charlist  The optional charlist of additional characters to trim
+	 * @param   string               $str       The string to be trimmed
+	 * @param   string|boolean|null  $charlist  The optional charlist of additional characters to trim
 	 *
 	 * @return  string  The trimmed string
 	 *
-	 * @link    https://www.php.net/rtrim
-	 * @since   1.3.0
+	 * @link       https://www.php.net/rtrim
+	 * @since      1.3.0
+	 * @deprecated 3.0 Please use UTF8::rtrim() instead.
 	 */
 	public static function rtrim($str, $charlist = false)
 	{
-		if ($charlist === false)
-		{
-			return utf8_rtrim($str);
-		}
-
-		if (empty($charlist))
+		if ($charlist === '')
 		{
 			return $str;
 		}
 
-		return utf8_rtrim($str, $charlist);
+		if ($charlist === false)
+		{
+			$charlist = null;
+		}
+
+		return UTF8::rtrim($str, $charlist);
 	}
 
 	/**
@@ -577,27 +606,28 @@ abstract class StringHelper
 	 * You only need to use this if you are supplying the charlist optional arg and it contains UTF-8 characters.
 	 * Otherwise, trim will work normally on a UTF-8 string
 	 *
-	 * @param   string          $str       The string to be trimmed
-	 * @param   string|boolean  $charlist  The optional charlist of additional characters to trim
+	 * @param   string               $str       The string to be trimmed
+	 * @param   string|boolean|null  $charlist  The optional charlist of additional characters to trim
 	 *
 	 * @return  string  The trimmed string
 	 *
-	 * @link    https://www.php.net/trim
-	 * @since   1.3.0
+	 * @link       https://www.php.net/trim
+	 * @since      1.3.0
+	 * @deprecated 3.0 Please use UTF8::trim() instead.
 	 */
 	public static function trim($str, $charlist = false)
 	{
-		if ($charlist === false)
-		{
-			return utf8_trim($str);
-		}
-
-		if (empty($charlist))
+		if ($charlist === '')
 		{
 			return $str;
 		}
 
-		return utf8_trim($str, $charlist);
+		if ($charlist === false)
+		{
+			$charlist = null;
+		}
+
+		return UTF8::trim($str, $charlist);
 	}
 
 	/**
@@ -620,7 +650,7 @@ abstract class StringHelper
 	{
 		if ($delimiter === null)
 		{
-			return utf8_ucfirst($str);
+			return UTF8::ucfirst($str);
 		}
 
 		if ($newDelimiter === null)
@@ -628,7 +658,7 @@ abstract class StringHelper
 			$newDelimiter = $delimiter;
 		}
 
-		return implode($newDelimiter, array_map('utf8_ucfirst', explode($delimiter, $str)));
+		return implode($newDelimiter, array_map([UTF8::class, 'ucfirst'], explode($delimiter, $str)));
 	}
 
 	/**
@@ -640,12 +670,13 @@ abstract class StringHelper
 	 *
 	 * @return  string  String with first char of each word uppercase
 	 *
-	 * @link    https://www.php.net/ucwords
-	 * @since   1.3.0
+	 * @link       https://www.php.net/ucwords
+	 * @since      1.3.0
+	 * @deprecated 3.0 Please use UTF8::ucwords() instead.
 	 */
 	public static function ucwords($str)
 	{
-		return utf8_ucwords($str);
+		return UTF8::ucwords($str);
 	}
 
 	/**
@@ -657,9 +688,9 @@ abstract class StringHelper
 	 *
 	 * @return  string|null  The transcoded string, or null if the source was not a string.
 	 *
-	 * @link    https://bugs.php.net/bug.php?id=48147
+	 * @link       https://bugs.php.net/bug.php?id=48147
 	 *
-	 * @since   1.3.0
+	 * @since      1.3.0
 	 */
 	public static function transcode($source, $fromEncoding, $toEncoding)
 	{
@@ -677,14 +708,15 @@ abstract class StringHelper
 	 *
 	 * @return  boolean  true if valid
 	 *
-	 * @author  <hsivonen@iki.fi>
-	 * @link    https://hsivonen.fi/php-utf8/
-	 * @see     compliant
-	 * @since   1.3.0
+	 * @author     <hsivonen@iki.fi>
+	 * @link       https://hsivonen.fi/php-utf8/
+	 * @see        compliant
+	 * @since      1.3.0
+	 * @deprecated 3.0 Please use UTF8::is_utf8() instead.
 	 */
 	public static function valid($str)
 	{
-		return utf8_is_valid($str);
+		return UTF8::is_utf8($str);
 	}
 
 	/**
@@ -700,63 +732,44 @@ abstract class StringHelper
 	 *
 	 * @return  boolean  TRUE if string is valid UTF-8
 	 *
-	 * @see     StringHelper::valid
-	 * @link    https://www.php.net/manual/en/reference.pcre.pattern.modifiers.php#54805
-	 * @since   1.3.0
+	 * @see        StringHelper::valid
+	 * @link       https://www.php.net/manual/en/reference.pcre.pattern.modifiers.php#54805
+	 * @since      1.3.0
+	 * @deprecated 3.0 Please use UTF8::is_utf8() instead.
 	 */
 	public static function compliant($str)
 	{
-		return utf8_compliant($str);
+		return UTF8::is_utf8($str);
 	}
 
 	/**
-	 * Converts Unicode sequences to UTF-8 string.
+	 * Converts UTF-8 sequences to UTF-8 string.
 	 *
 	 * @param   string  $str  Unicode string to convert
 	 *
 	 * @return  string  UTF-8 string
 	 *
-	 * @since   1.3.0
+	 * @since      1.3.0
+	 * @deprecated 3.0 Please use UTF8::to_utf8_string() instead.
 	 */
 	public static function unicode_to_utf8($str)
 	{
-		if (\extension_loaded('mbstring'))
-		{
-			return preg_replace_callback(
-				'/\\\\u([0-9a-fA-F]{4})/',
-				static function ($match) {
-					return mb_convert_encoding(pack('H*', $match[1]), 'UTF-8', 'UCS-2BE');
-				},
-				$str
-			);
-		}
-
-		return $str;
+		return UTF8::to_utf8_string($str);
 	}
 
 	/**
-	 * Converts Unicode sequences to UTF-16 string.
+	 * Converts UTF-16 sequences to UTF-8 string.
 	 *
 	 * @param   string  $str  Unicode string to convert
 	 *
 	 * @return  string  UTF-16 string
 	 *
-	 * @since   1.3.0
+	 * @since      1.3.0
+	 * @deprecated 3.0 Please use UTF8::to_utf8_string() instead.
 	 */
 	public static function unicode_to_utf16($str)
 	{
-		if (\extension_loaded('mbstring'))
-		{
-			return preg_replace_callback(
-				'/\\\\u([0-9a-fA-F]{4})/',
-				static function ($match) {
-					return mb_convert_encoding(pack('H*', $match[1]), 'UTF-8', 'UTF-16BE');
-				},
-				$str
-			);
-		}
-
-		return $str;
+		return UTF8::to_utf8_string($str);
 	}
 
 	/**

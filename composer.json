@@ -1,58 +1,55 @@
 {
-    "name": "joomla/string",
-    "type": "joomla-package",
-    "description": "Joomla String Package",
-    "keywords": ["joomla", "framework", "string"],
-    "homepage": "https://github.com/joomla-framework/string",
-    "license": "GPL-2.0-or-later",
-    "require": {
-        "php": "^7.2.5",
-        "symfony/deprecation-contracts": "^2.1"
-    },
-    "require-dev": {
-        "doctrine/inflector": "1.2",
-        "joomla/coding-standards": "^3.0@dev",
-        "joomla/test": "^2.0",
-        "phpunit/phpunit": "^8.5|^9.0"
-    },
-    "conflict": {
-        "doctrine/inflector": "<1.2"
-    },
-    "suggest": {
-        "ext-mbstring": "For improved processing",
-        "doctrine/inflector": "To use the string inflector"
-    },
-    "autoload": {
-        "psr-4": {
-            "Joomla\\String\\": "src/"
-        },
-        "files": [
-            "src/phputf8/utf8.php",
-            "src/phputf8/ord.php",
-            "src/phputf8/str_ireplace.php",
-            "src/phputf8/str_pad.php",
-            "src/phputf8/str_split.php",
-            "src/phputf8/strcasecmp.php",
-            "src/phputf8/strcspn.php",
-            "src/phputf8/stristr.php",
-            "src/phputf8/strrev.php",
-            "src/phputf8/strspn.php",
-            "src/phputf8/trim.php",
-            "src/phputf8/ucfirst.php",
-            "src/phputf8/ucwords.php",
-            "src/phputf8/utils/ascii.php",
-            "src/phputf8/utils/validation.php"
-        ]
-    },
-    "autoload-dev": {
-        "psr-4": {
-            "Joomla\\String\\Tests\\": "Tests/"
-        }
-    },
-    "minimum-stability": "dev",
-    "extra": {
-        "branch-alias": {
-	        "dev-2.0-dev": "2.0-dev"
-        }
-    }
+	"name": "joomla/string",
+	"type": "joomla-package",
+	"description": "Joomla String Package",
+	"keywords": [
+		"joomla",
+		"framework",
+		"string"
+	],
+	"homepage": "https://github.com/joomla-framework/string",
+	"license": "GPL-2.0-or-later",
+	"require": {
+		"php": "^7.2.5",
+		"symfony/deprecation-contracts": "^2.1",
+		"voku/portable-utf8": "^4.0|^5.0"
+	},
+	"require-dev": {
+		"roave/security-advisories": "dev-latest",
+		"doctrine/inflector": "1.2",
+		"joomla/coding-standards": "^3.0@dev",
+		"joomla/test": "^2.0",
+		"phpunit/phpunit": "^8.5|^9.0"
+	},
+	"conflict": {
+		"doctrine/inflector": "<1.2"
+	},
+	"replace": {
+		"symfony/polyfill-php72": "1.99",
+		"symfony/polyfill-iconv": "1.99",
+		"symfony/polyfill-intl-grapheme": "1.99",
+		"symfony/polyfill-intl-normalizer": "1.99",
+		"symfony/polyfill-mbstring": "1.99"
+	},
+	"suggest": {
+		"ext-mbstring": "For improved performance",
+		"ext-iconv": "For improved performance",
+		"doctrine/inflector": "To use the string inflector"
+	},
+	"autoload": {
+		"psr-4": {
+			"Joomla\\String\\": "src/"
+		}
+	},
+	"autoload-dev": {
+		"psr-4": {
+			"Joomla\\String\\Tests\\": "Tests/"
+		}
+	},
+	"minimum-stability": "dev",
+	"extra": {
+		"branch-alias": {
+			"dev-2.0-dev": "2.0-dev"
+		}
+	}
 }
