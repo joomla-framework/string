@@ -169,7 +169,7 @@ class StringHelperTest extends TestCase
 	public function seedTestStrRPos(): \Generator
 	{
 		// Note: haystack, needle, offset, expected result
-		yield 'returns the position of the last occurance of the substring' => ['pinging', 'ing', 0, 4];
+		yield 'returns the position of the last occurance of the substring' => ['pinging', 'ing', null, 4];
 		yield 'locates substring in ASCII string' => ['missing', 'sing', 0, 3];
 		yield 'locates substring in cyrillic string' => [' объектов на карте с', 'на карте', 0, 10];
 		yield 'returns false for non-existing substrings' => ['missing', 'sting', 0, false];
@@ -180,18 +180,18 @@ class StringHelperTest extends TestCase
 	/**
 	 * @testdox       StringHelper::strrpos() $_dataName
 	 *
-	 * @param   string                $haystack  String being examined
-	 * @param   string                $needle    String being searched for
-	 * @param   integer|null|boolean  $offset    Optional, specifies the position from which the search should be performed
-	 * @param   string|boolean        $expected  Expected result
+	 * @param   string          $haystack  String being examined
+	 * @param   string          $needle    String being searched for
+	 * @param   integer|null    $offset    Optional, specifies the position from which the search should be performed
+	 * @param   string|boolean  $expected  Expected result
 	 *
 	 * @dataProvider  seedTestStrRPos
 	 */
-	public function testStrRPos(string $haystack, string $needle, int $offset, $expected): void
+	public function testStrRPos(string $haystack, string $needle, ?int $offset, $expected): void
 	{
 		$this->assertEquals(
 			$expected,
-			StringHelper::strrpos($haystack, $needle, $offset)
+			StringHelper::strrpos($haystack, $needle, $offset ?? 0)
 		);
 	}
 
@@ -877,8 +877,18 @@ class StringHelperTest extends TestCase
 		yield 'only the first character by default' => ['george michael', null, null, 'George michael'];
 		yield 'the first character of a cyrillic string' => ['мога', null, null, 'Мога'];
 		yield 'the first character of a greek string' => ['ψυχοφθόρα', null, null, 'Ψυχοφθόρα'];
-		yield 'the first character of every chunk, if a delimiter is provided' => ['dr jekill and mister hyde', ' ', null, 'Dr Jekill And Mister Hyde'];
-		yield 'the chunks and optionally replaces the delimiter' => ['dr jekill and mister hyde', ' ', '_', 'Dr_Jekill_And_Mister_Hyde'];
+		yield 'the first character of every chunk, if a delimiter is provided' => [
+			'dr jekill and mister hyde',
+			' ',
+			null,
+			'Dr Jekill And Mister Hyde'
+		];
+		yield 'the chunks and optionally replaces the delimiter' => [
+			'dr jekill and mister hyde',
+			' ',
+			'_',
+			'Dr_Jekill_And_Mister_Hyde'
+		];
 	}
 
 	/**

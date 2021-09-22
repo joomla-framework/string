@@ -166,7 +166,7 @@ abstract class StringHelper
 	 */
 	public static function strrpos($haystack, $needle, $offset = 0)
 	{
-		return utf8_strrpos($haystack, $needle, $offset);
+		return utf8_strrpos($haystack, $needle, $offset ?? 0);
 	}
 
 	/**
