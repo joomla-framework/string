@@ -2,8 +2,8 @@
 /**
  * Part of the Joomla Framework String Package
  *
- * @copyright  Copyright (C) 2005 - 2021 Open Source Matters, Inc. All rights reserved.
- * @license    GNU General Public License version 2 or later; see LICENSE
+ * @copyright    Copyright (C) 2005 - 2021 Open Source Matters, Inc. All rights reserved.
+ * @license      GNU General Public License version 2 or later; see LICENSE
  *
  * @noinspection SpellCheckingInspection
  * @noinspection PhpMissingReturnTypeInspection
@@ -43,6 +43,11 @@ abstract class StringHelper
 	];
 
 	/**
+	 * @var false|string
+	 */
+	private static $currentLocale;
+
+	/**
 	 * Increment a trailing number in a string.
 	 *
 	 * Used to easily create distinct labels when copying objects. The method has the following styles:
@@ -80,7 +85,7 @@ abstract class StringHelper
 	}
 
 	/**
-	 * Test whether a string contains only 7bit ASCII bytes.
+	 * Check if a string is 7 bit ASCII.
 	 *
 	 * You might use this to conditionally check whether a string needs handling as UTF-8 or not, potentially offering performance
 	 * benefits by using the native PHP equivalent if it's just ASCII e.g.;
@@ -97,9 +102,9 @@ abstract class StringHelper
 	 * }
 	 * </code>
 	 *
-	 * @param   string  $str  The string to test.
+	 * @param   string  $str  TThe string to check.
 	 *
-	 * @return  boolean True if the string is all ASCII
+	 * @return  boolean true if it is ASCII, false otherwise
 	 *
 	 * @since      1.3.0
 	 * @since      __DEPLOY_VERSION__ Deprecated. Use UTF8::is_ascii() instead.
@@ -111,13 +116,11 @@ abstract class StringHelper
 	}
 
 	/**
-	 * Convert the first byte of a string to its ordinal number
+	 * Calculate Unicode code point of the given UTF-8 encoded character.
 	 *
-	 * UTF-8 aware alternative to ord()
+	 * @param   string  $chr  The character of which to calculate code point.
 	 *
-	 * @param   string  $chr  UTF-8 encoded character
-	 *
-	 * @return  integer Unicode ordinal for the character
+	 * @return  integer Unicode code point of the given character, 0 on invalid UTF-8 byte sequence
 	 *
 	 * @link       https://www.php.net/ord
 	 * @since      1.4.0
@@ -130,19 +133,14 @@ abstract class StringHelper
 	}
 
 	/**
-	 * Find the position of the first occurrence of a substring in a string
+	 * Find the position of the first occurrence of a substring in a string.
 	 *
-	 * UTF-8 aware alternative to strpos()
+	 * @param   string          $haystack  The string from which to get the position of the first occurrence of needle.
+	 * @param   integer|string  $needle    The string to find in haystack, or a code point as int.
+	 * @param   integer|null    $offset    [optional] The search offset. If it is not specified, 0 is used.
 	 *
-	 * @param   string        $haystack  The string to search in
-	 * @param   string        $needle    String being searched for
-	 * @param   integer|null  $offset    If specified, search will start this number of characters counted from the
-	 *                                   beginning of the string. Unlike {@see strrpos()}, the offset cannot be negative.
-	 *
-	 * @return  integer|boolean  Returns the position where the needle exists relative to the beginnning of the haystack
-	 *                           string (independent of search direction or offset). Also note that string positions
-	 *                           start at 0, and not 1.
-	 *                           Returns false if the needle was not found.
+	 * @return  integer|boolean  The numeric position of the first occurrence of needle in the haystack string.
+	 *                           If needle is not found it returns false.
 	 *
 	 * @link       https://www.php.net/strpos
 	 * @since      1.3.0
@@ -155,20 +153,16 @@ abstract class StringHelper
 	}
 
 	/**
-	 * Find the position of the last occurrence of a substring in a string
+	 * Find the position of the last occurrence of a substring in a string.
 	 *
-	 * UTF-8 aware alternative to strrpos()
+	 * @param   string          $haystack  The string being checked for the last occurrence of needle.
+	 * @param   integer|string  $needle    The string to find in haystack or a code point as int.
+	 * @param   integer         $offset    [optional] Can be specified to start the search after the given number of characters in
+	 *                                     the string. Negative values stop the search at the given point before the end
+	 *                                     of the string.
 	 *
-	 * @param   string   $haystack  The string to search in.
-	 * @param   string   $needle    String being searched for.
-	 * @param   integer  $offset    If specified, search will start this number of characters counted from the beginning
-	 *                              of the string. If the value is negative, search will instead start from that many
-	 *                              characters from the end of the string, searching backwards.
-	 *
-	 * @return  integer|boolean  Returns the position where the needle exists relative to the beginnning of the haystack
-	 *                           string (independent of search direction or offset). Also note that string positions
-	 *                           start at 0, and not 1.
-	 *                           Returns false if the needle was not found.
+	 * @return  integer|boolean  The numeric position of the last occurrence of needle in the haystack string.
+	 *                           If needle is not found, it returns false.
 	 *
 	 * @link       https://www.php.net/strrpos
 	 * @since      1.3.0
@@ -181,15 +175,14 @@ abstract class StringHelper
 	}
 
 	/**
-	 * Get part of a string given character offset (and optionally length).
+	 * Get part of a string.
 	 *
-	 * UTF-8 aware alternative to substr()
+	 * @param   string        $str     The string being checked.
+	 * @param   integer       $offset  The first position used in str.
+	 * @param   integer|null  $length  [optional] The maximum length of the returned string.
 	 *
-	 * @param   string        $str     String being processed
-	 * @param   integer       $offset  Number of UTF-8 characters offset (from left)
-	 * @param   integer|null  $length  Optional length in UTF-8 characters from offset
-	 *
-	 * @return  string|boolean
+	 * @return  string|boolean The portion of str specified by the offset and length parameters.
+	 *                         If str is shorter than offset characters, false will be returned.
 	 *
 	 * @link       https://www.php.net/substr
 	 * @since      1.3.0
@@ -202,20 +195,19 @@ abstract class StringHelper
 	}
 
 	/**
-	 * Make a string lowercase
-	 *
-	 * UTF-8 aware alternative to strtolower()
+	 * Make a string lowercase.
 	 *
 	 * Note: The concept of a characters "case" only exists is some alphabets such as Latin, Greek, Cyrillic, Armenian and archaic Georgian - it does
 	 * not exist in the Chinese alphabet, for example. See Unicode Standard Annex #21: Case Mappings
 	 *
-	 * @param   string  $str  String being processed
+	 * @param   string  $str  The string being lowercased.
 	 *
-	 * @return  string  Either string in lowercase or FALSE is UTF-8 invalid
+	 * @return  string  String with all alphabetic characters converted to lowercase.
 	 *
 	 * @link       https://www.php.net/strtolower
 	 * @since      1.3.0
 	 * @since      __DEPLOY_VERSION__ Deprecated. Use UTF8::strtolower() instead.
+	 * @since      __DEPLOY_VERSION__ str is always cast to string.
 	 * @deprecated 3.0 Please use UTF8::strtolower() instead.
 	 */
 	public static function strtolower($str)
@@ -224,20 +216,19 @@ abstract class StringHelper
 	}
 
 	/**
-	 * Make a string uppercase
-	 *
-	 * UTF-8 aware alternative to strtoupper()
+	 * Make a string uppercase.
 	 *
 	 * Note: The concept of a characters "case" only exists is some alphabets such as Latin, Greek, Cyrillic, Armenian and archaic Georgian - it does
 	 * not exist in the Chinese alphabet, for example. See Unicode Standard Annex #21: Case Mappings
 	 *
-	 * @param   string  $str  String being processed
+	 * @param   string  $str  The string being uppercased.
 	 *
-	 * @return  string  Either string in uppercase or FALSE is UTF-8 invalid
+	 * @return  string  String with all alphabetic characters converted to uppercase.
 	 *
 	 * @link       https://www.php.net/strtoupper
 	 * @since      1.3.0
 	 * @since      __DEPLOY_VERSION__ Deprecated. Use UTF8::strtoupper() instead.
+	 * @since      __DEPLOY_VERSION__ str is always cast to string.
 	 * @deprecated 3.0 Please use UTF8::strtoupper() instead.
 	 */
 	public static function strtoupper($str)
@@ -246,17 +237,17 @@ abstract class StringHelper
 	}
 
 	/**
-	 * UTF-8 aware alternative to strlen()
+	 * Get the string length, not the byte-length!
 	 *
-	 * Returns the number of characters in the string (NOT THE NUMBER OF BYTES).
+	 * @param   string  $str  The string being checked for length.
 	 *
-	 * @param   string  $str  UTF-8 string.
-	 *
-	 * @return  integer  Number of UTF-8 characters in string.
+	 * @return  integer|false  The number of characters in the string or false, if mbstring is not installed and invalid
+	 *                         characters are encountered.
 	 *
 	 * @link       https://www.php.net/strlen
 	 * @since      1.3.0
 	 * @since      __DEPLOY_VERSION__ Deprecated. Use UTF8::strlen() instead.
+	 * @since      __DEPLOY_VERSION__ Returns false, if mbstring is not installed and invalid characters are encountered.
 	 * @deprecated 3.0 Please use UTF8::strlen() instead.
 	 */
 	public static function strlen($str)
@@ -265,23 +256,26 @@ abstract class StringHelper
 	}
 
 	/**
-	 * Replace (parts of) a string in a case-insensitive manner
-	 *
-	 * UTF-8 aware alternative to str_ireplace()
-	 *
+	 * Case-insensitive and UTF-8 safe version of str_replace().
 	 *
 	 * @param   string[]|string  $search   String(s) to search
 	 *                                     Every replacement with search array is
 	 *                                     performed on the result of previous replacement.
-	 * @param   string[]|string  $replace  New string(s) to replace with
-	 * @param   string           $subject  Existing string to replace
-	 * @param   integer|null     $count    Optional count value to be passed by reference
+	 * @param   string[]|string  $replace  The replacement.
+	 * @param   string[]|string  $subject  If subject is an array, then the search and
+	 *                                     replace is performed with every entry of
+	 *                                     subject, and the return value is an array as
+	 *                                     well.
+	 * @param   integer|null     $count    [optional] The number of matched and replaced needles will
+	 *                                     be returned in count which is passed by
+	 *                                     reference.
 	 *
-	 * @return  string  UTF-8 String
+	 * @return  string[]|string  A string or an array of strings with applied replacements.
 	 *
 	 * @link       https://www.php.net/str_ireplace
 	 * @since      1.3.0
 	 * @since      __DEPLOY_VERSION__ Deprecated. Use UTF8::str_ireplace() instead.
+	 * @since      __DEPLOY_VERSION__ Accepts an array as subject.
 	 * @deprecated 3.0 Please use UTF8::str_ireplace() instead.
 	 */
 	public static function str_ireplace($search, $replace, $subject, &$count = null)
@@ -292,16 +286,15 @@ abstract class StringHelper
 	/**
 	 * Pad a string to a certain length with another string.
 	 *
-	 * UTF-8 aware alternative to str_pad()
-	 *
-	 * $padStr may contain multi-byte characters.
-	 *
 	 * @param   string   $input   The input string.
-	 * @param   integer  $length  If the value is negative, less than, or equal to the length of the input string, no padding takes place.
-	 * @param   string   $padStr  The string may be truncated if the number of padding characters can't be evenly divided by the string's length.
-	 * @param   integer  $type    The type of padding to apply
+	 * @param   integer  $length  The length of return string. If the value is negative, less than, or equal to the
+	 *                            length of the input string, no padding takes place.
+	 * @param   string   $padStr  [optional] String to use for padding the input string. The string may be truncated if the number
+	 *                            of padding characters can't be evenly divided by the string's length.
+	 * @param   integer  $type    [optional] The type of padding to apply. Can be STR_PAD_RIGHT, STR_PAD_LEFT or
+	 *                            STR_PAD_BOTH.
 	 *
-	 * @return  string
+	 * @return  string The padded string.
 	 *
 	 * @link       https://www.php.net/str_pad
 	 * @since      1.4.0
@@ -314,14 +307,12 @@ abstract class StringHelper
 	}
 
 	/**
-	 * Split a string into an array.
+	 * Convert a string to an array of unicode characters.
 	 *
-	 * UTF-8 aware alternative to str_split()
+	 * @param   string   $str       The string to split into an array.
+	 * @param   integer  $splitLen  [optional] Max character length of each array element.
 	 *
-	 * @param   string   $str       UTF-8 encoded string to process
-	 * @param   integer  $splitLen  Number to characters to split string by
-	 *
-	 * @return  array
+	 * @return  array An array containing chunks of chars from the input.
 	 *
 	 * @link       https://www.php.net/str_split
 	 * @since      1.3.0
@@ -334,24 +325,27 @@ abstract class StringHelper
 	}
 
 	/**
-	 * Compare strings in a case-insensitive manner.
+	 * Case-insensitive string comparison.
 	 *
-	 * UTF-8/LOCALE aware alternative to strcasecmp()
+	 * If no locale is provided, this method is an alias for UTF8::strcasecmp().
+	 * If a locale is provided, that locale is set, if possible, and used for comparison with strcoll().
 	 *
-	 * @param   string                $str1    string 1 to compare
-	 * @param   string                $str2    string 2 to compare
-	 * @param   array|string|boolean  $locale  The locale used by strcoll or false to use classical comparison
+	 * @param   string           $str1    The first string.
+	 * @param   string           $str2    The second string.
+	 * @param   string[]|string  $locale  [optional] A locale for collation aware comparison.
+	 *                                    See setlocale() for valid values.
 	 *
-	 * @return  integer   < 0 if str1 is less than str2; > 0 if str1 is greater than str2, and 0 if they are equal.
+	 * @return  integer   < 0 if str1 is less than str2, > 0 if str1 is greater than str2, 0 if they are equal.
 	 *
 	 * @link       https://www.php.net/strcasecmp
 	 * @link       https://www.php.net/strcoll
 	 * @link       https://www.php.net/setlocale
 	 * @since      1.3.0
+	 * @since      __DEPLOY_VERSION__ Restores locale after comparision.
 	 */
-	public static function strcasecmp($str1, $str2, $locale = false)
+	public static function strcasecmp($str1, $str2, $locale = null)
 	{
-		if ($locale === false)
+		if (empty($locale))
 		{
 			return UTF8::strcasecmp($str1, $str2);
 		}
@@ -361,30 +355,39 @@ abstract class StringHelper
 		// If we successfully set encoding it to utf-8 or encoding is sth weird don't recode
 		if ($encoding === 'UTF-8' || $encoding === 'nonrecodable')
 		{
-			return strcoll(UTF8::strtolower($str1), UTF8::strtolower($str2));
+			$result = strcoll(UTF8::strtolower($str1), UTF8::strtolower($str2));
+		}
+		else
+		{
+			$result = strcoll(
+				static::transcode(UTF8::strtolower($str1), 'UTF-8', $encoding),
+				static::transcode(UTF8::strtolower($str2), 'UTF-8', $encoding)
+			);
 		}
 
-		return strcoll(
-			static::transcode(UTF8::strtolower($str1), 'UTF-8', $encoding),
-			static::transcode(UTF8::strtolower($str2), 'UTF-8', $encoding)
-		);
+		self::restoreLocale();
+
+		return $result;
 	}
 
 	/**
-	 * Compare strings in a case-sensitive manner.
+	 * Case-sensitive string comparison.
 	 *
-	 * UTF-8/LOCALE aware alternative to strcmp()
+	 * If no locale is provided, this method is an alias for UTF8::strcmp().
+	 * If a locale is provided, that locale is set, if possible, and used for comparison with strcoll().
 	 *
-	 * @param   string                $str1    string 1 to compare
-	 * @param   string                $str2    string 2 to compare
-	 * @param   array|string|boolean  $locale  The locale used by strcoll or false to use classical comparison
+	 * @param   string           $str1    The first string.
+	 * @param   string           $str2    The second string.
+	 * @param   string[]|string  $locale  [optional] A locale for collation aware comparison.
+	 *                                    See setlocale() for valid values.
 	 *
-	 * @return  integer  < 0 if str1 is less than str2; > 0 if str1 is greater than str2, and 0 if they are equal.
+	 * @return  integer   < 0 if str1 is less than str2, > 0 if str1 is greater than str2, 0 if they are equal.
 	 *
 	 * @link       https://www.php.net/strcmp
 	 * @link       https://www.php.net/strcoll
 	 * @link       https://www.php.net/setlocale
 	 * @since      1.3.0
+	 * @since      __DEPLOY_VERSION__ Restores locale after comparision.
 	 */
 	public static function strcmp($str1, $str2, $locale = false)
 	{
@@ -398,24 +401,28 @@ abstract class StringHelper
 		// If we successfully set encoding it to utf-8 or encoding is sth weird don't recode
 		if ($encoding === 'UTF-8' || $encoding === 'nonrecodable')
 		{
-			return strcoll($str1, $str2);
+			$result = strcoll($str1, $str2);
+		}
+		else
+		{
+			$result = strcoll(
+				static::transcode($str1, 'UTF-8', $encoding),
+				static::transcode($str2, 'UTF-8', $encoding)
+			);
 		}
 
-		return strcoll(
-			static::transcode($str1, 'UTF-8', $encoding),
-			static::transcode($str2, 'UTF-8', $encoding)
-		);
+		self::restoreLocale();
+
+		return $result;
 	}
 
 	/**
 	 * Find length of initial segment not matching mask.
 	 *
-	 * UTF-8 aware alternative to strcspn()
-	 *
-	 * @param   string           $str     The string to process
-	 * @param   string           $mask    The mask
-	 * @param   integer|boolean  $start   Optional starting character position (in characters)
-	 * @param   integer|boolean  $length  Optional length
+	 * @param   string   $str     The string to process
+	 * @param   string   $mask    The mask
+	 * @param   integer  $offset  [optional] Starting character position (in characters)
+	 * @param   integer  $length  [optional] Length
 	 *
 	 * @return  integer  The length of the initial segment of str1 which does not contain any of the characters in str2
 	 *
@@ -424,52 +431,48 @@ abstract class StringHelper
 	 * @since      __DEPLOY_VERSION__ Deprecated. Use UTF8::strcspn() instead.
 	 * @deprecated 3.0 Please use UTF8::strcspn() instead.
 	 */
-	public static function strcspn($str, $mask, $start = null, $length = null)
+	public static function strcspn($str, $mask, $offset = null, $length = null)
 	{
 		if ($length === null)
 		{
-			if ($start === null)
+			if ($offset === null)
 			{
 				return UTF8::strcspn($str, $mask);
 			}
 
-			return UTF8::strcspn($str, $mask, $start);
+			return UTF8::strcspn($str, $mask, $offset);
 		}
 
-		return UTF8::strcspn($str, $mask, $start, $length);
+		return UTF8::strcspn($str, $mask, $offset, $length);
 	}
 
 	/**
 	 * Get everything from haystack from the first occurrence of needle to the end.
 	 *
-	 * UTF-8 aware alternative to stristr()
-	 *
 	 * Needle and haystack are examined in a case-insensitive manner to find the first occurrence of a string using
 	 * case-insensitive comparison.
 	 *
-	 * @param   string  $str     The haystack
-	 * @param   string  $search  The needle
+	 * @param   string  $haystack  The input string. Must be valid UTF-8.
+	 * @param   string  $needle    The string to look for. Must be valid UTF-8.
 	 *
-	 * @return  string|boolean
+	 * @return  string|false A sub-string, or false if needle is not found.
 	 *
 	 * @link       https://www.php.net/stristr
 	 * @since      1.3.0
 	 * @since      __DEPLOY_VERSION__ Deprecated. Use UTF8::stristr() instead.
 	 * @deprecated 3.0 Please use UTF8::stristr() instead.
 	 */
-	public static function stristr($str, $search)
+	public static function stristr($haystack, $needle)
 	{
-		return UTF8::stristr($str, $search);
+		return UTF8::stristr($haystack, $needle);
 	}
 
 	/**
-	 * Reverse a string.
-	 *
-	 * UTF-8 aware alternative to strrev()
+	 * Reverse characters order in the string.
 	 *
 	 * @param   string  $str  String to be reversed
 	 *
-	 * @return  string   The string in reverse character order
+	 * @return  string   The string with characters in the reverse sequence.
 	 *
 	 * @link       https://www.php.net/strrev
 	 * @since      1.3.0
@@ -482,14 +485,12 @@ abstract class StringHelper
 	}
 
 	/**
-	 * Find length of initial segment matching mask.
+	 * Find the length of the initial segment of a string consisting entirely of characters contained within a given mask.
 	 *
-	 * UTF-8 aware alternative to strspn()
-	 *
-	 * @param   string        $str     The haystack
-	 * @param   string        $mask    The mask
-	 * @param   integer|null  $start   Start optional
-	 * @param   integer|null  $length  Length optional
+	 * @param   string   $str     The input string.
+	 * @param   string   $mask    The mask of chars
+	 * @param   integer  $offset  [optional] Start
+	 * @param   integer  $length  [optional] Length
 	 *
 	 * @return  integer
 	 *
@@ -498,162 +499,162 @@ abstract class StringHelper
 	 * @since      __DEPLOY_VERSION__ Deprecated. Use UTF8::strspn() instead.
 	 * @deprecated 3.0 Please use UTF8::strspn() instead.
 	 */
-	public static function strspn($str, $mask, $start = null, $length = null)
+	public static function strspn($str, $mask, $offset = null, $length = null)
 	{
 		if ($length === null)
 		{
-			if ($start === null)
+			if ($offset === null)
 			{
 				return UTF8::strspn($str, $mask);
 			}
 
-			return UTF8::strspn($str, $mask, $start);
+			return UTF8::strspn($str, $mask, $offset);
 		}
 
-		return UTF8::strspn($str, $mask, $start ?? 0, $length);
+		return UTF8::strspn($str, $mask, $offset ?? 0, $length);
 	}
 
 	/**
 	 * Replace text within a portion of a string.
 	 *
-	 * UTF-8 aware alternative to substr_replace()
+	 * @param   string[]|string         $str          The input string or an array of stings.
+	 * @param   string[]|string         $replacement  The replacement string or an array of stings.
+	 * @param   integer[]|integer       $offset       If offset is positive, the replacing will begin at the start'th character
+	 *                                                of the string.
+	 *                                                If offset is negative, the replacing will begin at the start'th character
+	 *                                                from the end of string.
+	 * @param   integer[]|integer|null  $length       [optional] If given and is positive, it represents the length of the
+	 *                                                portion of string which is to be replaced. If it is negative, it
+	 *                                                represents the number of characters from the end of string at which to
+	 *                                                stop replacing. If it is not given, then it will default to
+	 *                                                strlen(string); i.e. end the replacing at the end of string.
+	 *                                                Of course, if length is zero then this function will have the effect
+	 *                                                of inserting replacement into string at the given start offset.
 	 *
-	 * @param   string                $str     The haystack
-	 * @param   string                $repl    The replacement string
-	 * @param   integer               $start   Start
-	 * @param   integer|boolean|null  $length  Length (optional)
-	 *
-	 * @return  string
+	 * @return  string The result string. If string is an array then an array is returned.
 	 *
 	 * @link       https://www.php.net/substr_replace
 	 * @since      1.3.0
 	 * @since      __DEPLOY_VERSION__ Deprecated. Use UTF8::substr_replace() instead.
 	 * @deprecated 3.0 Please use UTF8::substr_replace() instead.
 	 */
-	public static function substr_replace($str, $repl, $start, $length = null)
+	public static function substr_replace($str, $replacement, $offset, $length = null)
 	{
 		if ($length === false)
 		{
 			$length = null;
 		}
 
-		return UTF8::substr_replace($str, $repl, $start, $length);
+		return UTF8::substr_replace($str, $replacement, $offset, $length);
 	}
 
 	/**
-	 * Strip whitespace (or other characters) from the beginning of a string.
-	 *
-	 * UTF-8 aware replacement for ltrim()
+	 * Strip whitespace or other characters from the beginning of a string.
 	 *
 	 * You only need to use this if you are supplying the char list optional arg, and it contains UTF-8 characters.
 	 * Otherwise, ltrim will work normally on a UTF-8 string.
 	 *
-	 * @param   string               $str       The string to be trimmed
-	 * @param   string|boolean|null  $charlist  The optional charlist of additional characters to trim
+	 * @param   string  $str    The string to be trimmed.
+	 * @param   string  $chars  [optional] Characters to be stripped.
 	 *
-	 * @return  string  The trimmed string
+	 * @return  string  The string with unwanted characters stripped from the left
 	 *
 	 * @link       https://www.php.net/ltrim
 	 * @since      1.3.0
 	 * @since      __DEPLOY_VERSION__ Deprecated. Use UTF8::ltrim() instead.
 	 * @deprecated 3.0 Please use UTF8::ltrim() instead.
 	 */
-	public static function ltrim($str, $charlist = false)
+	public static function ltrim($str, $chars = false)
 	{
-		if ($charlist === '')
+		if ($chars === '')
 		{
 			return $str;
 		}
 
-		if ($charlist === false)
+		if ($chars === false)
 		{
-			$charlist = null;
+			return UTF8::ltrim($str);
 		}
 
-		return UTF8::ltrim($str, $charlist);
+		return UTF8::ltrim($str, $chars);
 	}
 
 	/**
-	 * Strip whitespace (or other characters) from the end of a string.
-	 *
-	 * UTF-8 aware replacement for rtrim()
+	 * Strip whitespace or other characters from the end of a string.
 	 *
 	 * You only need to use this if you are supplying the char list optional arg, and it contains UTF-8 characters.
 	 * Otherwise, rtrim will work normally on a UTF-8 string.
 	 *
-	 * @param   string               $str       The string to be trimmed
-	 * @param   string|boolean|null  $charlist  The optional charlist of additional characters to trim
+	 * @param   string  $str    The string to be trimmed.
+	 * @param   string  $chars  [optional] Characters to be stripped.
 	 *
-	 * @return  string  The trimmed string
+	 * @return  string  The string with unwanted characters stripped from the right.
 	 *
 	 * @link       https://www.php.net/rtrim
 	 * @since      1.3.0
 	 * @since      __DEPLOY_VERSION__ Deprecated. Use UTF8::rtrim() instead.
 	 * @deprecated 3.0 Please use UTF8::rtrim() instead.
 	 */
-	public static function rtrim($str, $charlist = false)
+	public static function rtrim($str, $chars = false)
 	{
-		if ($charlist === '')
+		if ($chars === '')
 		{
 			return $str;
 		}
 
-		if ($charlist === false)
+		if ($chars === false)
 		{
-			$charlist = null;
+			return UTF8::rtrim($str);
 		}
 
-		return UTF8::rtrim($str, $charlist);
+		return UTF8::rtrim($str, $chars);
 	}
 
 	/**
-	 * Strip whitespace (or other characters) from the beginning and end of a string.
-	 *
-	 * UTF-8 aware replacement for trim()
+	 * Strip whitespace or other characters from the beginning and end of a string.
 	 *
 	 * You only need to use this if you are supplying the charlist optional arg, and it contains UTF-8 characters.
 	 * Otherwise, trim will work normally on a UTF-8 string
 	 *
-	 * @param   string               $str       The string to be trimmed
-	 * @param   string|boolean|null  $charlist  The optional charlist of additional characters to trim
+	 * @param   string  $str    The string to be trimmed.
+	 * @param   string  $chars  [optional] Characters to be stripped.
 	 *
-	 * @return  string  The trimmed string
+	 * @return  string  The string with unwanted characters stripped from both ends.
 	 *
 	 * @link       https://www.php.net/trim
 	 * @since      1.3.0
 	 * @since      __DEPLOY_VERSION__ Deprecated. Use UTF8::trim() instead.
 	 * @deprecated 3.0 Please use UTF8::trim() instead.
 	 */
-	public static function trim($str, $charlist = false)
+	public static function trim($str, $chars = false)
 	{
-		if ($charlist === '')
+		if ($chars === '')
 		{
 			return $str;
 		}
 
-		if ($charlist === false)
+		if ($chars === false)
 		{
-			$charlist = null;
+			return UTF8::trim($str);
 		}
 
-		return UTF8::trim($str, $charlist);
+		return UTF8::trim($str, $chars);
 	}
 
 	/**
 	 * Make a string's first character uppercase or all words' first character uppercase.
 	 *
-	 * UTF-8 aware alternative to ucfirst()
+	 * @param   string  $str           String to be processed
+	 * @param   string  $delimiter     [optional] The words' delimiter (omitting means do not split the string)
+	 * @param   string  $newDelimiter  [optional] The new delimiter (omitting means equal to $delimiter)
 	 *
-	 * @param   string       $str           String to be processed
-	 * @param   string|null  $delimiter     The words' delimiter (null means do not split the string)
-	 * @param   string|null  $newDelimiter  The new words delimiter (null means equal to $delimiter)
-	 *
-	 * @return  string  If $delimiter is null, return the string with first character as upper case (if applicable)
+	 * @return  string  If $delimiter is omitted, return the string with first character as upper case (if applicable)
 	 *                  else consider the string of words separated by the delimiter, apply the ucfirst to each word
 	 *                  and return the string with the new delimiter
 	 *
-	 * @link    https://www.php.net/ucfirst
-	 * @since   1.3.0
+	 * @link       https://www.php.net/ucfirst
+	 * @since      1.3.0
+	 * @deprecated 3.0 Please use UTF8::ucfirst() instead. To reproduce the delimiter splitting and re-joining, use explode() and implode().
 	 */
 	public static function ucfirst($str, $delimiter = null, $newDelimiter = null)
 	{
@@ -673,9 +674,7 @@ abstract class StringHelper
 	/**
 	 * Uppercase the first character of each word in a string.
 	 *
-	 * UTF-8 aware alternative to ucwords()
-	 *
-	 * @param   string  $str  String to be processed
+	 * @param   string  $str  The input string.
 	 *
 	 * @return  string  String with first char of each word uppercase
 	 *
@@ -696,10 +695,11 @@ abstract class StringHelper
 	 * @param   string  $fromEncoding  The source encoding.
 	 * @param   string  $toEncoding    The target encoding.
 	 *
-	 * @return  string|null  The transcoded string, or null if the source was not a string.
+	 * @return  string|false  The converted string, or false on failure.
 	 *
 	 * @link       https://bugs.php.net/bug.php?id=48147
-	 *
+	 * @see        UTF8::to_iso8859()
+	 * @see        UTF8::to_utf8()
 	 * @since      1.3.0
 	 */
 	public static function transcode($source, $fromEncoding, $toEncoding)
@@ -710,17 +710,13 @@ abstract class StringHelper
 	}
 
 	/**
-	 * Tests a string whether it's valid UTF-8 and supported by the Unicode standard.
+	 * Check whether the passed input contains only byte sequences that appear valid UTF-8.
 	 *
-	 * Note: this function has been modified to simple return true or false.
-	 *
-	 * @param   string  $str  UTF-8 encoded string.
+	 * @param   string  $str  The input to be checked.
 	 *
 	 * @return  boolean  true if valid
 	 *
-	 * @author     <hsivonen@iki.fi>
-	 * @link       https://hsivonen.fi/php-utf8/
-	 * @see        compliant
+	 * @see        self::compliant
 	 * @since      1.3.0
 	 * @since      __DEPLOY_VERSION__ Deprecated. Use UTF8::is_utf8() instead.
 	 * @deprecated 3.0 Please use UTF8::is_utf8() instead.
@@ -731,20 +727,13 @@ abstract class StringHelper
 	}
 
 	/**
-	 * Tests whether a string complies as UTF-8.
+	 * Check whether the passed input contains only byte sequences that appear valid UTF-8.
 	 *
-	 * This will be much faster than StringHelper::valid() but will pass five and six octet UTF-8 sequences, which are
-	 * not supported by Unicode and so cannot be displayed correctly in a browser. In other words it is not as strict
-	 * as StringHelper::valid() but it's faster. If you use it to validate user input, you place yourself at the risk
-	 * that attackers will be able to inject 5 and 6 byte sequences (which may or may not be a significant risk,
-	 * depending on what you are doing).
+	 * @param   string  $str  The input to be checked.
 	 *
-	 * @param   string  $str  UTF-8 string to check
+	 * @return  boolean  true if valid
 	 *
-	 * @return  boolean  TRUE if string is valid UTF-8
-	 *
-	 * @see        StringHelper::valid
-	 * @link       https://www.php.net/manual/en/reference.pcre.pattern.modifiers.php#54805
+	 * @see        self::valid
 	 * @since      1.3.0
 	 * @since      __DEPLOY_VERSION__ Deprecated. Use UTF8::is_utf8() instead.
 	 * @deprecated 3.0 Please use UTF8::is_utf8() instead.
@@ -755,7 +744,7 @@ abstract class StringHelper
 	}
 
 	/**
-	 * Converts UTF-8 sequences to UTF-8 string.
+	 * Convert UTF-8 sequence to UTF-8 string.
 	 *
 	 * @param   string  $str  Unicode string to convert
 	 *
@@ -771,7 +760,7 @@ abstract class StringHelper
 	}
 
 	/**
-	 * Converts UTF-16 sequences to UTF-8 string.
+	 * Convert UTF-16 sequence to UTF-8 string.
 	 *
 	 * @param   string  $str  Unicode string to convert
 	 *
@@ -806,17 +795,18 @@ abstract class StringHelper
 	}
 
 	/**
-	 * @param   string[]|string  $locale  The locale
+	 * @param   string[]|string  $locale  The locale(s)
 	 *
-	 * @return string
+	 * @return string The encoding
 	 */
 	private static function setLocale($locale): string
 	{
-		$locale = setlocale(LC_COLLATE, $locale);
+		self::$currentLocale = setlocale(LC_COLLATE, 0);
+		$locale              = setlocale(LC_COLLATE, $locale);
 
 		if ($locale === false)
 		{
-			$locale = setlocale(LC_COLLATE, 0);
+			$locale = (string) self::$currentLocale;
 		}
 
 		// See if we have successfully set locale to UTF-8
@@ -837,5 +827,13 @@ abstract class StringHelper
 		}
 
 		return $encoding;
+	}
+
+	/**
+	 * @return void
+	 */
+	private static function restoreLocale(): void
+	{
+		setlocale(LC_COLLATE, self::$currentLocale);
 	}
 }
