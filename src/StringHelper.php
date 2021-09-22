@@ -4,6 +4,11 @@
  *
  * @copyright  Copyright (C) 2005 - 2021 Open Source Matters, Inc. All rights reserved.
  * @license    GNU General Public License version 2 or later; see LICENSE
+ *
+ * @noinspection SpellCheckingInspection
+ * @noinspection PhpMissingReturnTypeInspection
+ * @noinspection ReturnTypeCanBeDeclaredInspection
+ * @noinspection PhpMissingParamTypeInspection
  */
 
 namespace Joomla\String;
@@ -13,7 +18,8 @@ use voku\helper\UTF8;
 @ini_set('default_charset', 'UTF-8');
 
 /**
- * String handling class for UTF-8 data wrapping the phputf8 library. All functions assume the validity of UTF-8 strings.
+ * String handling class for UTF-8 data wrapping the Portable UTF-8 library.
+ * All functions assume the validity of UTF-8 strings.
  *
  * @since  1.3.0
  */
@@ -96,6 +102,7 @@ abstract class StringHelper
 	 * @return  boolean True if the string is all ASCII
 	 *
 	 * @since      1.3.0
+	 * @since      __DEPLOY_VERSION__ Deprecated. Use UTF8::is_ascii() instead.
 	 * @deprecated 3.0 Please use UTF8::is_ascii() instead.
 	 */
 	public static function is_ascii($str)
@@ -114,6 +121,7 @@ abstract class StringHelper
 	 *
 	 * @link       https://www.php.net/ord
 	 * @since      1.4.0
+	 * @since      __DEPLOY_VERSION__ Deprecated. Use UTF8::ord() instead.
 	 * @deprecated 3.0 Please use UTF8::ord() instead.
 	 */
 	public static function ord($chr)
@@ -138,16 +146,12 @@ abstract class StringHelper
 	 *
 	 * @link       https://www.php.net/strpos
 	 * @since      1.3.0
+	 * @since      __DEPLOY_VERSION__ Deprecated. Use UTF8::strpos() instead.
 	 * @deprecated 3.0 Please use UTF8::strpos() instead.
 	 */
 	public static function strpos($haystack, $needle, $offset = null)
 	{
-		if ($offset === null)
-		{
-			return UTF8::strpos($haystack, $needle);
-		}
-
-		return UTF8::strpos($haystack, $needle, $offset);
+		return UTF8::strpos($haystack, $needle, $offset ?? 0);
 	}
 
 	/**
@@ -168,16 +172,12 @@ abstract class StringHelper
 	 *
 	 * @link       https://www.php.net/strrpos
 	 * @since      1.3.0
+	 * @since      __DEPLOY_VERSION__ Deprecated. Use UTF8::strrpos() instead.
 	 * @deprecated 3.0 Please use UTF8::strrpos() instead.
 	 */
 	public static function strrpos($haystack, $needle, $offset = null)
 	{
-		if ($offset === null)
-		{
-			$offset = 0;
-		}
-
-		return UTF8::strrpos($haystack, $needle, $offset);
+		return UTF8::strrpos($haystack, $needle, $offset ?? 0);
 	}
 
 	/**
@@ -193,15 +193,11 @@ abstract class StringHelper
 	 *
 	 * @link       https://www.php.net/substr
 	 * @since      1.3.0
+	 * @since      __DEPLOY_VERSION__ Deprecated. Use UTF8::substr() instead.
 	 * @deprecated 3.0 Please use UTF8::substr() instead.
 	 */
 	public static function substr($str, $offset, $length = null)
 	{
-		if ($length === null)
-		{
-			return UTF8::substr($str, $offset);
-		}
-
 		return UTF8::substr($str, $offset, $length);
 	}
 
@@ -215,10 +211,11 @@ abstract class StringHelper
 	 *
 	 * @param   string  $str  String being processed
 	 *
-	 * @return  string|boolean  Either string in lowercase or FALSE is UTF-8 invalid
+	 * @return  string  Either string in lowercase or FALSE is UTF-8 invalid
 	 *
 	 * @link       https://www.php.net/strtolower
 	 * @since      1.3.0
+	 * @since      __DEPLOY_VERSION__ Deprecated. Use UTF8::strtolower() instead.
 	 * @deprecated 3.0 Please use UTF8::strtolower() instead.
 	 */
 	public static function strtolower($str)
@@ -236,10 +233,11 @@ abstract class StringHelper
 	 *
 	 * @param   string  $str  String being processed
 	 *
-	 * @return  string|boolean  Either string in uppercase or FALSE is UTF-8 invalid
+	 * @return  string  Either string in uppercase or FALSE is UTF-8 invalid
 	 *
 	 * @link       https://www.php.net/strtoupper
 	 * @since      1.3.0
+	 * @since      __DEPLOY_VERSION__ Deprecated. Use UTF8::strtoupper() instead.
 	 * @deprecated 3.0 Please use UTF8::strtoupper() instead.
 	 */
 	public static function strtoupper($str)
@@ -258,6 +256,7 @@ abstract class StringHelper
 	 *
 	 * @link       https://www.php.net/strlen
 	 * @since      1.3.0
+	 * @since      __DEPLOY_VERSION__ Deprecated. Use UTF8::strlen() instead.
 	 * @deprecated 3.0 Please use UTF8::strlen() instead.
 	 */
 	public static function strlen($str)
@@ -282,6 +281,7 @@ abstract class StringHelper
 	 *
 	 * @link       https://www.php.net/str_ireplace
 	 * @since      1.3.0
+	 * @since      __DEPLOY_VERSION__ Deprecated. Use UTF8::str_ireplace() instead.
 	 * @deprecated 3.0 Please use UTF8::str_ireplace() instead.
 	 */
 	public static function str_ireplace($search, $replace, $subject, &$count = null)
@@ -305,6 +305,7 @@ abstract class StringHelper
 	 *
 	 * @link       https://www.php.net/str_pad
 	 * @since      1.4.0
+	 * @since      __DEPLOY_VERSION__ Deprecated. Use UTF8::str_pad() instead.
 	 * @deprecated 3.0 Please use UTF8::str_pad() instead.
 	 */
 	public static function str_pad($input, $length, $padStr = ' ', $type = STR_PAD_RIGHT)
@@ -320,10 +321,11 @@ abstract class StringHelper
 	 * @param   string   $str       UTF-8 encoded string to process
 	 * @param   integer  $splitLen  Number to characters to split string by
 	 *
-	 * @return  array|string|boolean
+	 * @return  array
 	 *
 	 * @link       https://www.php.net/str_split
 	 * @since      1.3.0
+	 * @since      __DEPLOY_VERSION__ Deprecated. Use UTF8::str_split() instead.
 	 * @deprecated 3.0 Please use UTF8::str_split() instead.
 	 */
 	public static function str_split($str, $splitLen = 1)
@@ -383,7 +385,6 @@ abstract class StringHelper
 	 * @link       https://www.php.net/strcoll
 	 * @link       https://www.php.net/setlocale
 	 * @since      1.3.0
-	 * @since      __DEPLOY_VERSION__ 'locale' parameter is ignored
 	 */
 	public static function strcmp($str1, $str2, $locale = false)
 	{
@@ -420,6 +421,7 @@ abstract class StringHelper
 	 *
 	 * @link       https://www.php.net/strcspn
 	 * @since      1.3.0
+	 * @since      __DEPLOY_VERSION__ Deprecated. Use UTF8::strcspn() instead.
 	 * @deprecated 3.0 Please use UTF8::strcspn() instead.
 	 */
 	public static function strcspn($str, $mask, $start = null, $length = null)
@@ -452,6 +454,7 @@ abstract class StringHelper
 	 *
 	 * @link       https://www.php.net/stristr
 	 * @since      1.3.0
+	 * @since      __DEPLOY_VERSION__ Deprecated. Use UTF8::stristr() instead.
 	 * @deprecated 3.0 Please use UTF8::stristr() instead.
 	 */
 	public static function stristr($str, $search)
@@ -470,6 +473,7 @@ abstract class StringHelper
 	 *
 	 * @link       https://www.php.net/strrev
 	 * @since      1.3.0
+	 * @since      __DEPLOY_VERSION__ Deprecated. Use UTF8::strrev() instead.
 	 * @deprecated 3.0 Please use UTF8::strrev() instead.
 	 */
 	public static function strrev($str)
@@ -491,6 +495,7 @@ abstract class StringHelper
 	 *
 	 * @link       https://www.php.net/strspn
 	 * @since      1.3.0
+	 * @since      __DEPLOY_VERSION__ Deprecated. Use UTF8::strspn() instead.
 	 * @deprecated 3.0 Please use UTF8::strspn() instead.
 	 */
 	public static function strspn($str, $mask, $start = null, $length = null)
@@ -522,6 +527,7 @@ abstract class StringHelper
 	 *
 	 * @link       https://www.php.net/substr_replace
 	 * @since      1.3.0
+	 * @since      __DEPLOY_VERSION__ Deprecated. Use UTF8::substr_replace() instead.
 	 * @deprecated 3.0 Please use UTF8::substr_replace() instead.
 	 */
 	public static function substr_replace($str, $repl, $start, $length = null)
@@ -549,6 +555,7 @@ abstract class StringHelper
 	 *
 	 * @link       https://www.php.net/ltrim
 	 * @since      1.3.0
+	 * @since      __DEPLOY_VERSION__ Deprecated. Use UTF8::ltrim() instead.
 	 * @deprecated 3.0 Please use UTF8::ltrim() instead.
 	 */
 	public static function ltrim($str, $charlist = false)
@@ -581,6 +588,7 @@ abstract class StringHelper
 	 *
 	 * @link       https://www.php.net/rtrim
 	 * @since      1.3.0
+	 * @since      __DEPLOY_VERSION__ Deprecated. Use UTF8::rtrim() instead.
 	 * @deprecated 3.0 Please use UTF8::rtrim() instead.
 	 */
 	public static function rtrim($str, $charlist = false)
@@ -603,7 +611,7 @@ abstract class StringHelper
 	 *
 	 * UTF-8 aware replacement for trim()
 	 *
-	 * You only need to use this if you are supplying the charlist optional arg and it contains UTF-8 characters.
+	 * You only need to use this if you are supplying the charlist optional arg, and it contains UTF-8 characters.
 	 * Otherwise, trim will work normally on a UTF-8 string
 	 *
 	 * @param   string               $str       The string to be trimmed
@@ -613,6 +621,7 @@ abstract class StringHelper
 	 *
 	 * @link       https://www.php.net/trim
 	 * @since      1.3.0
+	 * @since      __DEPLOY_VERSION__ Deprecated. Use UTF8::trim() instead.
 	 * @deprecated 3.0 Please use UTF8::trim() instead.
 	 */
 	public static function trim($str, $charlist = false)
@@ -636,11 +645,11 @@ abstract class StringHelper
 	 * UTF-8 aware alternative to ucfirst()
 	 *
 	 * @param   string       $str           String to be processed
-	 * @param   string|null  $delimiter     The words delimiter (null means do not split the string)
+	 * @param   string|null  $delimiter     The words' delimiter (null means do not split the string)
 	 * @param   string|null  $newDelimiter  The new words delimiter (null means equal to $delimiter)
 	 *
 	 * @return  string  If $delimiter is null, return the string with first character as upper case (if applicable)
-	 *                  else consider the string of words separated by the delimiter, apply the ucfirst to each words
+	 *                  else consider the string of words separated by the delimiter, apply the ucfirst to each word
 	 *                  and return the string with the new delimiter
 	 *
 	 * @link    https://www.php.net/ucfirst
@@ -672,6 +681,7 @@ abstract class StringHelper
 	 *
 	 * @link       https://www.php.net/ucwords
 	 * @since      1.3.0
+	 * @since      __DEPLOY_VERSION__ Deprecated. Use UTF8::ucwords() instead.
 	 * @deprecated 3.0 Please use UTF8::ucwords() instead.
 	 */
 	public static function ucwords($str)
@@ -712,6 +722,7 @@ abstract class StringHelper
 	 * @link       https://hsivonen.fi/php-utf8/
 	 * @see        compliant
 	 * @since      1.3.0
+	 * @since      __DEPLOY_VERSION__ Deprecated. Use UTF8::is_utf8() instead.
 	 * @deprecated 3.0 Please use UTF8::is_utf8() instead.
 	 */
 	public static function valid($str)
@@ -735,6 +746,7 @@ abstract class StringHelper
 	 * @see        StringHelper::valid
 	 * @link       https://www.php.net/manual/en/reference.pcre.pattern.modifiers.php#54805
 	 * @since      1.3.0
+	 * @since      __DEPLOY_VERSION__ Deprecated. Use UTF8::is_utf8() instead.
 	 * @deprecated 3.0 Please use UTF8::is_utf8() instead.
 	 */
 	public static function compliant($str)
@@ -750,6 +762,7 @@ abstract class StringHelper
 	 * @return  string  UTF-8 string
 	 *
 	 * @since      1.3.0
+	 * @since      __DEPLOY_VERSION__ Deprecated. Use UTF8::to_utf8_string() instead.
 	 * @deprecated 3.0 Please use UTF8::to_utf8_string() instead.
 	 */
 	public static function unicode_to_utf8($str)
@@ -765,6 +778,7 @@ abstract class StringHelper
 	 * @return  string  UTF-16 string
 	 *
 	 * @since      1.3.0
+	 * @since      __DEPLOY_VERSION__ Deprecated. Use UTF8::to_utf8_string() instead.
 	 * @deprecated 3.0 Please use UTF8::to_utf8_string() instead.
 	 */
 	public static function unicode_to_utf16($str)
