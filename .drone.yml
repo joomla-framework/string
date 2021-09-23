@@ -68,7 +68,8 @@ steps:
 - name: locales
   image: joomlaprojects/docker-images:php7.2
   commands:
-  - apt-get update -y && apt-get install -y glibc-source locales-all
+  - locale
+  - locale -a
   - locale-gen fr_FR.UTF-8
   - locale-gen ru_RU.CP1251
 
@@ -103,7 +104,8 @@ steps:
 - name: locales
   image: joomlaprojects/docker-images:php7.2
   commands:
-  - apt-get update -y && apt-get install -y glibc-source locales-all
+  - locale
+  - locale -a
   - locale-gen fr_FR.UTF-8
   - locale-gen ru_RU.CP1251
 
@@ -138,7 +140,8 @@ steps:
 - name: locales
   image: joomlaprojects/docker-images:php7.3
   commands:
-  - apt-get update -y && apt-get install -y glibc-source locales-all
+  - locale
+  - locale -a
   - locale-gen fr_FR.UTF-8
   - locale-gen ru_RU.CP1251
 
@@ -173,7 +176,8 @@ steps:
 - name: locales
   image: joomlaprojects/docker-images:php7.4
   commands:
-  - apt-get update -y && apt-get install -y glibc-source locales-all
+  - locale
+  - locale -a
   - locale-gen fr_FR.UTF-8
   - locale-gen ru_RU.CP1251
 
@@ -208,7 +212,8 @@ steps:
 - name: locales
   image: joomlaprojects/docker-images:php8.0
   commands:
-  - apt-get update -y && apt-get install -y glibc-source locales-all
+  - locale
+  - locale -a
   - locale-gen fr_FR.UTF-8
   - locale-gen ru_RU.CP1251
 
@@ -243,7 +248,8 @@ steps:
 - name: locales
   image: joomlaprojects/docker-images:php8.1
   commands:
-  - apt-get update -y && apt-get install -y glibc-source locales-all
+  - locale
+  - locale -a
   - locale-gen fr_FR.UTF-8
   - locale-gen ru_RU.CP1251
 
@@ -269,6 +275,6 @@ volumes:
 
 ---
 kind: signature
-hmac: 3dc98958d0298aa7b1ed6c1f02945631942597b5b014419021f0dc6094e56d88
+hmac: 74cc459bfb9c6997ad713851e3f4b30eab5f6b89efda3a708ecb745ee2739856
 
 ...
