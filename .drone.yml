@@ -65,6 +65,12 @@ platform:
   arch: amd64
 
 steps:
+- name: locales
+  image: joomlaprojects/docker-images:php7.2
+  commands:
+  - localedef -c -i fr_FR -f UTF8 ru_RU.UTF-8
+  - localedef -c -i ru_RU -f CP1251 ru_RU.CP1251
+
 - name: composer
   image: joomlaprojects/docker-images:php7.2
   commands:
@@ -93,6 +99,12 @@ platform:
   arch: amd64
 
 steps:
+- name: locales
+  image: joomlaprojects/docker-images:php7.2
+  commands:
+  - localedef -c -i fr_FR -f UTF8 ru_RU.UTF-8
+  - localedef -c -i ru_RU -f CP1251 ru_RU.CP1251
+
 - name: composer
   image: joomlaprojects/docker-images:php7.2
   commands:
@@ -121,6 +133,12 @@ platform:
   arch: amd64
 
 steps:
+- name: locales
+  image: joomlaprojects/docker-images:php7.3
+  commands:
+  - localedef -c -i fr_FR -f UTF8 ru_RU.UTF-8
+  - localedef -c -i ru_RU -f CP1251 ru_RU.CP1251
+
 - name: composer
   image: joomlaprojects/docker-images:php7.3
   commands:
@@ -149,6 +167,12 @@ platform:
   arch: amd64
 
 steps:
+- name: locales
+  image: joomlaprojects/docker-images:php7.4
+  commands:
+  - localedef -c -i fr_FR -f UTF8 ru_RU.UTF-8
+  - localedef -c -i ru_RU -f CP1251 ru_RU.CP1251
+
 - name: composer
   image: joomlaprojects/docker-images:php7.4
   commands:
@@ -177,6 +201,12 @@ platform:
   arch: amd64
 
 steps:
+- name: locales
+  image: joomlaprojects/docker-images:php8.0
+  commands:
+  - localedef -c -i fr_FR -f UTF8 ru_RU.UTF-8
+  - localedef -c -i ru_RU -f CP1251 ru_RU.CP1251
+
 - name: composer
   image: joomlaprojects/docker-images:php8.0
   commands:
@@ -205,6 +235,12 @@ platform:
   arch: amd64
 
 steps:
+- name: locales
+  image: joomlaprojects/docker-images:php8.1
+  commands:
+  - localedef -c -i fr_FR -f UTF8 ru_RU.UTF-8
+  - localedef -c -i ru_RU -f CP1251 ru_RU.CP1251
+
 - name: composer
   image: joomlaprojects/docker-images:php8.1
   commands:
@@ -227,6 +263,6 @@ volumes:
 
 ---
 kind: signature
-hmac: 4af173bc17cfa22a3f0fcef83a9535adb76d5b3727ab33d8d3c4a51f994525a3
+hmac: f8fc60bb7a050364bba020a07c19d8f1eb16a8c019cc8e778e63485ab19e58ab
 
 ...

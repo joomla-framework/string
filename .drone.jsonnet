@@ -22,6 +22,15 @@ local composer(phpversion, params) = {
     ]
 };
 
+local locales(phpversion) = {
+    name: "locales",
+    image: "joomlaprojects/docker-images:php" + phpversion,
+    commands: [
+        "localedef -c -i fr_FR -f UTF8 ru_RU.UTF-8",
+        "localedef -c -i ru_RU -f CP1251 ru_RU.CP1251"
+    ]
+};
+
 local phpunit(phpversion) = {
     name: "PHPUnit",
     image: "joomlaprojects/docker-images:php" + phpversion,
@@ -34,6 +43,7 @@ local pipeline(name, phpversion, params) = {
     name: "PHP " + name,
     volumes: hostvolumes,
     steps: [
+        locales(phpversion),
         composer(phpversion, params),
         phpunit(phpversion)
     ],
