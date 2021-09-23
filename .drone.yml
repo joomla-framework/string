@@ -68,6 +68,7 @@ steps:
 - name: locales
   image: joomlaprojects/docker-images:php7.2
   commands:
+  - apt install -y yum
   - yum -y install glibc-locale-source glibc-langpack-fr glibc-langpack-ru
   - localedef -c -i fr_FR -f UTF-8 fr_FR.UTF-8
   - localedef -c -i ru_RU -f CP1251 ru_RU.CP1251
@@ -103,6 +104,7 @@ steps:
 - name: locales
   image: joomlaprojects/docker-images:php7.2
   commands:
+  - apt install -y yum
   - yum -y install glibc-locale-source glibc-langpack-fr glibc-langpack-ru
   - localedef -c -i fr_FR -f UTF-8 fr_FR.UTF-8
   - localedef -c -i ru_RU -f CP1251 ru_RU.CP1251
@@ -138,6 +140,7 @@ steps:
 - name: locales
   image: joomlaprojects/docker-images:php7.3
   commands:
+  - apt install -y yum
   - yum -y install glibc-locale-source glibc-langpack-fr glibc-langpack-ru
   - localedef -c -i fr_FR -f UTF-8 fr_FR.UTF-8
   - localedef -c -i ru_RU -f CP1251 ru_RU.CP1251
@@ -173,6 +176,7 @@ steps:
 - name: locales
   image: joomlaprojects/docker-images:php7.4
   commands:
+  - apt install -y yum
   - yum -y install glibc-locale-source glibc-langpack-fr glibc-langpack-ru
   - localedef -c -i fr_FR -f UTF-8 fr_FR.UTF-8
   - localedef -c -i ru_RU -f CP1251 ru_RU.CP1251
@@ -208,6 +212,7 @@ steps:
 - name: locales
   image: joomlaprojects/docker-images:php8.0
   commands:
+  - apt install -y yum
   - yum -y install glibc-locale-source glibc-langpack-fr glibc-langpack-ru
   - localedef -c -i fr_FR -f UTF-8 fr_FR.UTF-8
   - localedef -c -i ru_RU -f CP1251 ru_RU.CP1251
@@ -243,6 +248,7 @@ steps:
 - name: locales
   image: joomlaprojects/docker-images:php8.1
   commands:
+  - apt install -y yum
   - yum -y install glibc-locale-source glibc-langpack-fr glibc-langpack-ru
   - localedef -c -i fr_FR -f UTF-8 fr_FR.UTF-8
   - localedef -c -i ru_RU -f CP1251 ru_RU.CP1251
@@ -269,6 +275,6 @@ volumes:
 
 ---
 kind: signature
-hmac: 4ec44e50735d79a749b11df40520497656b7319d7d3b7038cf8fd31e06e8fb9e
+hmac: 00e841dad9c8532dcf8d19f40d1797af02d678a290f65bf37c41739598bc7425
 
 ...
