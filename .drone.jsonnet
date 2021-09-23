@@ -29,8 +29,8 @@ local locales(phpversion) = {
     commands: [
         "apt-get clean && apt-get update && apt-get install -y locales",
         "locale -a",
-        "locale-gen fr_FR.UTF-8",
-        "locale-gen ru_RU.CP1251",
+        "localedef -c -i fr_FR -f UTF-8 fr_FR.UTF-8",
+        "localedef -c -i ru_RU -f CP1251 ru_RU.CP1251",
         "locale -a"
     ]
 };
