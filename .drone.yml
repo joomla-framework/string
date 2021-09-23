@@ -72,6 +72,8 @@ steps:
   - locale -a
   - locale-gen fr_FR.UTF-8
   - locale-gen ru_RU.CP1251
+  - locale -a
+  failure: ignore
 
 - name: composer
   image: joomlaprojects/docker-images:php7.2
@@ -108,6 +110,8 @@ steps:
   - locale -a
   - locale-gen fr_FR.UTF-8
   - locale-gen ru_RU.CP1251
+  - locale -a
+  failure: ignore
 
 - name: composer
   image: joomlaprojects/docker-images:php7.2
@@ -144,6 +148,7 @@ steps:
   - locale -a
   - locale-gen fr_FR.UTF-8
   - locale-gen ru_RU.CP1251
+  - locale -a
 
 - name: composer
   image: joomlaprojects/docker-images:php7.3
@@ -180,6 +185,7 @@ steps:
   - locale -a
   - locale-gen fr_FR.UTF-8
   - locale-gen ru_RU.CP1251
+  - locale -a
 
 - name: composer
   image: joomlaprojects/docker-images:php7.4
@@ -216,6 +222,7 @@ steps:
   - locale -a
   - locale-gen fr_FR.UTF-8
   - locale-gen ru_RU.CP1251
+  - locale -a
 
 - name: composer
   image: joomlaprojects/docker-images:php8.0
@@ -252,6 +259,7 @@ steps:
   - locale -a
   - locale-gen fr_FR.UTF-8
   - locale-gen ru_RU.CP1251
+  - locale -a
 
 - name: composer
   image: joomlaprojects/docker-images:php8.1
@@ -275,6 +283,6 @@ volumes:
 
 ---
 kind: signature
-hmac: 0c0ce713f539a6cbb658fa78592ff7fba9aaa092487bc0275c07f5869ad0036d
+hmac: 8f4fd9633fff950a3137e1dec0cc4639f6c41056c48bee8e3d0be0b2485dce73
 
 ...

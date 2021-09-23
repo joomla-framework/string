@@ -25,11 +25,13 @@ local composer(phpversion, params) = {
 local locales(phpversion) = {
     name: "locales",
     image: "joomlaprojects/docker-images:php" + phpversion,
+    [if phpversion == "7.2" then "failure"]: "ignore",
     commands: [
         "apt-get clean && apt-get update && apt-get install -y locales",
         "locale -a",
         "locale-gen fr_FR.UTF-8",
-        "locale-gen ru_RU.CP1251"
+        "locale-gen ru_RU.CP1251",
+        "locale -a"
     ]
 };
 
