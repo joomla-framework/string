@@ -10,7 +10,7 @@
         "symfony/deprecation-contracts": "^2.1"
     },
     "require-dev": {
-        "doctrine/inflector": "^1.2",
+        "doctrine/inflector": "1.2",
         "joomla/coding-standards": "^3.0@dev",
         "joomla/test": "^2.0.1",
         "phpunit/phpunit": "^8.5|^9.0"
