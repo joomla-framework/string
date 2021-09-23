@@ -65,16 +65,6 @@ platform:
   arch: amd64
 
 steps:
-- name: locales
-  image: joomlaprojects/docker-images:php7.2
-  commands:
-  - apt-get clean && apt-get update && apt-get install -y locales
-  - locale -a
-  - localedef -c -i fr_FR -f UTF-8 fr_FR.UTF-8
-  - localedef -c -i ru_RU -f CP1251 ru_RU.CP1251
-  - locale -a
-  failure: ignore
-
 - name: composer
   image: joomlaprojects/docker-images:php7.2
   commands:
@@ -87,6 +77,11 @@ steps:
 - name: PHPUnit
   image: joomlaprojects/docker-images:php7.2
   commands:
+  - apt-get clean && apt-get update && apt-get install -y locales
+  - locale -a
+  - localedef -c -i fr_FR -f UTF-8 fr_FR.UTF-8
+  - localedef -c -i ru_RU -f CP1251 ru_RU.CP1251
+  - locale -a
   - vendor/bin/phpunit
 
 volumes:
@@ -103,16 +98,6 @@ platform:
   arch: amd64
 
 steps:
-- name: locales
-  image: joomlaprojects/docker-images:php7.2
-  commands:
-  - apt-get clean && apt-get update && apt-get install -y locales
-  - locale -a
-  - localedef -c -i fr_FR -f UTF-8 fr_FR.UTF-8
-  - localedef -c -i ru_RU -f CP1251 ru_RU.CP1251
-  - locale -a
-  failure: ignore
-
 - name: composer
   image: joomlaprojects/docker-images:php7.2
   commands:
@@ -125,6 +110,11 @@ steps:
 - name: PHPUnit
   image: joomlaprojects/docker-images:php7.2
   commands:
+  - apt-get clean && apt-get update && apt-get install -y locales
+  - locale -a
+  - localedef -c -i fr_FR -f UTF-8 fr_FR.UTF-8
+  - localedef -c -i ru_RU -f CP1251 ru_RU.CP1251
+  - locale -a
   - vendor/bin/phpunit
 
 volumes:
@@ -141,15 +131,6 @@ platform:
   arch: amd64
 
 steps:
-- name: locales
-  image: joomlaprojects/docker-images:php7.3
-  commands:
-  - apt-get clean && apt-get update && apt-get install -y locales
-  - locale -a
-  - localedef -c -i fr_FR -f UTF-8 fr_FR.UTF-8
-  - localedef -c -i ru_RU -f CP1251 ru_RU.CP1251
-  - locale -a
-
 - name: composer
   image: joomlaprojects/docker-images:php7.3
   commands:
@@ -162,6 +143,11 @@ steps:
 - name: PHPUnit
   image: joomlaprojects/docker-images:php7.3
   commands:
+  - apt-get clean && apt-get update && apt-get install -y locales
+  - locale -a
+  - localedef -c -i fr_FR -f UTF-8 fr_FR.UTF-8
+  - localedef -c -i ru_RU -f CP1251 ru_RU.CP1251
+  - locale -a
   - vendor/bin/phpunit
 
 volumes:
@@ -178,15 +164,6 @@ platform:
   arch: amd64
 
 steps:
-- name: locales
-  image: joomlaprojects/docker-images:php7.4
-  commands:
-  - apt-get clean && apt-get update && apt-get install -y locales
-  - locale -a
-  - localedef -c -i fr_FR -f UTF-8 fr_FR.UTF-8
-  - localedef -c -i ru_RU -f CP1251 ru_RU.CP1251
-  - locale -a
-
 - name: composer
   image: joomlaprojects/docker-images:php7.4
   commands:
@@ -199,6 +176,11 @@ steps:
 - name: PHPUnit
   image: joomlaprojects/docker-images:php7.4
   commands:
+  - apt-get clean && apt-get update && apt-get install -y locales
+  - locale -a
+  - localedef -c -i fr_FR -f UTF-8 fr_FR.UTF-8
+  - localedef -c -i ru_RU -f CP1251 ru_RU.CP1251
+  - locale -a
   - vendor/bin/phpunit
 
 volumes:
@@ -215,15 +197,6 @@ platform:
   arch: amd64
 
 steps:
-- name: locales
-  image: joomlaprojects/docker-images:php8.0
-  commands:
-  - apt-get clean && apt-get update && apt-get install -y locales
-  - locale -a
-  - localedef -c -i fr_FR -f UTF-8 fr_FR.UTF-8
-  - localedef -c -i ru_RU -f CP1251 ru_RU.CP1251
-  - locale -a
-
 - name: composer
   image: joomlaprojects/docker-images:php8.0
   commands:
@@ -236,6 +209,11 @@ steps:
 - name: PHPUnit
   image: joomlaprojects/docker-images:php8.0
   commands:
+  - apt-get clean && apt-get update && apt-get install -y locales
+  - locale -a
+  - localedef -c -i fr_FR -f UTF-8 fr_FR.UTF-8
+  - localedef -c -i ru_RU -f CP1251 ru_RU.CP1251
+  - locale -a
   - vendor/bin/phpunit
 
 volumes:
@@ -252,15 +230,6 @@ platform:
   arch: amd64
 
 steps:
-- name: locales
-  image: joomlaprojects/docker-images:php8.1
-  commands:
-  - apt-get clean && apt-get update && apt-get install -y locales
-  - locale -a
-  - localedef -c -i fr_FR -f UTF-8 fr_FR.UTF-8
-  - localedef -c -i ru_RU -f CP1251 ru_RU.CP1251
-  - locale -a
-
 - name: composer
   image: joomlaprojects/docker-images:php8.1
   commands:
@@ -273,6 +242,11 @@ steps:
 - name: PHPUnit
   image: joomlaprojects/docker-images:php8.1
   commands:
+  - apt-get clean && apt-get update && apt-get install -y locales
+  - locale -a
+  - localedef -c -i fr_FR -f UTF-8 fr_FR.UTF-8
+  - localedef -c -i ru_RU -f CP1251 ru_RU.CP1251
+  - locale -a
   - vendor/bin/phpunit
   failure: ignore
 
@@ -283,6 +257,6 @@ volumes:
 
 ---
 kind: signature
-hmac: cc6e0cb7cb2c0a1abc50e6e2e94e260e349b800df17332b09750a02de7f584e7
+hmac: c8d21be1c7b1680ea20d25073a8a76ef47d48d81f550e8868b619848f78c54a5
 
 ...
