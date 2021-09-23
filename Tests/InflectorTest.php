@@ -109,6 +109,7 @@ class InflectorTest extends TestCase
 	{
 		$this->expectException(\InvalidArgumentException::class);
 
+		/** @noinspection PhpParamsInspection */
 		TestHelper::invoke($this->inflector, 'addRule', new \stdClass, 'singular');
 	}
 
@@ -145,6 +146,11 @@ class InflectorTest extends TestCase
 	 */
 	public function testAddWordWithoutPlural()
 	{
+		if (!$this->checkInflectorImplementation($this->inflector))
+		{
+			$this->markTestSkipped('This test depends on the library\'s implementation');
+		}
+
 		$this->assertSame(
 			$this->inflector,
 			$this->inflector->addWord('foo')
@@ -168,6 +174,11 @@ class InflectorTest extends TestCase
 	 */
 	public function testAddWordWithPlural()
 	{
+		if (!$this->checkInflectorImplementation($this->inflector))
+		{
+			$this->markTestSkipped('This test depends on the library\'s implementation');
+		}
+
 		$this->assertEquals(
 			$this->inflector,
 			$this->inflector->addWord('bar', 'foo')
@@ -193,6 +204,11 @@ class InflectorTest extends TestCase
 	 */
 	public function testAddPluraliseRule()
 	{
+		if (!$this->checkInflectorImplementation($this->inflector))
+		{
+			$this->markTestSkipped('This test depends on the library\'s implementation');
+		}
+
 		$this->assertSame(
 			$this->inflector->addPluraliseRule(['/^(custom)$/i' => '\1izables']),
 			$this->inflector,
@@ -213,6 +229,11 @@ class InflectorTest extends TestCase
 	 */
 	public function testAddSingulariseRule()
 	{
+		if (!$this->checkInflectorImplementation($this->inflector))
+		{
+			$this->markTestSkipped('This test depends on the library\'s implementation');
+		}
+
 		$this->assertSame(
 			$this->inflector->addSingulariseRule(['/^(inflec|contribu)tors$/i' => '\1ta']),
 			$this->inflector,
@@ -272,6 +293,10 @@ class InflectorTest extends TestCase
 	 */
 	public function testIsPlural(string $singular, string $plural)
 	{
+		if ($singular === 'bus' && !$this->checkInflectorImplementation($this->inflector)) {
+			$this->markTestSkipped('"bus/buses" is not known to the new implementation');
+		}
+
 		$this->assertTrue(
 			$this->inflector->isPlural($plural),
 			"'$plural' should be reported as plural"
@@ -296,6 +321,11 @@ class InflectorTest extends TestCase
 	 */
 	public function testIsSingular(string $singular, string $plural)
 	{
+		if ($singular === 'bus' && !$this->checkInflectorImplementation($this->inflector))
+		{
+			$this->markTestSkipped('"bus/buses" is not known to the new implementation');
+		}
+
 		$this->assertTrue(
 			$this->inflector->isSingular($singular),
 			"'$singular' should be reported as singular"
@@ -361,10 +391,22 @@ class InflectorTest extends TestCase
 	 */
 	public function testToSingularAlreadySingular()
 	{
+		if (!$this->checkInflectorImplementation($this->inflector))
+		{
+			$this->markTestSkipped('"bus/buses" is not known to the new implementation');
+		}
+
 		$this->assertSame(
 			'bus',
 			$this->inflector->toSingular('bus'),
 			"'bus' should not be singularised'"
 		);
+	}
+
+	private function checkInflectorImplementation(DoctrineInflector $inflector): bool
+	{
+		$reflectionClass = new \ReflectionClass($inflector);
+
+		return $reflectionClass->hasProperty('plural');
 	}
 }

@@ -6,13 +6,13 @@
     "homepage": "https://github.com/joomla-framework/string",
     "license": "GPL-2.0-or-later",
     "require": {
-        "php": "^7.2.5",
+        "php": "^7.2.5|^8.0",
         "symfony/deprecation-contracts": "^2.1"
     },
     "require-dev": {
-        "doctrine/inflector": "1.2",
+        "doctrine/inflector": "^1.2",
         "joomla/coding-standards": "^3.0@dev",
-        "joomla/test": "^2.0",
+        "joomla/test": "^2.0.1",
         "phpunit/phpunit": "^8.5|^9.0"
     },
     "conflict": {
