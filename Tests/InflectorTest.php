@@ -157,6 +157,11 @@ class InflectorTest extends TestCase
 	 */
 	public function testAddWordWithoutPlural(): void
 	{
+		if (!$this->checkInflectorImplementation($this->inflector))
+		{
+			$this->markTestSkipped('This test depends on the library\'s implementation');
+		}
+
 		$this->assertSame(
 			$this->inflector,
 			$this->inflector->addWord('foo')
@@ -183,6 +188,11 @@ class InflectorTest extends TestCase
 	 */
 	public function testAddWordWithPlural(): void
 	{
+		if (!$this->checkInflectorImplementation($this->inflector))
+		{
+			$this->markTestSkipped('This test depends on the library\'s implementation');
+		}
+
 		$this->assertEquals(
 			$this->inflector,
 			$this->inflector->addWord('bar', 'foo')
@@ -305,6 +315,11 @@ class InflectorTest extends TestCase
 	 */
 	public function testIsSingular(string $singular, string $plural): void
 	{
+		if ($singular === 'bus' && !$this->checkInflectorImplementation($this->inflector))
+		{
+			$this->markTestSkipped('"bus/buses" is not known to the new implementation');
+		}
+
 		$this->assertTrue(
 			$this->inflector->isSingular($singular),
 			"'$singular' should be reported as singular"
@@ -370,10 +385,22 @@ class InflectorTest extends TestCase
 	 */
 	public function testToSingularAlreadySingular(): void
 	{
+		if (!$this->checkInflectorImplementation($this->inflector))
+		{
+			$this->markTestSkipped('"bus/buses" is not known to the new implementation');
+		}
+
 		$this->assertSame(
 			'bus',
 			$this->inflector->toSingular('bus'),
 			"'bus' should not be singularised'"
 		);
+	}
+
+	private function checkInflectorImplementation(DoctrineInflector $inflector): bool
+	{
+		$reflectionClass = new \ReflectionClass($inflector);
+
+		return $reflectionClass->hasProperty('plural');
 	}
 }
