@@ -26,7 +26,7 @@ local locales(phpversion) = {
     name: "locales",
     image: "joomlaprojects/docker-images:php" + phpversion,
     commands: [
-        "apt-get update -y && apt-get install -y yum-utils && yum -y install glibc-locale-source glibc-langpack-fr glibc-langpack-ru",
+        "apt-get update -y && apt-get install -y glibc-locale-source glibc-langpack-fr glibc-langpack-ru",
         "localedef -c -i fr_FR -f UTF-8 fr_FR.UTF-8",
         "localedef -c -i ru_RU -f CP1251 ru_RU.CP1251"
     ]
