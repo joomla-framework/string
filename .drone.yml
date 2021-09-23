@@ -77,7 +77,7 @@ steps:
 - name: PHPUnit
   image: joomlaprojects/docker-images:php7.2
   commands:
-  - apt-get clean && apt-get update && apt-get install -y locales
+  - apt-get clean && apt-get  --allow-releaseinfo-change update && apt-get install -y locales
   - locale -a
   - localedef -c -i fr_FR -f UTF-8 fr_FR.UTF-8
   - localedef -c -i ru_RU -f CP1251 ru_RU.CP1251
@@ -110,7 +110,7 @@ steps:
 - name: PHPUnit
   image: joomlaprojects/docker-images:php7.2
   commands:
-  - apt-get clean && apt-get update && apt-get install -y locales
+  - apt-get clean && apt-get  --allow-releaseinfo-change update && apt-get install -y locales
   - locale -a
   - localedef -c -i fr_FR -f UTF-8 fr_FR.UTF-8
   - localedef -c -i ru_RU -f CP1251 ru_RU.CP1251
@@ -143,7 +143,7 @@ steps:
 - name: PHPUnit
   image: joomlaprojects/docker-images:php7.3
   commands:
-  - apt-get clean && apt-get update && apt-get install -y locales
+  - apt-get clean && apt-get  --allow-releaseinfo-change update && apt-get install -y locales
   - locale -a
   - localedef -c -i fr_FR -f UTF-8 fr_FR.UTF-8
   - localedef -c -i ru_RU -f CP1251 ru_RU.CP1251
@@ -176,7 +176,7 @@ steps:
 - name: PHPUnit
   image: joomlaprojects/docker-images:php7.4
   commands:
-  - apt-get clean && apt-get update && apt-get install -y locales
+  - apt-get clean && apt-get  --allow-releaseinfo-change update && apt-get install -y locales
   - locale -a
   - localedef -c -i fr_FR -f UTF-8 fr_FR.UTF-8
   - localedef -c -i ru_RU -f CP1251 ru_RU.CP1251
@@ -209,7 +209,7 @@ steps:
 - name: PHPUnit
   image: joomlaprojects/docker-images:php8.0
   commands:
-  - apt-get clean && apt-get update && apt-get install -y locales
+  - apt-get clean && apt-get  --allow-releaseinfo-change update && apt-get install -y locales
   - locale -a
   - localedef -c -i fr_FR -f UTF-8 fr_FR.UTF-8
   - localedef -c -i ru_RU -f CP1251 ru_RU.CP1251
@@ -242,7 +242,7 @@ steps:
 - name: PHPUnit
   image: joomlaprojects/docker-images:php8.1
   commands:
-  - apt-get clean && apt-get update && apt-get install -y locales
+  - apt-get clean && apt-get  --allow-releaseinfo-change update && apt-get install -y locales
   - locale -a
   - localedef -c -i fr_FR -f UTF-8 fr_FR.UTF-8
   - localedef -c -i ru_RU -f CP1251 ru_RU.CP1251
@@ -257,6 +257,6 @@ volumes:
 
 ---
 kind: signature
-hmac: c8d21be1c7b1680ea20d25073a8a76ef47d48d81f550e8868b619848f78c54a5
+hmac: 7a94947f6defafe4679795a1b288940c9aff85ef981a9d6e47b7df2fb4addf8f
 
 ...
