@@ -69,8 +69,8 @@ steps:
   image: joomlaprojects/docker-images:php7.2
   commands:
   - apt-get update -y && apt-get install -y glibc-source locales-all
-  - localedef -c -i fr_FR -f UTF-8 fr_FR.UTF-8
-  - localedef -c -i ru_RU -f CP1251 ru_RU.CP1251
+  - locale-gen fr_FR.UTF-8
+  - locale-gen ru_RU.CP1251
 
 - name: composer
   image: joomlaprojects/docker-images:php7.2
@@ -104,8 +104,8 @@ steps:
   image: joomlaprojects/docker-images:php7.2
   commands:
   - apt-get update -y && apt-get install -y glibc-source locales-all
-  - localedef -c -i fr_FR -f UTF-8 fr_FR.UTF-8
-  - localedef -c -i ru_RU -f CP1251 ru_RU.CP1251
+  - locale-gen fr_FR.UTF-8
+  - locale-gen ru_RU.CP1251
 
 - name: composer
   image: joomlaprojects/docker-images:php7.2
@@ -139,8 +139,8 @@ steps:
   image: joomlaprojects/docker-images:php7.3
   commands:
   - apt-get update -y && apt-get install -y glibc-source locales-all
-  - localedef -c -i fr_FR -f UTF-8 fr_FR.UTF-8
-  - localedef -c -i ru_RU -f CP1251 ru_RU.CP1251
+  - locale-gen fr_FR.UTF-8
+  - locale-gen ru_RU.CP1251
 
 - name: composer
   image: joomlaprojects/docker-images:php7.3
@@ -174,8 +174,8 @@ steps:
   image: joomlaprojects/docker-images:php7.4
   commands:
   - apt-get update -y && apt-get install -y glibc-source locales-all
-  - localedef -c -i fr_FR -f UTF-8 fr_FR.UTF-8
-  - localedef -c -i ru_RU -f CP1251 ru_RU.CP1251
+  - locale-gen fr_FR.UTF-8
+  - locale-gen ru_RU.CP1251
 
 - name: composer
   image: joomlaprojects/docker-images:php7.4
@@ -209,8 +209,8 @@ steps:
   image: joomlaprojects/docker-images:php8.0
   commands:
   - apt-get update -y && apt-get install -y glibc-source locales-all
-  - localedef -c -i fr_FR -f UTF-8 fr_FR.UTF-8
-  - localedef -c -i ru_RU -f CP1251 ru_RU.CP1251
+  - locale-gen fr_FR.UTF-8
+  - locale-gen ru_RU.CP1251
 
 - name: composer
   image: joomlaprojects/docker-images:php8.0
@@ -244,8 +244,8 @@ steps:
   image: joomlaprojects/docker-images:php8.1
   commands:
   - apt-get update -y && apt-get install -y glibc-source locales-all
-  - localedef -c -i fr_FR -f UTF-8 fr_FR.UTF-8
-  - localedef -c -i ru_RU -f CP1251 ru_RU.CP1251
+  - locale-gen fr_FR.UTF-8
+  - locale-gen ru_RU.CP1251
 
 - name: composer
   image: joomlaprojects/docker-images:php8.1
@@ -269,6 +269,6 @@ volumes:
 
 ---
 kind: signature
-hmac: b6ed17a485142300a60c4de9c553c9584e544ee379b05762a8f2950c56ca7406
+hmac: 3dc98958d0298aa7b1ed6c1f02945631942597b5b014419021f0dc6094e56d88
 
 ...
