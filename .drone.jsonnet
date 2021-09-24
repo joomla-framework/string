@@ -26,7 +26,14 @@ local phpunit(phpversion) = {
     name: "PHPUnit",
     image: "joomlaprojects/docker-images:php" + phpversion,
     [if phpversion == "8.1" then "failure"]: "ignore",
-    commands: ["vendor/bin/phpunit"]
+    commands: [
+        "apt-get clean && apt-get  --allow-releaseinfo-change update && apt-get install -y locales",
+        "locale -a",
+        "localedef -c -i fr_FR -f UTF-8 fr_FR.UTF-8",
+        "localedef -c -i ru_RU -f CP1251 ru_RU.CP1251",
+        "locale -a",
+        "vendor/bin/phpunit"
+    ]
 };
 
 local pipeline(name, phpversion, params) = {
