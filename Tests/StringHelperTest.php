@@ -1078,4 +1078,205 @@ class StringHelperTest extends TestCase
 			StringHelper::valid($string)
 		);
 	}
+
+	/**
+	 * @return \Generator
+	 */
+	public function seedTestIncrementSignature(): \Generator
+	{
+		// Note: string, style
+		yield 'unnumbered default' => ['test', 'default'];
+		yield 'unnumbered dash' => ['test', 'dash'];
+		yield 'numbered default' => ['test (3)', 'default'];
+		yield 'numbered dash' => ['test-3', 'dash'];
+	}
+
+	/**
+	 * @testdox Change of default value in StringHelper::increment() is backward compatible
+	 *
+	 * @dataProvider seedTestIncrementSignature
+	 */
+	public function testIncrementSignature(string $string, string $style): void
+	{
+		$curDefault = StringHelper::increment($string, $style);
+		$oldDefault = StringHelper::increment($string, $style, 0);
+		$newDefault = StringHelper::increment($string, $style, null);
+
+		$this->assertSame(
+			$curDefault,
+			$oldDefault,
+			'Omitting argument should give the same result as providing the old default value'
+		);
+		$this->assertSame(
+			$curDefault,
+			$newDefault,
+			'Omitting argument should give the same result as providing the new default value'
+		);
+	}
+
+	/**
+	 * @return \Generator
+	 */
+	public function seedTestStrPosSignature(): \Generator
+	{
+		// Note: haystack, needle
+		yield 'existing substring at the beginning' => ['teststring', 'test'];
+		yield 'existing substring within the string' => ['teststring', 'string'];
+		yield 'non-existing substring' => ['teststring', 'foo'];
+	}
+
+	/**
+	 * @testdox Change of default value in StringHelper::strpos() is backward compatible
+	 *
+	 * @dataProvider seedTestStrPosSignature
+	 */
+	public function testStrPosSignature(string $haystack, string $needle): void
+	{
+		$curDefault = StringHelper::strpos($haystack, $needle);
+		$actDefault = StringHelper::strpos($haystack, $needle, 0);
+		$oldDefault = StringHelper::strpos($haystack, $needle, false);
+		$newDefault = StringHelper::strpos($haystack, $needle, null);
+
+		$this->assertSame(
+			$curDefault,
+			$actDefault,
+			'Omitting argument should give the same result as providing the actual default value'
+		);
+		$this->assertSame(
+			$curDefault,
+			$oldDefault,
+			'Omitting argument should give the same result as providing the old default value'
+		);
+		$this->assertSame(
+			$curDefault,
+			$newDefault,
+			'Omitting argument should give the same result as providing the new default value'
+		);
+	}
+
+	/**
+	 * @testdox Change of default value in StringHelper::strrpos() is backward compatible
+	 *
+	 * @dataProvider seedTestStrPosSignature
+	 */
+	public function testStrRPosSignature(string $haystack, string $needle): void
+	{
+		$curDefault = StringHelper::strrpos($haystack, $needle);
+		$oldDefault = StringHelper::strrpos($haystack, $needle, 0);
+		$newDefault = StringHelper::strrpos($haystack, $needle, null);
+
+		$this->assertSame(
+			$curDefault,
+			$oldDefault,
+			'Omitting argument should give the same result as providing the old default value'
+		);
+		$this->assertSame(
+			$curDefault,
+			$newDefault,
+			'Omitting argument should give the same result as providing the new default value'
+		);
+	}
+
+	/**
+	 * @return \Generator
+	 */
+	public function seedTestSubStrSignature(): \Generator
+	{
+		// Note: haystack, needle
+		yield 'offset at the beginning' => ['teststring', 0];
+		yield 'offset within the string' => ['teststring', 4];
+		yield 'offset out of bounds' => ['teststring', 12];
+	}
+
+	/**
+	 * @testdox Change of default value in StringHelper::substr() is backward compatible
+	 *
+	 * @dataProvider seedTestSubStrSignature
+	 */
+	public function testSubStrSignature(string $str, int $offset): void
+	{
+		$curDefault = StringHelper::substr($str, $offset);
+		$oldDefault = StringHelper::substr($str, $offset, false);
+		$newDefault = StringHelper::substr($str, $offset, null);
+
+		$this->assertSame(
+			$curDefault,
+			$oldDefault,
+			'Omitting argument should give the same result as providing the old default value'
+		);
+		$this->assertSame(
+			$curDefault,
+			$newDefault,
+			'Omitting argument should give the same result as providing the new default value'
+		);
+	}
+
+	/**
+	 * @return \Generator
+	 */
+	public function seedTestStrCmpSignature(): \Generator
+	{
+		// Note: haystack, needle
+		yield 'a < b' => ['a', 'b'];
+		yield 'a = a' => ['a', 'a'];
+		yield 'b > a' => ['b', 'a'];
+	}
+
+	/**
+	 * @testdox Change of default value in StringHelper::strcasecmp() is backward compatible
+	 *
+	 * @dataProvider seedTestStrCmpSignature
+	 */
+	public function testStrCaseCmpSignature(string $str1, string $str2): void
+	{
+		$curDefault = StringHelper::strcasecmp($str1, $str2);
+		$oldDefault = StringHelper::strcasecmp($str1, $str2, false);
+		$newDefault = StringHelper::strcasecmp($str1, $str2, null);
+
+		$this->assertSame(
+			$this->sign($curDefault),
+			$this->sign($oldDefault),
+			'Omitting argument should give the same result as providing the old default value'
+		);
+		$this->assertSame(
+			$this->sign($curDefault),
+			$this->sign($newDefault),
+			'Omitting argument should give the same result as providing the new default value'
+		);
+	}
+
+	/**
+	 * @testdox Change of default value in StringHelper::strcmp() is backward compatible
+	 *
+	 * @dataProvider seedTestStrCmpSignature
+	 */
+	public function testStrCmpSignature(string $str1, string $str2): void
+	{
+		$curDefault = StringHelper::strcmp($str1, $str2);
+		$oldDefault = StringHelper::strcmp($str1, $str2, false);
+		$newDefault = StringHelper::strcmp($str1, $str2, null);
+
+		$this->assertSame(
+			$this->sign($curDefault),
+			$this->sign($oldDefault),
+			'Omitting argument should give the same result as providing the old default value'
+		);
+		$this->assertSame(
+			$this->sign($curDefault),
+			$this->sign($newDefault),
+			'Omitting argument should give the same result as providing the new default value'
+		);
+	}
+
+	/**
+	 * Determine the sign of an integer
+	 *
+	 * @param   int  $value
+	 *
+	 * @return int
+	 */
+	private function sign(int $value): int
+	{
+		return $value <=> 0;
+	}
 }
