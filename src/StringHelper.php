@@ -44,13 +44,13 @@ abstract class StringHelper
 	 *
 	 * @param   string        $string  The source string.
 	 * @param   string|null   $style   The style (default|dash).
-	 * @param   integer|null  $n       If a positive number is supplied, this number is used for the copy, otherwise it is the 'next' number.
+	 * @param   integer  $n       If a positive number is supplied, this number is used for the copy, otherwise it is the 'next' number.
 	 *
 	 * @return  string  The incremented string.
 	 *
 	 * @since   1.3.0
 	 */
-	public static function increment($string, $style = 'default', $n = null)
+	public static function increment($string, $style = 'default', $n = 0)
 	{
 		$styleSpec = static::$incrementStyles[$style] ?? static::$incrementStyles['default'];
 
@@ -135,7 +135,7 @@ abstract class StringHelper
 	 * @link    https://www.php.net/strpos
 	 * @since   1.3.0
 	 */
-	public static function strpos($haystack, $needle, $offset = null)
+	public static function strpos($haystack, $needle, $offset = false)
 	{
 		if ($offset === null)
 		{
@@ -176,16 +176,16 @@ abstract class StringHelper
 	 *
 	 * @param   string        $str     String being processed
 	 * @param   integer       $offset  Number of UTF-8 characters offset (from left)
-	 * @param   integer|null  $length  Optional length in UTF-8 characters from offset
+	 * @param   integer|null|boolean  $length  Optional length in UTF-8 characters from offset
 	 *
 	 * @return  string|boolean
 	 *
 	 * @link    https://www.php.net/substr
 	 * @since   1.3.0
 	 */
-	public static function substr($str, $offset, $length = null)
+	public static function substr($str, $offset, $length = false)
 	{
-		if ($length === null)
+		if ($length === false)
 		{
 			return utf8_substr($str, $offset);
 		}
