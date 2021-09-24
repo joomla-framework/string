@@ -56,7 +56,8 @@ abstract class StringHelper
 	 *
 	 * @return  string  The incremented string.
 	 *
-	 * @since   1.3.0
+	 * @since      1.3.0
+	 * @since      __DEPLOY_VERSION__ Default value for omitted parameter $n is now null (was 0)
 	 */
 	public static function increment($string, $style = 'default', $n = null)
 	{
@@ -140,6 +141,7 @@ abstract class StringHelper
 	 * @link       https://www.php.net/strpos
 	 * @since      1.3.0
 	 * @since      __DEPLOY_VERSION__ Deprecated. Use UTF8::strpos() instead.
+	 * @since      __DEPLOY_VERSION__ Default value for omitted parameter $offset is now null (was false)
 	 * @deprecated 3.0 Please use UTF8::strpos() instead.
 	 */
 	public static function strpos($haystack, $needle, $offset = null)
@@ -162,6 +164,7 @@ abstract class StringHelper
 	 * @link       https://www.php.net/strrpos
 	 * @since      1.3.0
 	 * @since      __DEPLOY_VERSION__ Deprecated. Use UTF8::strrpos() instead.
+	 * @since      __DEPLOY_VERSION__ Default value for omitted parameter $offset is now null (was 0)
 	 * @deprecated 3.0 Please use UTF8::strrpos() instead.
 	 */
 	public static function strrpos($haystack, $needle, $offset = null)
@@ -182,6 +185,7 @@ abstract class StringHelper
 	 * @link       https://www.php.net/substr
 	 * @since      1.3.0
 	 * @since      __DEPLOY_VERSION__ Deprecated. Use UTF8::substr() instead.
+	 * @since      __DEPLOY_VERSION__ Default value for omitted parameter $length is now null (was false)
 	 * @deprecated 3.0 Please use UTF8::substr() instead.
 	 */
 	public static function substr($str, $offset, $length = null)
@@ -337,6 +341,7 @@ abstract class StringHelper
 	 * @link       https://www.php.net/setlocale
 	 * @since      1.3.0
 	 * @since      __DEPLOY_VERSION__ Restores locale after comparision.
+	 * @since      __DEPLOY_VERSION__ Default value for omitted parameter $locale is now null (was false)
 	 */
 	public static function strcasecmp($str1, $str2, $locale = null)
 	{
@@ -383,8 +388,9 @@ abstract class StringHelper
 	 * @link       https://www.php.net/setlocale
 	 * @since      1.3.0
 	 * @since      __DEPLOY_VERSION__ Restores locale after comparision.
+	 * @since      __DEPLOY_VERSION__ Default value for omitted parameter $locale is now null (was false)
 	 */
-	public static function strcmp($str1, $str2, $locale = false)
+	public static function strcmp($str1, $str2, $locale = null)
 	{
 		if ($locale === false)
 		{
@@ -801,7 +807,7 @@ abstract class StringHelper
 
 		if ($locale === false)
 		{
-			$locale = (string) self::$currentLocale;
+			$locale = (string)self::$currentLocale;
 		}
 
 		// See if we have successfully set locale to UTF-8
