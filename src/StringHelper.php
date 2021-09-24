@@ -141,12 +141,12 @@ abstract class StringHelper
 	 * @link       https://www.php.net/strpos
 	 * @since      1.3.0
 	 * @since      __DEPLOY_VERSION__ Deprecated. Use UTF8::strpos() instead.
-	 * @since      __DEPLOY_VERSION__ Default value for omitted parameter $offset is now null (was false)
+	 * @since      __DEPLOY_VERSION__ Default value for omitted parameter $offset is now 0 (was false)
 	 * @deprecated 3.0 Please use UTF8::strpos() instead.
 	 */
-	public static function strpos($haystack, $needle, $offset = null)
+	public static function strpos($haystack, $needle, $offset = 0)
 	{
-		return UTF8::strpos($haystack, $needle, $offset ?? 0);
+		return UTF8::strpos($haystack, $needle, $offset ?: 0);
 	}
 
 	/**
@@ -164,12 +164,11 @@ abstract class StringHelper
 	 * @link       https://www.php.net/strrpos
 	 * @since      1.3.0
 	 * @since      __DEPLOY_VERSION__ Deprecated. Use UTF8::strrpos() instead.
-	 * @since      __DEPLOY_VERSION__ Default value for omitted parameter $offset is now null (was 0)
 	 * @deprecated 3.0 Please use UTF8::strrpos() instead.
 	 */
-	public static function strrpos($haystack, $needle, $offset = null)
+	public static function strrpos($haystack, $needle, $offset = 0)
 	{
-		return UTF8::strrpos($haystack, $needle, $offset ?? 0);
+		return UTF8::strrpos($haystack, $needle, $offset ?: 0);
 	}
 
 	/**
@@ -190,6 +189,11 @@ abstract class StringHelper
 	 */
 	public static function substr($str, $offset, $length = null)
 	{
+		if ($length === false)
+		{
+			$length = null;
+		}
+
 		return UTF8::substr($str, $offset, $length);
 	}
 
