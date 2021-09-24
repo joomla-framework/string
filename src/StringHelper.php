@@ -811,7 +811,7 @@ abstract class StringHelper
 
 		if ($locale === false)
 		{
-			$locale = (string)self::$currentLocale;
+			$locale = (string) self::$currentLocale;
 		}
 
 		// See if we have successfully set locale to UTF-8
