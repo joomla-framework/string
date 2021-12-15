@@ -11,11 +11,15 @@
     <exclude-pattern>*/.github/*</exclude-pattern>
 
     <!-- Exclude 3rd party libraries. -->
-    <exclude-pattern>*/src/phputf8/*</exclude-pattern>
     <exclude-pattern>*/vendor/*</exclude-pattern>
 
     <rule ref="Joomla">
-        <!-- Required due to class methods which are named in snake case -->
-        <exclude name="Joomla.NamingConventions.ValidFunctionName.ScopeNotCamelCaps"/>
+        <exclude name="Generic.Arrays.DisallowShortArraySyntax"/>
+    </rule>
+
+    <rule ref="Joomla.Classes.InstantiateNewClasses">
+        <properties>
+            <property name="shortArraySyntax" value="true"/>
+        </properties>
     </rule>
 </ruleset>
