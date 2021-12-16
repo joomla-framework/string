@@ -1,1 +1,1 @@
-src="Inflector.php Normalise.php String.php StringHelper.php"
+src="src/Inflector.php src/Normalise.php src/String.php src/StringHelper.php"

@@ -61,7 +61,7 @@ local pipeline(name, phpversion, params) = {
                 depends: [ "composer" ],
                 commands: [
                     "vendor/bin/phpcs --config-set installed_paths vendor/joomla/coding-standards",
-                    "vendor/bin/phpcs -p --report=full --extensions=php --standard=ruleset.xml Inflector.php Normalise.php String.php StringHelper.php"
+                    "vendor/bin/phpcs -p --report=full --extensions=php --standard=ruleset.xml src/Inflector.php src/Normalise.php src/String.php src/StringHelper.php"
                 ]
             },
             {
@@ -71,7 +71,7 @@ local pipeline(name, phpversion, params) = {
                 failure: "ignore",
                 commands: [
                     "vendor/bin/phpcs --config-set installed_paths vendor/joomla/coding-standards",
-                    "vendor/bin/phpcs -p --report=full --extensions=php --standard=Joomla src/"
+                    "vendor/bin/phpcs -p --report=full --extensions=php --standard=Joomla src/Inflector.php src/Normalise.php src/String.php src/StringHelper.php"
                 ]
             },
             {
