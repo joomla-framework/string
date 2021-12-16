@@ -21,7 +21,7 @@ steps:
   image: joomlaprojects/docker-images:php7.4
   commands:
   - vendor/bin/phpcs --config-set installed_paths vendor/joomla/coding-standards
-  - vendor/bin/phpcs -p --report=full --extensions=php --standard=ruleset.xml src/
+  - vendor/bin/phpcs -p --report=full --extensions=php --standard=ruleset.xml Inflector.php Normalise.php String.php StringHelper.php
 
 - name: phpcs (strict)
   image: joomlaprojects/docker-images:php7.4
@@ -319,6 +319,6 @@ volumes:
 
 ---
 kind: signature
-hmac: 82b534f58acb39d32886791cf77e6b55f855b0a810ebd8dd4477992700ed6994
+hmac: 88165cd1c0164dea7b77e8a5f467dadee2aa5021a9ac4c2623c406922bf6d459
 
 ...
