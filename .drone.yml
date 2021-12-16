@@ -21,13 +21,13 @@ steps:
   image: joomlaprojects/docker-images:php7.4
   commands:
   - vendor/bin/phpcs --config-set installed_paths vendor/joomla/coding-standards
-  - vendor/bin/phpcs -p --report=full --extensions=php --standard=ruleset.xml Inflector.php Normalise.php String.php StringHelper.php
+  - vendor/bin/phpcs -p --report=full --extensions=php --standard=ruleset.xml src/Inflector.php src/Normalise.php src/String.php src/StringHelper.php
 
 - name: phpcs (strict)
   image: joomlaprojects/docker-images:php7.4
   commands:
   - vendor/bin/phpcs --config-set installed_paths vendor/joomla/coding-standards
-  - vendor/bin/phpcs -p --report=full --extensions=php --standard=Joomla src/
+  - vendor/bin/phpcs -p --report=full --extensions=php --standard=Joomla src/Inflector.php src/Normalise.php src/String.php src/StringHelper.php
   failure: ignore
 
 - name: phpmd
@@ -319,6 +319,6 @@ volumes:
 
 ---
 kind: signature
-hmac: 88165cd1c0164dea7b77e8a5f467dadee2aa5021a9ac4c2623c406922bf6d459
+hmac: 991f2f86c3455e1c8ae45ec03282982fa7102b7f8fd1b7876e019fe7427499c1
 
 ...
