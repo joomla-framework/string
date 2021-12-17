@@ -2,11 +2,7 @@
     "name": "joomla/string",
     "type": "joomla-package",
     "description": "Joomla String Package",
-    "keywords": [
-        "joomla",
-        "framework",
-        "string"
-    ],
+    "keywords": ["joomla", "framework", "string"],
     "homepage": "https://github.com/joomla-framework/string",
     "license": "GPL-2.0-or-later",
     "require": {
@@ -15,7 +11,7 @@
     "require-dev": {
         "joomla/coding-standards": "~2.0@alpha",
         "joomla/test": "~1.0",
-        "phpunit/phpunit": "^4.8.36|^5.4.3|^6.0|^7.0|^8.0"
+        "phpunit/phpunit": "^4.8.35|^5.4.3|~6.0"
     },
     "suggest": {
         "ext-mbstring": "For improved processing"
