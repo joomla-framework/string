@@ -47,7 +47,8 @@
             "Joomla\\String\\Tests\\": "Tests/"
         }
     },
-    "extra": {
+  "minimum-stability": "dev",
+  "extra": {
         "branch-alias": {
             "dev-master": "1.x-dev"
         }
