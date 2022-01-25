@@ -1,13 +1,25 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <phpunit bootstrap="vendor/autoload.php" colors="false">
-	<filter>
-		<blacklist>
-			<directory suffix=".php">src/phputf8</directory>
-		</blacklist>
-	</filter>
 	<testsuites>
 		<testsuite name="Unit">
-			<directory>Tests</directory>
+			<directory suffix="Test.php" phpVersion="7.1.0" phpVersionOperator="&lt;">Tests/php53</directory>
+			<directory suffix="Test.php" phpVersion="7.1.0" phpVersionOperator=">=">Tests/php71</directory>
 		</testsuite>
 	</testsuites>
+    <php>
+		<env name="SYMFONY_DEPRECATIONS_HELPER" value="weak" />
+	</php>
+
+	<!--
+	<logging>
+		<log type="coverage-clover" target="build/logs/clover.xml" />
+		<log type="junit" target="build/logs/junit.xml" logIncompleteSkipped="false" />
+	</logging>
+	-->
+
+	<filter>
+		<whitelist addUncoveredFilesFromWhitelist="true">
+			<directory suffix=".php">src</directory>
+		</whitelist>
+	</filter>
 </phpunit>

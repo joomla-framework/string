@@ -4,7 +4,7 @@
  * @license    GNU General Public License version 2 or later; see LICENSE
  */
 
-namespace Joomla\String\Tests;
+namespace Joomla\String\Tests\php71;
 
 use Joomla\String\Normalise;
 use PHPUnit\Framework\TestCase;
