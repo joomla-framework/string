@@ -153,11 +153,12 @@ class InflectorTest extends TestCase
 	 * @return  void
 	 *
 	 * @covers  Joomla\String\Inflector::addRule
-	 * @expectedException  InvalidArgumentException
+	 *
 	 * @since   1.0
 	 */
 	public function testAddRuleException()
 	{
+		$this->expectException(InvalidArgumentException::class);
 		TestHelper::invoke($this->inflector, 'addRule', new \stdClass, 'singular');
 	}
 

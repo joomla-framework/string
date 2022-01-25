@@ -367,7 +367,7 @@ class StringHelperTest extends TestCase
 			array("Би шил\t\n\r\x0B", null, 'Би шил'),
 			array("Би шил\r\x0B\t\n", "\t\n\x0B", "Би шил\r"),
 			array("\x09Би шил\x0A", "\x09\x0A", "\x09Би шил"),
-			array('1234abc', 'abc', '01234')
+			array('1234abc', 'abc', '1234')
 		);
 	}
 
