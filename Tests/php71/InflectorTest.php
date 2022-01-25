@@ -158,7 +158,7 @@ class InflectorTest extends TestCase
 	 */
 	public function testAddRuleException()
 	{
-		$this->expectException(InvalidArgumentException::class);
+		$this->expectException(\InvalidArgumentException::class);
 		TestHelper::invoke($this->inflector, 'addRule', new \stdClass, 'singular');
 	}
 
