@@ -4,7 +4,7 @@
  * @license    GNU General Public License version 2 or later; see LICENSE
  */
 
-namespace Joomla\String\Tests;
+namespace Joomla\String\Tests\php71;
 
 use Joomla\String\Inflector;
 use Joomla\Test\TestHelper;
@@ -407,7 +407,7 @@ class InflectorTest extends TestCase
 	public function testGetInstance()
 	{
 		$this->assertInstanceOf(
-			'Joomla\\String\\Inflector',
+			\Joomla\String\Inflector::class,
 			Inflector::getInstance(),
 			'Check getInstance returns the right class.'
 		);
@@ -422,7 +422,7 @@ class InflectorTest extends TestCase
 		);
 
 		$this->assertInstanceOf(
-			'Joomla\\String\\Inflector',
+			\Joomla\String\Inflector::class,
 			Inflector::getInstance(true),
 			'Check getInstance a fresh object with true argument even though the instance is set to something else.'
 		);
