@@ -21,7 +21,7 @@ if ( !defined('UTF8_CORE') ) {
 * @package utf8
 */
 function utf8_strlen($str){
-    return mb_strlen($str ?? "");
+    return mb_strlen($str ?? '');
 }
 
 
