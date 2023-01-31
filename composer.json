@@ -11,9 +11,9 @@
     },
     "require-dev": {
         "doctrine/inflector": "^1.2",
-        "joomla/coding-standards": "^3.0@dev",
         "joomla/test": "^2.0.1",
-        "phpunit/phpunit": "^8.5|^9.0"
+        "phpunit/phpunit": "^8.5|^9.0",
+        "squizlabs/php_codesniffer": "~3.7.1"
     },
     "conflict": {
         "doctrine/inflector": "<1.2"
