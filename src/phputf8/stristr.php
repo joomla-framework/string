@@ -15,21 +15,21 @@
 * @see utf8_strtolower
 * @package utf8
 */
-function utf8_stristr($str, $search) {
-
-    if ( strlen($search) == 0 ) {
+function utf8_stristr($str, $search)
+{
+    if (strlen($search) == 0) {
         return $str;
     }
 
-    $lstr = utf8_strtolower($str);
+    $lstr    = utf8_strtolower($str);
     $lsearch = utf8_strtolower($search);
     //JOOMLA SPECIFIC FIX - BEGIN
-    preg_match('/^(.*)'.preg_quote($lsearch, '/').'/Us',$lstr, $matches);
+    preg_match('/^(.*)'.preg_quote($lsearch, '/').'/Us', $lstr, $matches);
     //JOOMLA SPECIFIC FIX - END
 
-    if ( count($matches) == 2 ) {
+    if (count($matches) == 2) {
         return substr($str, strlen($matches[1]));
     }
 
-    return FALSE;
+    return false;
 }

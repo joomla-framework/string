@@ -23,8 +23,8 @@
 /**
 * Put the current directory in this constant
 */
-if ( !defined('UTF8') ) {
-    define('UTF8',dirname(__FILE__));
+if (!defined('UTF8')) {
+    define('UTF8', dirname(__FILE__));
 }
 
 /**
@@ -34,7 +34,7 @@ if ( !defined('UTF8') ) {
 * Also need to check we have the correct internal mbstring
 * encoding
 */
-if ( extension_loaded('mbstring')) {
+if (extension_loaded('mbstring')) {
     /*
      * Joomla modification - As of PHP 8, the `mbstring.func_overload` configuration has been removed and the
      * MB_OVERLOAD_STRING constant will no longer be present, so this check only runs for PHP 7 and older
@@ -42,8 +42,8 @@ if ( extension_loaded('mbstring')) {
      * and https://github.com/php/php-src/commit/97df99a6d7d96a886ac143337fecad775907589a
      * for additional references
      */
-    if ( PHP_VERSION_ID < 80000 && ((int) ini_get('mbstring.func_overload')) & MB_OVERLOAD_STRING ) {
-        trigger_error('String functions are overloaded by mbstring',E_USER_ERROR);
+    if (PHP_VERSION_ID < 80000 && ((int) ini_get('mbstring.func_overload')) & MB_OVERLOAD_STRING) {
+        trigger_error('String functions are overloaded by mbstring', E_USER_ERROR);
     }
     mb_internal_encoding('UTF-8');
 }
@@ -51,9 +51,9 @@ if ( extension_loaded('mbstring')) {
 /**
 * Check whether PCRE has been compiled with UTF-8 support
 */
-$UTF8_ar = array();
-if ( preg_match('/^.{1}$/u',"ñ",$UTF8_ar) != 1 ) {
-    trigger_error('PCRE is not compiled with UTF-8 support',E_USER_ERROR);
+$UTF8_ar = [];
+if (preg_match('/^.{1}$/u', "ñ", $UTF8_ar) != 1) {
+    trigger_error('PCRE is not compiled with UTF-8 support', E_USER_ERROR);
 }
 unset($UTF8_ar);
 
@@ -62,8 +62,8 @@ unset($UTF8_ar);
 * Load the smartest implementations of utf8_strpos, utf8_strrpos
 * and utf8_substr
 */
-if ( !defined('UTF8_CORE') ) {
-    if ( function_exists('mb_substr') ) {
+if (!defined('UTF8_CORE')) {
+    if (function_exists('mb_substr')) {
         require_once UTF8 . '/mbstring/core.php';
     } else {
         require_once UTF8 . '/utils/unicode.php';
