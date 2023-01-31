@@ -1,4 +1,5 @@
 <?php
+
 /**
 * @package utf8
 */
@@ -24,7 +25,7 @@ function utf8_stristr($str, $search)
     $lstr    = utf8_strtolower($str);
     $lsearch = utf8_strtolower($search);
     //JOOMLA SPECIFIC FIX - BEGIN
-    preg_match('/^(.*)'.preg_quote($lsearch, '/').'/Us', $lstr, $matches);
+    preg_match('/^(.*)' . preg_quote($lsearch, '/') . '/Us', $lstr, $matches);
     //JOOMLA SPECIFIC FIX - END
 
     if (count($matches) == 2) {

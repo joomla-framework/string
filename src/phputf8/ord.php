@@ -1,4 +1,5 @@
 <?php
+
 /**
 * @package utf8
 */
@@ -87,7 +88,7 @@ function utf8_ord($chr)
     }
 
     if ($ord0 >= 254 && $ord0 <= 255) {
-        trigger_error('Invalid UTF-8 with surrogate ordinal '.$ord0);
+        trigger_error('Invalid UTF-8 with surrogate ordinal ' . $ord0);
         return false;
     }
 }

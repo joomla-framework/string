@@ -1,4 +1,5 @@
 <?php
+
 /**
 * @package utf8
 */
@@ -26,6 +27,6 @@ function utf8_str_split($str, $split_len = 1)
         return [$str];
     }
 
-    preg_match_all('/.{'.$split_len.'}|[^\x00]{1,'.$split_len.'}$/us', $str, $ar);
+    preg_match_all('/.{' . $split_len . '}|[^\x00]{1,' . $split_len . '}$/us', $str, $ar);
     return $ar[0];
 }

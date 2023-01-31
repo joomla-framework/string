@@ -1,4 +1,5 @@
 <?php
+
 /**
 * Locate a byte index given a UTF-8 character index
 * @package utf8
@@ -89,7 +90,7 @@ function utf8_byte_position()
             $i = $j;
 
             // from 7 it is faster to iterate over the string
-        } while (($error > 7) && --$safety_valve) ;
+        } while (($error > 7) && --$safety_valve);
 
         if ($error && $error <= 7) {
             if ($c < $offset) {

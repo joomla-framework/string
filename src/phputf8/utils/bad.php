@@ -1,4 +1,5 @@
 <?php
+
 /**
 * Tools for locating / replacing bad bytes in UTF-8 strings
 * The Original Code is Mozilla Communicator client code.
@@ -30,18 +31,18 @@
 function utf8_bad_find($str)
 {
     $UTF8_BAD =
-    '([\x00-\x7F]'.                          # ASCII (including control chars)
-    '|[\xC2-\xDF][\x80-\xBF]'.               # non-overlong 2-byte
-    '|\xE0[\xA0-\xBF][\x80-\xBF]'.           # excluding overlongs
-    '|[\xE1-\xEC\xEE\xEF][\x80-\xBF]{2}'.    # straight 3-byte
-    '|\xED[\x80-\x9F][\x80-\xBF]'.           # excluding surrogates
-    '|\xF0[\x90-\xBF][\x80-\xBF]{2}'.        # planes 1-3
-    '|[\xF1-\xF3][\x80-\xBF]{3}'.            # planes 4-15
-    '|\xF4[\x80-\x8F][\x80-\xBF]{2}'.        # plane 16
+    '([\x00-\x7F]' .                          # ASCII (including control chars)
+    '|[\xC2-\xDF][\x80-\xBF]' .               # non-overlong 2-byte
+    '|\xE0[\xA0-\xBF][\x80-\xBF]' .           # excluding overlongs
+    '|[\xE1-\xEC\xEE\xEF][\x80-\xBF]{2}' .    # straight 3-byte
+    '|\xED[\x80-\x9F][\x80-\xBF]' .           # excluding surrogates
+    '|\xF0[\x90-\xBF][\x80-\xBF]{2}' .        # planes 1-3
+    '|[\xF1-\xF3][\x80-\xBF]{3}' .            # planes 4-15
+    '|\xF4[\x80-\x8F][\x80-\xBF]{2}' .        # plane 16
     '|(.{1}))';                              # invalid byte
     $pos     = 0;
     $badList = [];
-    while (preg_match('/'.$UTF8_BAD.'/S', $str, $matches)) {
+    while (preg_match('/' . $UTF8_BAD . '/S', $str, $matches)) {
         $bytes = strlen($matches[0]);
         if (isset($matches[2])) {
             return $pos;
@@ -67,18 +68,18 @@ function utf8_bad_find($str)
 function utf8_bad_findall($str)
 {
     $UTF8_BAD =
-    '([\x00-\x7F]'.                          # ASCII (including control chars)
-    '|[\xC2-\xDF][\x80-\xBF]'.               # non-overlong 2-byte
-    '|\xE0[\xA0-\xBF][\x80-\xBF]'.           # excluding overlongs
-    '|[\xE1-\xEC\xEE\xEF][\x80-\xBF]{2}'.    # straight 3-byte
-    '|\xED[\x80-\x9F][\x80-\xBF]'.           # excluding surrogates
-    '|\xF0[\x90-\xBF][\x80-\xBF]{2}'.        # planes 1-3
-    '|[\xF1-\xF3][\x80-\xBF]{3}'.            # planes 4-15
-    '|\xF4[\x80-\x8F][\x80-\xBF]{2}'.        # plane 16
+    '([\x00-\x7F]' .                          # ASCII (including control chars)
+    '|[\xC2-\xDF][\x80-\xBF]' .               # non-overlong 2-byte
+    '|\xE0[\xA0-\xBF][\x80-\xBF]' .           # excluding overlongs
+    '|[\xE1-\xEC\xEE\xEF][\x80-\xBF]{2}' .    # straight 3-byte
+    '|\xED[\x80-\x9F][\x80-\xBF]' .           # excluding surrogates
+    '|\xF0[\x90-\xBF][\x80-\xBF]{2}' .        # planes 1-3
+    '|[\xF1-\xF3][\x80-\xBF]{3}' .            # planes 4-15
+    '|\xF4[\x80-\x8F][\x80-\xBF]{2}' .        # plane 16
     '|(.{1}))';                              # invalid byte
     $pos     = 0;
     $badList = [];
-    while (preg_match('/'.$UTF8_BAD.'/S', $str, $matches)) {
+    while (preg_match('/' . $UTF8_BAD . '/S', $str, $matches)) {
         $bytes = strlen($matches[0]);
         if (isset($matches[2])) {
             $badList[] = $pos;
@@ -106,17 +107,17 @@ function utf8_bad_findall($str)
 function utf8_bad_strip($str)
 {
     $UTF8_BAD =
-    '([\x00-\x7F]'.                          # ASCII (including control chars)
-    '|[\xC2-\xDF][\x80-\xBF]'.               # non-overlong 2-byte
-    '|\xE0[\xA0-\xBF][\x80-\xBF]'.           # excluding overlongs
-    '|[\xE1-\xEC\xEE\xEF][\x80-\xBF]{2}'.    # straight 3-byte
-    '|\xED[\x80-\x9F][\x80-\xBF]'.           # excluding surrogates
-    '|\xF0[\x90-\xBF][\x80-\xBF]{2}'.        # planes 1-3
-    '|[\xF1-\xF3][\x80-\xBF]{3}'.            # planes 4-15
-    '|\xF4[\x80-\x8F][\x80-\xBF]{2}'.        # plane 16
+    '([\x00-\x7F]' .                          # ASCII (including control chars)
+    '|[\xC2-\xDF][\x80-\xBF]' .               # non-overlong 2-byte
+    '|\xE0[\xA0-\xBF][\x80-\xBF]' .           # excluding overlongs
+    '|[\xE1-\xEC\xEE\xEF][\x80-\xBF]{2}' .    # straight 3-byte
+    '|\xED[\x80-\x9F][\x80-\xBF]' .           # excluding surrogates
+    '|\xF0[\x90-\xBF][\x80-\xBF]{2}' .        # planes 1-3
+    '|[\xF1-\xF3][\x80-\xBF]{3}' .            # planes 4-15
+    '|\xF4[\x80-\x8F][\x80-\xBF]{2}' .        # plane 16
     '|(.{1}))';                              # invalid byte
     ob_start();
-    while (preg_match('/'.$UTF8_BAD.'/S', $str, $matches)) {
+    while (preg_match('/' . $UTF8_BAD . '/S', $str, $matches)) {
         if (!isset($matches[2])) {
             echo $matches[0];
         }
@@ -143,17 +144,17 @@ function utf8_bad_strip($str)
 function utf8_bad_replace($str, $replace = '?')
 {
     $UTF8_BAD =
-    '([\x00-\x7F]'.                          # ASCII (including control chars)
-    '|[\xC2-\xDF][\x80-\xBF]'.               # non-overlong 2-byte
-    '|\xE0[\xA0-\xBF][\x80-\xBF]'.           # excluding overlongs
-    '|[\xE1-\xEC\xEE\xEF][\x80-\xBF]{2}'.    # straight 3-byte
-    '|\xED[\x80-\x9F][\x80-\xBF]'.           # excluding surrogates
-    '|\xF0[\x90-\xBF][\x80-\xBF]{2}'.        # planes 1-3
-    '|[\xF1-\xF3][\x80-\xBF]{3}'.            # planes 4-15
-    '|\xF4[\x80-\x8F][\x80-\xBF]{2}'.        # plane 16
+    '([\x00-\x7F]' .                          # ASCII (including control chars)
+    '|[\xC2-\xDF][\x80-\xBF]' .               # non-overlong 2-byte
+    '|\xE0[\xA0-\xBF][\x80-\xBF]' .           # excluding overlongs
+    '|[\xE1-\xEC\xEE\xEF][\x80-\xBF]{2}' .    # straight 3-byte
+    '|\xED[\x80-\x9F][\x80-\xBF]' .           # excluding surrogates
+    '|\xF0[\x90-\xBF][\x80-\xBF]{2}' .        # planes 1-3
+    '|[\xF1-\xF3][\x80-\xBF]{3}' .            # planes 4-15
+    '|\xF4[\x80-\x8F][\x80-\xBF]{2}' .        # plane 16
     '|(.{1}))';                              # invalid byte
     ob_start();
-    while (preg_match('/'.$UTF8_BAD.'/S', $str, $matches)) {
+    while (preg_match('/' . $UTF8_BAD . '/S', $str, $matches)) {
         if (!isset($matches[2])) {
             echo $matches[0];
         } else {
@@ -312,9 +313,11 @@ function utf8_bad_identify($str, &$i)
                 */
                 if (0 == --$mState) {
                     // From Unicode 3.1, non-shortest form is illegal
-                    if (((2 == $mBytes) && ($mUcs4 < 0x0080)) ||
+                    if (
+                        ((2 == $mBytes) && ($mUcs4 < 0x0080)) ||
                         ((3 == $mBytes) && ($mUcs4 < 0x0800)) ||
-                        ((4 == $mBytes) && ($mUcs4 < 0x10000))) {
+                        ((4 == $mBytes) && ($mUcs4 < 0x10000))
+                    ) {
                         return UTF8_BAD_NONSHORT;
 
                     // From Unicode 3.2, surrogate characters are illegal
@@ -392,6 +395,6 @@ function utf8_bad_explain($code)
             break;
     }
 
-    trigger_error('Unknown error code: '.$code, E_USER_WARNING);
+    trigger_error('Unknown error code: ' . $code, E_USER_WARNING);
     return false;
 }

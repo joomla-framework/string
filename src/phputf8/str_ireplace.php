@@ -1,4 +1,5 @@
 <?php
+
 /**
 * @package utf8
 */
@@ -33,7 +34,7 @@ function utf8_ireplace($search, $replace, $str, $count = null)
         $lstr    = utf8_strtolower($str);
         $i       = 0;
         $matched = 0;
-        while (preg_match('/(.*)'.$search.'/Us', $lstr, $matches)) {
+        while (preg_match('/(.*)' . $search . '/Us', $lstr, $matches)) {
             if ($i === $count) {
                 break;
             }

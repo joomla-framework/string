@@ -1,4 +1,5 @@
 <?php
+
 /**
 * @package utf8
 */
@@ -26,7 +27,7 @@ function utf8_strcspn($str, $mask, $start = null, $length = null)
         $str = utf8_substr($str, $start, $length);
     }
 
-    preg_match('/^[^'.$mask.']+/u', $str, $matches);
+    preg_match('/^[^' . $mask . ']+/u', $str, $matches);
 
     if (isset($matches[0])) {
         return utf8_strlen($matches[0]);
