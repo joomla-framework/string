@@ -19,5 +19,7 @@
     <rule ref="PSR12">
         <exclude name="Generic.Files.LineLength.MaxExceeded"/>
         <exclude name="Generic.Files.LineLength.TooLong"/>
+        <exclude name="PSR1.Files.SideEffects.FoundWithSymbols"/>
+        <exclude name="PSR1.Methods.CamelCapsMethodName.NotCamelCaps"/>
     </rule>
 </ruleset>
