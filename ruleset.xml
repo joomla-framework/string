@@ -19,10 +19,4 @@
         <!-- Required due to class methods which are named in snake case -->
         <exclude name="Joomla.NamingConventions.ValidFunctionName.ScopeNotCamelCaps"/>
     </rule>
-
-    <rule ref="Joomla.Classes.InstantiateNewClasses">
-        <properties>
-            <property name="shortArraySyntax" value="true"/>
-        </properties>
-    </rule>
 </ruleset>
