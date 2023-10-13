@@ -1,4 +1,5 @@
-<?php
+<?php /** @noinspection SpellCheckingInspection */
+
 /**
  * @copyright  Copyright (C) 2005 - 2021 Open Source Matters, Inc. All rights reserved.
  * @license    GNU General Public License version 2 or later; see LICENSE
@@ -14,6 +15,17 @@ use PHPUnit\Framework\TestCase;
  */
 class StringHelperTest extends TestCase
 {
+	const FRENCH_LOCALE      = [
+		'fr_FR.utf8',
+		'fr_FR.UTF-8',
+		'fr_FR.UTF-8@euro',
+		'French_Standard',
+		'french',
+		'fr_FR',
+		'fre_FR'
+	];
+	const RUSSIAN_WIN_LOCALE = ['ru_RU.CP1251'];
+
 	/**
 	 * Data provider for testIncrement
 	 *
@@ -21,64 +33,166 @@ class StringHelperTest extends TestCase
 	 */
 	public function seedTestIncrement(): \Generator
 	{
-		// Note: string, style, number, expected
-		yield 'First default increment' => ['title', null, 0, 'title (2)'];
-		yield 'Second default increment' => ['title(2)', null, 0, 'title(3)'];
-		yield 'First dash increment' => ['title', 'dash', 0, 'title-2'];
-		yield 'Second dash increment' => ['title-2', 'dash', 0, 'title-3'];
-		yield 'Set default increment' => ['title', null, 4, 'title (4)'];
-		yield 'Unknown style fallback to default' => ['title', 'foo', 0, 'title (2)'];
+		// Note: input string, incrementation style, next number, expected result
+		yield 'appends " (2)" to an unnumbered string (default style)' => ['title', null, 0, 'title (2)'];
+		yield 'increments a trailing number by 1 (default style)' => ['title(2)', null, 0, 'title(3)'];
+		yield 'appends "-2" to an unnumbered string (dash style)' => ['title', 'dash', 0, 'title-2'];
+		yield 'increments a trailing number by 1 (dash style)' => ['title-2', 'dash', 0, 'title-3'];
+		yield 'sets the number to the value provided' => ['title', null, 4, 'title (4)'];
+		yield 'uses default style, if an unknown style is provided' => ['title', 'foo', 0, 'title (2)'];
 	}
 
 	/**
-	 * Data provider for testIs_ascii
+	 * @testdox       StringHelper::increment() $_dataName
+	 *
+	 * @param   string        $string    The source string.
+	 * @param   string|null   $style     The style (default|dash).
+	 * @param   integer|null  $number    If supplied and > 0, this number is used for the copy, otherwise it is the 'next' number.
+	 * @param   string        $expected  Expected result.
+	 *
+	 * @dataProvider  seedTestIncrement
+	 */
+	public function testIncrement(string $string, ?string $style, ?int $number, string $expected): void
+	{
+		$this->assertEquals(
+			$expected,
+			StringHelper::increment($string, $style, $number)
+		);
+	}
+
+	/**
+	 * Data provider for testIsAscii
 	 *
 	 * @return  \Generator
 	 */
-	public function seedTestIs_ascii(): \Generator
+	public function seedTestIsAscii(): \Generator
 	{
-		yield ['ascii', true];
-		yield ['1024', true];
-		yield ['#$#@$%', true];
-		yield ['áÑ', false];
-		yield ['ÿ©', false];
-		yield ['¡¾', false];
-		yield ['÷™', false];
+		// Note: input string, expected result
+		yield '7bit ASCII letters' => ['ascii', true];
+		yield 'ASCII numbers' => ['1024', true];
+		yield 'ASCII special characters' => ['#$#@$%', true];
+		yield 'characters above code 128' => ['áÑÿ©¡¾÷™', false];
+		yield 'cyrillic letters' => ['на карте с', false];
+		yield 'greek letters' => ['ψυχοφθόρα', false];
+		yield 'chinese letters' => ['我能吞', false];
 	}
 
 	/**
-	 * Data provider for testStrpos
+	 * @testdox       StringHelper::is_ascii() correctly recognises $_dataName
+	 *
+	 * @param   string   $string    The string to test.
+	 * @param   boolean  $expected  Expected result.
+	 *
+	 * @dataProvider  seedTestIsAscii
+	 */
+	public function testIsAscii(string $string, bool $expected): void
+	{
+		$this->assertEquals(
+			$expected,
+			StringHelper::is_ascii($string)
+		);
+	}
+
+	/**
+	 * Data provider for testOrd
 	 *
 	 * @return  \Generator
 	 */
-	public function seedTestStrpos(): \Generator
+	public function seedTestOrd(): \Generator
 	{
-		yield [3, 'missing', 'sing', 0];
-		yield [false, 'missing', 'sting', 0];
-		yield [4, 'missing', 'ing', 0];
-		yield [10, ' объектов на карте с', 'на карте', 0];
-		yield [0, 'на карте с', 'на карте', 0, 0];
-		yield [false, 'на карте с', 'на каррте', 0];
-		yield [false, 'на карте с', 'на карте', 2];
-		yield [3, 'missing', 'sing', false];
+		yield 'lowercase ASCII characters' => ['abc', 97];
+		yield 'uppercase ASCII characters' => ['A', 65];
+		yield 'cyrillic characters' => ['на', 1085];
+		yield 'greek characters' => ['ψ', 968];
+		yield 'chinese characters' => ['我能吞', 25105];
 	}
 
 	/**
-	 * Data provider for testStrrpos
+	 * @testdox       SringHelper::ord() returns the ordinal number for $_dataName
+	 *
+	 * @param   string   $character
+	 * @param   integer  $ordinalNumber
+	 *
+	 * @dataProvider  seedTestOrd
+	 */
+	public function testOrd(string $character, int $ordinalNumber): void
+	{
+		$this->assertEquals(
+			$ordinalNumber,
+			StringHelper::ord($character)
+		);
+	}
+
+	/**
+	 * Data provider for testStrPos
+	 *
+	 * @return  \Generator
+	 */
+	public function seedTestStrPos(): \Generator
+	{
+		// Note: haystack, needle, offset, expected result
+		yield 'returns the position of the first occurance of the substring' => ['pinging', 'ing', 0, 1];
+		yield 'locates substring in ASCII string' => ['missing', 'sing', 0, 3];
+		yield 'locates substring in string with accents' => ['Fábio', 'b', 0, 2];
+		yield 'locates substring in cyrillic string' => [' объектов на карте с', 'на карте', 0, 10];
+		yield 'locates substring beginning in first position' => ['на карте с', 'на карте', 0, 0, 0];
+		yield 'returns false for non-existing substrings' => ['missing', 'sting', 0, false];
+		yield 'starts search at the given offset' => ['на карте с', 'на карте', 2, false];
+		yield 'starts search at position 0 if no offset is provided' => ['missing', 'mis', null, 0];
+	}
+
+	/**
+	 * @testdox       StringHelper::strpos() $_dataName
+	 *
+	 * @param   string                $haystack  String being examined
+	 * @param   string                $needle    String being searched for
+	 * @param   integer|null|boolean  $offset    The position from which the search should be performed
+	 * @param   string|boolean        $expected  Expected result
+	 *
+	 * @dataProvider  seedTestStrPos
+	 */
+	public function testStrPos(string $haystack, string $needle, $offset, $expected): void
+	{
+		$this->assertEquals(
+			$expected,
+			StringHelper::strpos($haystack, $needle, $offset)
+		);
+	}
+
+	/**
+	 * Data provider for testStrRPos
 	 *
 	 * @return  \Generator
 	 *
 	 * @since   1.0
 	 */
-	public function seedTestStrrpos(): \Generator
+	public function seedTestStrRPos(): \Generator
 	{
-		yield [3, 'missing', 'sing', 0];
-		yield [false, 'missing', 'sting', 0];
-		yield [4, 'missing', 'ing', 0];
-		yield [10, ' объектов на карте с', 'на карте', 0];
-		yield [0, 'на карте с', 'на карте', 0];
-		yield [false, 'на карте с', 'на каррте', 0];
-		yield [3, 'на карте с', 'карт', 2];
+		// Note: haystack, needle, offset, expected result
+		yield 'returns the position of the last occurance of the substring' => ['pinging', 'ing', null, 4];
+		yield 'locates substring in ASCII string' => ['missing', 'sing', 0, 3];
+		yield 'locates substring in cyrillic string' => [' объектов на карте с', 'на карте', 0, 10];
+		yield 'returns false for non-existing substrings' => ['missing', 'sting', 0, false];
+		yield 'locates substring beginning in first position' => ['на карте с', 'на карте', 0, 0];
+		yield 'starts search at the given offset' => ['на карте с', 'карт', 2, 3];
+	}
+
+	/**
+	 * @testdox       StringHelper::strrpos() $_dataName
+	 *
+	 * @param   string          $haystack  String being examined
+	 * @param   string          $needle    String being searched for
+	 * @param   integer|null    $offset    Optional, specifies the position from which the search should be performed
+	 * @param   string|boolean  $expected  Expected result
+	 *
+	 * @dataProvider  seedTestStrRPos
+	 */
+	public function testStrRPos(string $haystack, string $needle, ?int $offset, $expected): void
+	{
+		$this->assertEquals(
+			$expected,
+			StringHelper::strrpos($haystack, $needle, $offset ?? 0)
+		);
 	}
 
 	/**
@@ -88,164 +202,478 @@ class StringHelperTest extends TestCase
 	 */
 	public function seedTestSubstr(): \Generator
 	{
-		yield ['issauga', 'Mississauga', 4, false];
-		yield ['на карте с', ' объектов на карте с', 10, false];
-		yield ['на ка', ' объектов на карте с', 10, 5];
-		yield ['те с', ' объектов на карте с', -4, false];
-		yield [false, ' объектов на карте с', 99, false];
+		// Note: string, offset, length, expected result
+		yield 'extracts substring from offset to end, if no length is provided' => ['Mississauga', 4, null, 'issauga'];
+		yield 'extracts substring from cyrillic string' => [' объектов на карте с', 10, null, 'на карте с'];
+		yield 'extracts substring of given length' => [' объектов на карте с', 10, 5, 'на ка'];
+		yield 'extracts substring from the end, if offset is negative' => [' объектов на карте с', -4, null, 'те с'];
+		yield 'returns false, if offset is out of bounds' => [' объектов на карте с', 99, null, false];
 	}
 
 	/**
-	 * Data provider for testStrtolower
+	 * @testdox       StringHelper::substr() $_dataName
+	 *
+	 * @param   string          $string    String being processed
+	 * @param   integer         $start     Number of UTF-8 characters offset (from left)
+	 * @param   integer|null    $length    Optional, specifies the length
+	 * @param   string|boolean  $expected  Expected result
+	 *
+	 * @dataProvider  seedTestSubstr
+	 */
+	public function testSubstr(string $string, int $start, $length, $expected): void
+	{
+		$this->assertEquals(
+			$expected,
+			StringHelper::substr($string, $start, $length)
+		);
+	}
+
+	/**
+	 * Data provider for testStrToLower
 	 *
 	 * @return  \Generator
 	 */
-	public function seedTestStrtolower(): \Generator
+	public function seedTestStrToLower(): \Generator
 	{
-		yield ['Joomla! Rocks', 'joomla! rocks'];
+		yield 'converts ASCII string' => ['Joomla! Rocks', 'joomla! rocks'];
+		yield 'converts cyrillic string' => ['На Карте С', 'на карте с'];
+		yield 'converts greek string' => ['Ψυχοφθόρα', 'ψυχοφθόρα'];
+		yield 'leaves chinese string alone' => ['我能吞', '我能吞'];
 	}
 
 	/**
-	 * Data provider for testStrtoupper
+	 * @testdox       StringHelper::strtolower() $_dataName
+	 *
+	 * @param   string          $string    String being processed
+	 * @param   string|boolean  $expected  Expected result
+	 *
+	 * @dataProvider  seedTestStrToLower
+	 */
+	public function testStrToLower(string $string, $expected): void
+	{
+		$this->assertEquals(
+			$expected,
+			StringHelper::strtolower($string)
+		);
+	}
+
+	/**
+	 * Data provider for testStrToUpper
 	 *
 	 * @return  \Generator
 	 */
-	public function seedTestStrtoupper(): \Generator
+	public function seedTestStrToUpper(): \Generator
 	{
-		yield ['Joomla! Rocks', 'JOOMLA! ROCKS'];
+		yield 'converts ASCII string' => ['Joomla! Rocks', 'JOOMLA! ROCKS'];
+		yield 'converts cyrillic string' => ['На Карте С', 'НА КАРТЕ С'];
+		yield 'converts greek string' => ['Ψυχοφθόρα', 'ΨΥΧΟΦΘΌΡΑ'];
+		yield 'leaves chinese string alone' => ['我能吞', '我能吞'];
 	}
 
 	/**
-	 * Data provider for testStrlen
+	 * @testdox       StringHelper::strtoupper() $_dataName
+	 *
+	 * @param   string          $string    String being processed
+	 * @param   string|boolean  $expected  Expected result
+	 *
+	 * @dataProvider  seedTestStrToUpper
+	 */
+	public function testStrToUpper(string $string, $expected): void
+	{
+		$this->assertEquals(
+			$expected,
+			StringHelper::strtoupper($string)
+		);
+	}
+
+	/**
+	 * Data provider for testStrLen
 	 *
 	 * @return  \Generator
 	 */
-	public function seedTestStrlen(): \Generator
+	public function seedTestStrLen(): \Generator
 	{
-		yield ['Joomla! Rocks', 13];
+		yield 'an ASCII string' => ['Joomla! Rocks', 13];
+		yield 'a cyrillic string' => ['На Карте С', 10];
+		yield 'a greek string' => ['Ψυχοφθόρα', 9];
+		yield 'a chinese string' => ['我能吞', 3];
 	}
 
 	/**
-	 * Data provider for testStr_ireplace
+	 * @testdox       StringHelper::strlen() determines the length of $_dataName
+	 *
+	 * @param   string          $string    String being processed
+	 * @param   string|boolean  $expected  Expected result
+	 *
+	 * @dataProvider  seedTestStrLen
+	 */
+	public function testStrLen(string $string, $expected): void
+	{
+		$this->assertEquals(
+			$expected,
+			StringHelper::strlen($string)
+		);
+	}
+
+	/**
+	 * Data provider for testStrIReplace
 	 *
 	 * @return  \Generator
 	 */
-	public function seedTestStr_ireplace(): \Generator
+	public function seedTestStrIReplace(): \Generator
 	{
-		yield ['Pig', 'cow', 'the pig jumped', false, 'the cow jumped'];
-		yield ['Pig', 'cow', 'the pig jumped', true, 'the cow jumped'];
-		yield ['Pig', 'cow', 'the pig jumped over the cow', true, 'the cow jumped over the cow'];
-		yield [['PIG', 'JUMPED'], ['cow', 'hopped'], 'the pig jumped over the pig', true, 'the cow hopped over the cow'];
-		yield ['шил', 'биш', 'Би шил идэй чадна', true, 'Би биш идэй чадна'];
-		yield ['/', ':', '/test/slashes/', true, ':test:slashes:'];
+		// Note: search, replace, subject, count, expected result
+		yield 'does not require "count" variable' => ['Pig', 'cow', 'the pig jumped', null, 'the cow jumped'];
+		yield 'counts the number of replacements' => ['Pig', 'cow', 'the pig jumped', 1, 'the cow jumped'];
+		yield 'supports arrays for search and replace values' => [
+			['PIG', 'JUMPED'],
+			['cow', 'hopped'],
+			'the pig jumped over the pig',
+			3,
+			'the cow hopped over the cow'
+		];
+		yield 'operates on cyrillic string' => ['шил', 'биш', 'Би шил идэй чадна', 1, 'Би биш идэй чадна'];
+		yield 'replaces special characters' => ['/', ':', '/test/slashes/', 3, ':test:slashes:'];
+		yield 'performes replacement on the result of previous replacement' => [
+			['Pig', 'cow'],
+			['cow', 'dog'],
+			'the pig jumped over the cow',
+			3,
+			'the dog jumped over the dog'
+		];
 	}
 
 	/**
-	 * Data provider for testStr_split
+	 * @testdox       StringHelper::str_ireplace() $_dataName
+	 *
+	 * @param   string[]|string  $search          String to search
+	 * @param   string[]|string  $replace         Existing string to replace
+	 * @param   string           $subject         New string to replace with
+	 * @param   integer|null     $expectedCount   Optional count value to be passed by reference
+	 * @param   string           $expectedResult  Expected result
+	 *
+	 * @return  void
+	 *
+	 * @dataProvider  seedTestStrIReplace
+	 */
+	public function testStrIReplace(
+		$search,
+		$replace,
+		string $subject,
+		?int $expectedCount,
+		string $expectedResult
+	): void {
+		$actualCount = null;
+
+		if ($expectedCount !== null)
+		{
+			$actualResult = StringHelper::str_ireplace($search, $replace, $subject, $actualCount);
+		}
+		else
+		{
+			$actualResult = StringHelper::str_ireplace($search, $replace, $subject);
+		}
+
+		$this->assertEquals($expectedResult, $actualResult);
+		$this->assertEquals($expectedCount, $actualCount);
+	}
+
+	/**
+	 * Data provider for testStrPad
 	 *
 	 * @return  \Generator
 	 */
-	public function seedTestStr_split(): \Generator
+	public function seedTestStrPad(): \Generator
 	{
-		yield ['string', 1, ['s', 't', 'r', 'i', 'n', 'g']];
-		yield ['string', 2, ['st', 'ri', 'ng']];
-		yield ['волн', 3, ['вол', 'н']];
-		yield ['волн', 1, ['в', 'о', 'л', 'н']];
+		// Note: input, length, padStr, type, expected result
+		yield 'can pad to the right' => ['foo', 5, ' ', STR_PAD_RIGHT, 'foo  '];
+		yield 'can pad to the left' => ['foo', 5, ' ', STR_PAD_LEFT, '  foo'];
+		yield 'can pad to both sides' => ['foo', 5, ' ', STR_PAD_BOTH, ' foo '];
+		yield 'truncates the pad string to fit' => ['foo', 7, 'bar', STR_PAD_BOTH, 'bafooba'];
+		yield 'can pad a cyrillic string' => ['На Карте С', 12, 'т', STR_PAD_RIGHT, 'На Карте Стт'];
+		yield 'can pad a greek string' => ['Ψυχοφθόρα', 11, 'φ', STR_PAD_RIGHT, 'Ψυχοφθόραφφ'];
+		yield 'can pad a chinese string' => ['我能吞', 5, '我', STR_PAD_RIGHT, '我能吞我我'];
 	}
 
 	/**
-	 * Data provider for testStrcasecmp
+	 * @testdox      StringHelper::strpad() $_dataName
+	 *
+	 * @dataProvider seedTestStrPad
+	 *
+	 * @param   string  $string     The input string.
+	 * @param   int     $length     Desired string length
+	 * @param   string  $padString  The string to add; may be truncated
+	 * @param   int     $padType    One of STR_PAD_RIGHT, STR_PAD_LEFT or STR_PAD_BOTH
+	 * @param   string  $expected   The expected result
+	 */
+	public function testStrPad(string $string, int $length, string $padString, int $padType, string $expected): void
+	{
+		$this->assertEquals(
+			$expected,
+			StringHelper::str_pad($string, $length, $padString, $padType)
+		);
+	}
+
+	/**
+	 * Data provider for testStrSplit
 	 *
 	 * @return  \Generator
 	 */
-	public function seedTestStrcasecmp(): \Generator
+	public function seedTestStrSplit(): \Generator
 	{
-		yield ['THIS IS STRING1', 'this is string1', false, 0];
-		yield ['this is string1', 'this is string2', false, -1];
-		yield ['this is string2', 'this is string1', false, 1];
-		yield ['бгдпт', 'бгдпт', false, 0];
-		yield ['àbc', 'abc', ['fr_FR.utf8', 'fr_FR.UTF-8', 'fr_FR.UTF-8@euro', 'French_Standard', 'french', 'fr_FR', 'fre_FR'], 1];
-		yield ['àbc', 'bcd', ['fr_FR.utf8', 'fr_FR.UTF-8', 'fr_FR.UTF-8@euro', 'French_Standard', 'french', 'fr_FR', 'fre_FR'], -1];
-		yield ['é', 'è', ['fr_FR.utf8', 'fr_FR.UTF-8', 'fr_FR.UTF-8@euro', 'French_Standard', 'french', 'fr_FR', 'fre_FR'], -1];
-		yield ['É', 'é', ['fr_FR.utf8', 'fr_FR.UTF-8', 'fr_FR.UTF-8@euro', 'French_Standard', 'french', 'fr_FR', 'fre_FR'], 0];
-		yield ['œ', 'p', ['fr_FR.utf8', 'fr_FR.UTF-8', 'fr_FR.UTF-8@euro', 'French_Standard', 'french', 'fr_FR', 'fre_FR'], -1];
-		yield ['œ', 'n', ['fr_FR.utf8', 'fr_FR.UTF-8', 'fr_FR.UTF-8@euro', 'French_Standard', 'french', 'fr_FR', 'fre_FR'], 1];
+		yield 'splits into single characters by default' => ['string', null, ['s', 't', 'r', 'i', 'n', 'g']];
+		yield 'splits into chunks of given size' => ['strings', 2, ['st', 'ri', 'ng', 's']];
+		yield 'splits cyrillic strings' => ['волн', 1, ['в', 'о', 'л', 'н']];
 	}
 
 	/**
-	 * Data provider for testStrcmp
+	 * @testdox       StringHelper::str_split() $_dataName
+	 *
+	 * @param   string        $string    UTF-8 encoded string to process
+	 * @param   integer|null  $splitLen  Number to characters to split string by
+	 * @param   array         $expected  Expected result
+	 *
+	 * @dataProvider  seedTestStrSplit
+	 */
+	public function testStrSplit(string $string, ?int $splitLen, array $expected): void
+	{
+		if ($splitLen !== null)
+		{
+			$actual = StringHelper::str_split($string, $splitLen);
+		}
+		else
+		{
+			$actual = StringHelper::str_split($string);
+		}
+
+		$this->assertEquals($expected, $actual);
+	}
+
+	/**
+	 * Data provider for testStrCaseCmp
+	 *
+	 * @return  \Generator
+	 */
+	public function seedTestStrCaseCmp(): \Generator
+	{
+		yield 'A = a with default locale' => ['THIS IS STRING1', 'this is string1', false, 0];
+		yield 'a < b with default locale' => ['this is string1', 'this is string2', false, -1];
+		yield 'b > a with default locale' => ['this is string2', 'this is string1', false, 1];
+		yield 'cyrillic д = д with default locale' => ['бгдпт', 'бгдпт', false, 0];
+		yield 'à > a with french locale' => ['àbc', 'abc', self::FRENCH_LOCALE, 1];
+		yield 'à < b with french locale' => ['àbc', 'bcd', self::FRENCH_LOCALE, -1];
+		yield 'é < è with french locale' => ['é', 'è', self::FRENCH_LOCALE, -1];
+		yield 'É = é with french locale' => ['É', 'é', self::FRENCH_LOCALE, 0];
+		yield 'œ < p with french locale' => ['œ', 'p', self::FRENCH_LOCALE, -1];
+		yield 'œ > n with french locale' => ['œ', 'n', self::FRENCH_LOCALE, 1];
+		yield 'cyrillic р < т with russian locale' => ['р', 'т', self::RUSSIAN_WIN_LOCALE, -1];
+	}
+
+	/**
+	 * @testdox       StringHelper::strcasecmp() compares $_dataName
+	 *
+	 * @param   string                $string1   String 1 to compare
+	 * @param   string                $string2   String 2 to compare
+	 * @param   array|string|boolean  $locale    The locale used by strcoll or false to use classical comparison
+	 * @param   integer               $expected  Expected result
+	 *
+	 * @dataProvider  seedTestStrCaseCmp
+	 */
+	public function testStrCaseCmp(string $string1, string $string2, $locale, int $expected): void
+	{
+		if ($locale !== false && strpos(php_uname(), 'Darwin') === 0)
+		{
+			$this->markTestSkipped('Darwin bug prevents foreign conversion from working properly');
+		}
+
+		if ($locale !== false && setlocale(LC_COLLATE, $locale) === false)
+		{
+			$this->markTestSkipped(
+				sprintf(
+					"Locale %s is not available.",
+					implode(', ', (array)$locale)
+				)
+			);
+		}
+
+		$actual = StringHelper::strcasecmp($string1, $string2, $locale);
+
+		if ($actual !== 0)
+		{
+			$actual /= abs($actual);
+		}
+
+		$this->assertEquals($expected, $actual);
+	}
+
+	/**
+	 * Data provider for testStrCmp
 	 *
 	 * @return  \Generator
 	 *
 	 * @since   1.0
 	 */
-	public function seedTestStrcmp(): \Generator
+	public function seedTestStrCmp(): \Generator
 	{
-		yield ['THIS IS STRING1', 'this is string1', false, -1];
-		yield ['this is string1', 'this is string2', false, -1];
-		yield ['this is string2', 'this is string1', false, 1];
-		yield ['a', 'B', false, 1];
-		yield ['A', 'b', false, -1];
-		yield ['Àbc', 'abc', ['fr_FR.utf8', 'fr_FR.UTF-8', 'fr_FR.UTF-8@euro', 'French_Standard', 'french', 'fr_FR', 'fre_FR'], 1];
-		yield ['Àbc', 'bcd', ['fr_FR.utf8', 'fr_FR.UTF-8', 'fr_FR.UTF-8@euro', 'French_Standard', 'french', 'fr_FR', 'fre_FR'], -1];
-		yield ['É', 'è', ['fr_FR.utf8', 'fr_FR.UTF-8', 'fr_FR.UTF-8@euro', 'French_Standard', 'french', 'fr_FR', 'fre_FR'], -1];
-		yield ['é', 'È', ['fr_FR.utf8', 'fr_FR.UTF-8', 'fr_FR.UTF-8@euro', 'French_Standard', 'french', 'fr_FR', 'fre_FR'], -1];
-		yield ['Œ', 'p', ['fr_FR.utf8', 'fr_FR.UTF-8', 'fr_FR.UTF-8@euro', 'French_Standard', 'french', 'fr_FR', 'fre_FR'], -1];
-		yield ['Œ', 'n', ['fr_FR.utf8', 'fr_FR.UTF-8', 'fr_FR.UTF-8@euro', 'French_Standard', 'french', 'fr_FR', 'fre_FR'], 1];
-		yield ['œ', 'N', ['fr_FR.utf8', 'fr_FR.UTF-8', 'fr_FR.UTF-8@euro', 'French_Standard', 'french', 'fr_FR', 'fre_FR'], 1];
-		yield ['œ', 'P', ['fr_FR.utf8', 'fr_FR.UTF-8', 'fr_FR.UTF-8@euro', 'French_Standard', 'french', 'fr_FR', 'fre_FR'], -1];
+		yield 'A < a with default locale' => ['THIS IS STRING1', 'this is string1', false, -1];
+		yield 'a < b with default locale' => ['this is string1', 'this is string2', false, -1];
+		yield 'b > a with default locale' => ['this is string2', 'this is string1', false, 1];
+		yield 'a > B with default locale' => ['a', 'B', false, 1];
+		yield 'A < b with default locale' => ['A', 'b', false, -1];
+		yield 'À > a with french locale' => ['Àbc', 'abc', self::FRENCH_LOCALE, 1];
+		yield 'À < b with french locale' => ['Àbc', 'bcd', self::FRENCH_LOCALE, -1];
+		yield 'É < è with french locale' => ['É', 'è', self::FRENCH_LOCALE, -1];
+		yield 'é < È with french locale' => ['é', 'È', self::FRENCH_LOCALE, -1];
+		yield 'Œ < p with french locale' => ['Œ', 'p', self::FRENCH_LOCALE, -1];
+		yield 'Œ > n with french locale' => ['Œ', 'n', self::FRENCH_LOCALE, 1];
+		yield 'œ > N with french locale' => ['œ', 'N', self::FRENCH_LOCALE, 1];
+		yield 'œ < P with french locale' => ['œ', 'P', self::FRENCH_LOCALE, -1];
+		yield 'cyrillic р < т with russian locale' => ['р', 'т', self::RUSSIAN_WIN_LOCALE, -1];
 	}
 
 	/**
-	 * Data provider for testStrcspn
+	 * @testdox       StringHelper::strcmp() compares $_dataName
+	 *
+	 * @param   string           $string1   String 1 to compare
+	 * @param   string           $string2   String 2 to compare
+	 * @param   string[]|string  $locale    The locale used by strcoll or false to use classical comparison
+	 * @param   integer          $expected  Expected result
+	 *
+	 * @dataProvider  seedTestStrCmp
+	 */
+	public function testStrCmp(string $string1, string $string2, $locale, int $expected): void
+	{
+		if ($locale !== false && strpos(php_uname(), 'Darwin') === 0)
+		{
+			$this->markTestSkipped('Darwin bug prevents foreign conversion from working properly');
+		}
+
+		if ($locale !== false && setlocale(LC_COLLATE, $locale) === false)
+		{
+			$this->markTestSkipped(
+				sprintf(
+					"Locale %s is not available.",
+					implode(', ', (array)$locale)
+				)
+			);
+		}
+
+		$actual = StringHelper::strcmp($string1, $string2, $locale);
+
+		if ($actual !== 0)
+		{
+			$actual /= abs($actual);
+		}
+
+		$this->assertEquals($expected, $actual);
+	}
+
+	/**
+	 * Data provider for testStrCSpn
 	 *
 	 * @return  \Generator
 	 *
 	 * @since   1.0
 	 */
-	public function seedTestStrcspn(): \Generator
+	public function seedTestStrCSpn(): \Generator
 	{
-		yield ['subject <a> string <a>', '<>', false, false, 8];
-		yield ['Би шил {123} идэй {456} чадна', '}{', null, false, 7];
-		yield ['Би шил {123} идэй {456} чадна', '}{', 13, 10, 5];
+		// Note: haystack, needles, start, len, expected result
+		yield 'an ASCII string' => ['subject <a> string <a>', '<>', null, null, 8];
+		yield 'an ASCII string given a start position' => ['subject <a> string <a>', '<>', 1, null, 7];
+		yield 'a cyrillic string' => ['Би шил {123} идэй {456} чадна', '}{', null, null, 7];
+		yield 'a limited substring' => ['Би шил {123} идэй {456} чадна', '}{', 13, 10, 5];
 	}
 
 	/**
-	 * Data provider for testStristr
+	 * @testdox       StringHelper::strcspn() finds length of non-matching segment in $_dataName
+	 *
+	 * @param   string           $haystack  The string to process
+	 * @param   string           $needles   The mask
+	 * @param   integer|boolean  $start     Optional starting character position (in characters)
+	 * @param   integer|boolean  $len       Optional length
+	 * @param   integer          $expected  Expected result
+	 *
+	 * @dataProvider  seedTestStrCSpn
+	 */
+	public function testStrCSpn(string $haystack, string $needles, $start, $len, int $expected): void
+	{
+		$this->assertEquals(
+			$expected,
+			StringHelper::strcspn($haystack, $needles, $start, $len)
+		);
+	}
+
+	/**
+	 * Data provider for testStrIStr
 	 *
 	 * @return  \Generator
 	 *
 	 * @since   1.0
 	 */
-	public function seedTestStristr(): \Generator
+	public function seedTestStrIStr(): \Generator
 	{
-		yield ['haystack', 'needle', false];
-		yield ['before match, after match', 'match', 'match, after match'];
-		yield ['Би шил идэй чадна', 'шил', 'шил идэй чадна'];
+		yield 'non-matching needle' => ['haystack', 'needle', false];
+		yield 'match case needle' => ['before match, after match', 'match', 'match, after match'];
+		yield 'non-match case needle' => ['before match, after match', 'MATCH', 'match, after match'];
+		yield 'cyrillic strings' => ['Би шил идэй чадна', 'шил', 'шил идэй чадна'];
 	}
 
 	/**
-	 * Data provider for testStrrev
+	 * @testdox       StringHelper::stristr() finds the first occurrence of a string
+	 *
+	 * @param   string          $haystack  The haystack
+	 * @param   string          $needle    The needle
+	 * @param   string|boolean  $expected  Expected result
+	 *
+	 * @dataProvider  seedTestStrIStr
+	 */
+	public function testStrIStr(string $haystack, string $needle, $expected): void
+	{
+		$this->assertEquals(
+			$expected,
+			StringHelper::stristr($haystack, $needle)
+		);
+	}
+
+	/**
+	 * Data provider for testStrRev
 	 *
 	 * @return  \Generator
 	 *
 	 * @since   1.0
 	 */
-	public function seedTestStrrev(): \Generator
+	public function seedTestStrRev(): \Generator
 	{
-		yield ['abc def', 'fed cba'];
-		yield ['Би шил', 'лиш иБ'];
+		yield 'an ASCII string' => ['abc def', 'fed cba'];
+		yield 'a cyrillic string' => ['Би шил', 'лиш иБ'];
 	}
 
 	/**
-	 * Data provider for testStrspn
+	 * @testdox       StringHelper::strrev() reverses $_dataName
+	 *
+	 * @param   string  $string    String to be reversed
+	 * @param   string  $expected  Expected result
+	 *
+	 * @dataProvider  seedTestStrRev
+	 */
+	public function testStrRev(string $string, string $expected): void
+	{
+		$this->assertEquals(
+			$expected,
+			StringHelper::strrev($string)
+		);
+	}
+
+	/**
+	 * Data provider for testStrSpn
 	 *
 	 * @return  \Generator
 	 *
 	 * @since   1.0
 	 */
-	public function seedTestStrspn(): \Generator
+	public function seedTestStrSpn(): \Generator
 	{
+		// Note: subject, mask, start, length, expected result
 		yield ['A321 Main Street', '0123456789', 1, 2, 2];
 		yield ['321 Main Street', '0123456789', null, 2, 2];
 		yield ['A321 Main Street', '0123456789', null, 10, 0];
@@ -261,54 +689,144 @@ class StringHelperTest extends TestCase
 	}
 
 	/**
-	 * Data provider for testSubstr_replace
+	 * @testdox       StringHelper::strspn() finds length of matching segment
 	 *
-	 * @return  \Generator
+	 * @param   string        $subject   The haystack
+	 * @param   string        $mask      The mask
+	 * @param   integer|null  $start     Start optional
+	 * @param   integer|null  $length    Length optional
+	 * @param   integer       $expected  Expected result
 	 *
-	 * @since   1.0
+	 * @dataProvider  seedTestStrSpn
 	 */
-	public function seedTestSubstr_replace(): \Generator
+	public function testStrSpn(string $subject, string $mask, ?int $start, ?int $length, int $expected): void
 	{
-		yield ['321 Broadway Avenue', '321 Main Street', 'Broadway Avenue', 4, false];
-		yield ['321 Broadway Street', '321 Main Street', 'Broadway', 4, 4];
-		yield ['чадна 我能吞', 'чадна Би шил идэй чадна', '我能吞', 6, false];
-		yield ['чадна 我能吞 шил идэй чадна', 'чадна Би шил идэй чадна', '我能吞', 6, 2];
+		$this->assertEquals(
+			$expected,
+			StringHelper::strspn($subject, $mask, $start, $length)
+		);
 	}
 
 	/**
-	 * Data provider for testLtrim
+	 * Data provider for testSubstrReplace
 	 *
 	 * @return  \Generator
 	 *
 	 * @since   1.0
 	 */
-	public function seedTestLtrim(): \Generator
+	public function seedTestSubstrReplace(): \Generator
 	{
-		yield ['   abc def', false, 'abc def'];
-		yield ['   abc def', '', '   abc def'];
-		yield [' Би шил', false, 'Би шил'];
-		yield ["\t\n\r\x0BБи шил", false, 'Би шил'];
-		yield ["\x0B\t\n\rБи шил", "\t\n\x0B", "\rБи шил"];
-		yield ["\x09Би шил\x0A", "\x09\x0A", "Би шил\x0A"];
-		yield ['1234abc', '0123456789', 'abc'];
+		yield 'the remainder of the string, if no length is given' => [
+			'321 Main Street',
+			'Broadway Avenue',
+			4,
+			false,
+			'321 Broadway Avenue'
+		];
+		yield 'only the given number of characters' => ['321 Main Street', 'Broadway', 4, 4, '321 Broadway Street'];
+		yield 'the given number of characters in a cyrillic string' => [
+			'чадна Би шил идэй чадна',
+			'我能吞',
+			6,
+			2,
+			'чадна 我能吞 шил идэй чадна'
+		];
+		yield 'the remainder of a cyrillic string, if no length is given' => [
+			'чадна Би шил идэй чадна',
+			'我能吞',
+			6,
+			false,
+			'чадна 我能吞'
+		];
 	}
 
 	/**
-	 * Data provider for testRtrim
+	 * @testdox       StringHelper::substr_replace() replaces $_dataName
+	 *
+	 * @param   string                $string       The haystack
+	 * @param   string                $replacement  The replacement string
+	 * @param   integer               $start        Start
+	 * @param   integer|boolean|null  $length       Length (optional)
+	 * @param   string                $expected     Expected result
+	 *
+	 * @dataProvider  seedTestSubstrReplace
+	 */
+	public function testSubstrReplace(string $string, string $replacement, int $start, $length, string $expected): void
+	{
+		$this->assertEquals(
+			$expected,
+			StringHelper::substr_replace($string, $replacement, $start, $length)
+		);
+	}
+
+	/**
+	 * Data provider for testLTrim
 	 *
 	 * @return  \Generator
 	 *
 	 * @since   1.0
 	 */
-	public function seedTestRtrim(): \Generator
+	public function seedTestLTrim(): \Generator
 	{
-		yield ['abc def   ', false, 'abc def'];
-		yield ['abc def   ', '', 'abc def   '];
-		yield ['Би шил ', false, 'Би шил'];
-		yield ["Би шил\t\n\r\x0B", false, 'Би шил'];
-		yield ["Би шил\r\x0B\t\n", "\t\n\x0B", "Би шил\r"];
-		yield ["\x09Би шил\x0A", "\x09\x0A", "\x09Би шил"];
-		yield ['1234abc', 'abc', '1234'];
+		yield 'spaces with default char list' => ['   abc def', false, 'abc def'];
+		yield 'nothing with empty char list' => ['   abc def', '', '   abc def'];
+		yield 'spaces with default char list on cyrillic strings' => [' Би шил', false, 'Би шил'];
+		yield 'HTAB, VTAB, NL, CR with default char list' => ["\t\n\r\x0BБи шил", false, 'Би шил'];
+		yield 'special characters from provided char list' => ["\x0B\t\n\rБи шил", "\t\n\x0B", "\rБи шил"];
+		yield 'characters only on the left side' => ["\x09Би шил\x0A", "\x09\x0A", "Би шил\x0A"];
+		yield 'normal characters from provided char list' => ['1234abc', '0123456789', 'abc'];
+	}
+
+	/**
+	 * @testdox       StringHelper::ltrim() removes $_dataName
+	 *
+	 * @param   string          $string    The string to be trimmed
+	 * @param   string|boolean  $charlist  The optional charlist of additional characters to trim
+	 * @param   string          $expected  Expected result
+	 *
+	 * @dataProvider  seedTestLTrim
+	 */
+	public function testLTrim(string $string, $charlist, string $expected): void
+	{
+		$this->assertEquals(
+			$expected,
+			StringHelper::ltrim($string, $charlist)
+		);
+	}
+
+	/**
+	 * Data provider for testRTrim
+	 *
+	 * @return  \Generator
+	 *
+	 * @since   1.0
+	 */
+	public function seedTestRTrim(): \Generator
+	{
+		yield 'spaces with default char list' => ['abc def   ', false, 'abc def'];
+		yield 'nothing with empty char list' => ['abc def   ', '', 'abc def   '];
+		yield 'spaces with default char list on cyrillic strings' => ['Би шил ', false, 'Би шил'];
+		yield 'HTAB, VTAB, NL, CR with default char list' => ["Би шил\t\n\r\x0B", false, 'Би шил'];
+		yield 'special characters from provided char list' => ["Би шил\r\x0B\t\n", "\t\n\x0B", "Би шил\r"];
+		yield 'characters only on the right side' => ["\x09Би шил\x0A", "\x09\x0A", "\x09Би шил"];
+		yield 'normal characters from provided char list' => ['1234abc', 'abcdefgh', '1234'];
+	}
+
+	/**
+	 * @testdox       StringHelper::rtrim() removes $_dataName
+	 *
+	 * @param   string          $string    The string to be trimmed
+	 * @param   string|boolean  $charlist  The optional charlist of additional characters to trim
+	 * @param   string          $expected  Expected result
+	 *
+	 * @dataProvider  seedTestRTrim
+	 */
+	public function testRTrim(string $string, $charlist, string $expected): void
+	{
+		$this->assertEquals(
+			$expected,
+			StringHelper::rtrim($string, $charlist)
+		);
 	}
 
 	/**
@@ -320,13 +838,30 @@ class StringHelperTest extends TestCase
 	 */
 	public function seedTestTrim(): \Generator
 	{
-		yield ['  abc def   ', false, 'abc def'];
-		yield ['  abc def   ', '', '  abc def   '];
-		yield ['   Би шил ', false, 'Би шил'];
-		yield ["\t\n\r\x0BБи шил\t\n\r\x0B", false, 'Би шил'];
-		yield ["\x0B\t\n\rБи шил\r\x0B\t\n", "\t\n\x0B", "\rБи шил\r"];
-		yield ["\x09Би шил\x0A", "\x09\x0A", "Би шил"];
-		yield ['1234abc56789', '0123456789', 'abc'];
+		yield 'spaces with default char list' => ['  abc def   ', false, 'abc def'];
+		yield 'nothing with empty char list' => ['  abc def   ', '', '  abc def   '];
+		yield 'spaces with default char list on cyrillic strings' => ['   Би шил ', false, 'Би шил'];
+		yield 'HTAB, VTAB, NL, CR with default char list' => ["\t\n\r\x0BБи шил\t\n\r\x0B", false, 'Би шил'];
+		yield 'special characters from provided char list' => ["\x0B\t\n\rБи шил\r\x0B\t\n", "\t\n\x0B", "\rБи шил\r"];
+		yield 'characters on both sides' => ["\x09Би шил\x0A", "\x09\x0A", "Би шил"];
+		yield 'normal characters from provided char list' => ['1234abc56789', '0123456789', 'abc'];
+	}
+
+	/**
+	 * @testdox       StringHelper::trim() removes $_dataName
+	 *
+	 * @param   string          $string    The string to be trimmed
+	 * @param   string|boolean  $charlist  The optional charlist of additional characters to trim
+	 * @param   string          $expected  Expected result
+	 *
+	 * @dataProvider  seedTestTrim
+	 */
+	public function testTrim(string $string, $charlist, string $expected): void
+	{
+		$this->assertEquals(
+			$expected,
+			StringHelper::trim($string, $charlist)
+		);
 	}
 
 	/**
@@ -338,12 +873,40 @@ class StringHelperTest extends TestCase
 	 */
 	public function seedTestUcfirst(): \Generator
 	{
-		yield ['george', null, null, 'George'];
-		yield ['мога', null, null, 'Мога'];
-		yield ['ψυχοφθόρα', null, null, 'Ψυχοφθόρα'];
-		yield ['dr jekill and mister hyde', ' ', null, 'Dr Jekill And Mister Hyde'];
-		yield ['dr jekill and mister hyde', ' ', '_', 'Dr_Jekill_And_Mister_Hyde'];
-		yield ['dr jekill and mister hyde', ' ', '', 'DrJekillAndMisterHyde'];
+		// Note: string, delimiter, newDelimiter expected result
+		yield 'only the first character by default' => ['george michael', null, null, 'George michael'];
+		yield 'the first character of a cyrillic string' => ['мога', null, null, 'Мога'];
+		yield 'the first character of a greek string' => ['ψυχοφθόρα', null, null, 'Ψυχοφθόρα'];
+		yield 'the first character of every chunk, if a delimiter is provided' => [
+			'dr jekill and mister hyde',
+			' ',
+			null,
+			'Dr Jekill And Mister Hyde'
+		];
+		yield 'the chunks and optionally replaces the delimiter' => [
+			'dr jekill and mister hyde',
+			' ',
+			'_',
+			'Dr_Jekill_And_Mister_Hyde'
+		];
+	}
+
+	/**
+	 * @testdox       StringHelper::ucfirst() uppercases $_dataName
+	 *
+	 * @param   string       $string        String to be processed
+	 * @param   string|null  $delimiter     The delimiter (null means do not split the string)
+	 * @param   string|null  $newDelimiter  The new delimiter (null means equal to $delimiter)
+	 * @param   string       $expected      Expected result
+	 *
+	 * @dataProvider  seedTestUcfirst
+	 */
+	public function testUcfirst(string $string, ?string $delimiter, ?string $newDelimiter, string $expected): void
+	{
+		$this->assertEquals(
+			$expected,
+			StringHelper::ucfirst($string, $delimiter, $newDelimiter)
+		);
 	}
 
 	/**
@@ -355,11 +918,27 @@ class StringHelperTest extends TestCase
 	 */
 	public function seedTestUcwords(): \Generator
 	{
-		yield ['george washington', 'George Washington'];
-		yield ["george\r\nwashington", "George\r\nWashington"];
-		yield ['мога', 'Мога'];
-		yield ['αβγ δεζ', 'Αβγ Δεζ'];
-		yield ['åbc öde', 'Åbc Öde'];
+		yield 'each word' => ['george washington', 'George Washington'];
+		yield 'words at the beginning of a new line' => ["george\r\nwashington", "George\r\nWashington"];
+		yield 'cyrillic words' => ['мога', 'Мога'];
+		yield 'greek words' => ['αβγ δεζ', 'Αβγ Δεζ'];
+		yield 'words with Umlauts' => ['åbc öde', 'Åbc Öde'];
+	}
+
+	/**
+	 * @testdox       StringHelper::ucwords() uppercases $_dataName
+	 *
+	 * @param   string  $string    String to be processed
+	 * @param   string  $expected  Expected result
+	 *
+	 * @dataProvider  seedTestUcwords
+	 */
+	public function testUcwords(string $string, string $expected): void
+	{
+		$this->assertEquals(
+			$expected,
+			StringHelper::ucwords($string)
+		);
 	}
 
 	/**
@@ -371,7 +950,83 @@ class StringHelperTest extends TestCase
 	 */
 	public function seedTestTranscode(): \Generator
 	{
-		yield ['Åbc Öde €100', 'UTF-8', 'ISO-8859-1', "\xc5bc \xd6de EUR100"];
+		yield 'UTF-8 to ISO-8859-1' => ['Åbc Öde €100', 'UTF-8', 'ISO-8859-1', "\xc5bc \xd6de EUR100"];
+	}
+
+	/**
+	 * @testdox       StringHelper::transcode transcodes $_dataName
+	 *
+	 * @param   string       $source        The string to transcode.
+	 * @param   string       $fromEncoding  The source encoding.
+	 * @param   string       $toEncoding    The target encoding.
+	 * @param   string|null  $expected      Expected result.
+	 *
+	 * @dataProvider  seedTestTranscode
+	 */
+	public function testTranscode(string $source, string $fromEncoding, string $toEncoding, ?string $expected): void
+	{
+		$this->assertEquals(
+			$expected,
+			StringHelper::transcode($source, $fromEncoding, $toEncoding)
+		);
+	}
+
+	/**
+	 * Data provider for testUnicodeToUtf8
+	 *
+	 * @return  \Generator
+	 *
+	 * @since   1.2.0
+	 */
+	public function seedTestUnicodeToUtf8(): \Generator
+	{
+		yield 'cyrillic' => ["\u0422\u0435\u0441\u0442 \u0441\u0438\u0441\u0442\u0435\u043c\u044b", "Тест системы"];
+		yield 'umlaut' => ["\u00dcberpr\u00fcfung der Systemumstellung", "Überprüfung der Systemumstellung"];
+	}
+
+	/**
+	 * @testdox       StringHelper::unicode_to_utf8() converts a $_dataName string from unicode to UTF-8
+	 *
+	 * @param   string  $string    The Unicode string to be converted
+	 * @param   string  $expected  Expected result
+	 *
+	 * @dataProvider  seedTestUnicodeToUtf8
+	 */
+	public function testUnicodeToUtf8(string $string, string $expected): void
+	{
+		$this->assertEquals(
+			$expected,
+			StringHelper::unicode_to_utf8($string)
+		);
+	}
+
+	/**
+	 * Data provider for testUnicodeToUtf16
+	 *
+	 * @return  \Generator
+	 *
+	 * @since   1.2.0
+	 */
+	public function seedTestUnicodeToUtf16(): \Generator
+	{
+		yield 'cyrillic' => ["\u0422\u0435\u0441\u0442 \u0441\u0438\u0441\u0442\u0435\u043c\u044b", "Тест системы"];
+		yield 'umlaut' => ["\u00dcberpr\u00fcfung der Systemumstellung", "Überprüfung der Systemumstellung"];
+	}
+
+	/**
+	 * @testdox       StringHelper::unicode_to_utf16() converts a $_dataName string from unicode to UTF-16
+	 *
+	 * @param   string  $string    The Unicode string to be converted
+	 * @param   string  $expected  Expected result
+	 *
+	 * @dataProvider  seedTestUnicodeToUtf16
+	 */
+	public function testUnicodeToUtf16(string $string, string $expected): void
+	{
+		$this->assertEquals(
+			$expected,
+			StringHelper::unicode_to_utf16($string)
+		);
 	}
 
 	/**
@@ -394,484 +1049,30 @@ class StringHelperTest extends TestCase
 	}
 
 	/**
-	 * Data provider for testUnicodeToUtf8
+	 * @testdox       StringHelper::compliant() detects UTF-8 compliant strings
 	 *
-	 * @return  \Generator
+	 * @param   string   $string    UTF-8 string to check
+	 * @param   boolean  $expected  Expected result
 	 *
-	 * @since   1.2.0
+	 * @dataProvider  seedCompliantStrings
 	 */
-	public function seedTestUnicodeToUtf8(): \Generator
-	{
-		yield ["\u0422\u0435\u0441\u0442 \u0441\u0438\u0441\u0442\u0435\u043c\u044b", "Тест системы"];
-		yield ["\u00dcberpr\u00fcfung der Systemumstellung", "Überprüfung der Systemumstellung"];
-	}
-
-	/**
-	 * Data provider for testUnicodeToUtf16
-	 *
-	 * @return  \Generator
-	 *
-	 * @since   1.2.0
-	 */
-	public function seedTestUnicodeToUtf16(): \Generator
-	{
-		yield ["\u0422\u0435\u0441\u0442 \u0441\u0438\u0441\u0442\u0435\u043c\u044b", "Тест системы"];
-		yield ["\u00dcberpr\u00fcfung der Systemumstellung", "Überprüfung der Systemumstellung"];
-	}
-
-	/**
-	 * @testdox  A string is correctly incremented
-	 *
-	 * @param   string       $string    The source string.
-	 * @param   string|null  $style     The the style (default|dash).
-	 * @param   integer      $number    If supplied, this number is used for the copy, otherwise it is the 'next' number.
-	 * @param   string       $expected  Expected result.
-	 *
-	 * @dataProvider  seedTestIncrement
-	 */
-	public function testIncrement(string $string, ?string $style, int $number, string $expected)
+	public function testCompliant(string $string, bool $expected): void
 	{
 		$this->assertEquals(
 			$expected,
-			StringHelper::increment($string, $style, $number)
+			StringHelper::compliant($string)
 		);
 	}
 
 	/**
-	 * @testdox  A string is checked to determine if it is ASCII
-	 *
-	 * @param   string   $string    The string to test.
-	 * @param   boolean  $expected  Expected result.
-	 *
-	 * @dataProvider  seedTestIs_ascii
-	 */
-	public function testIs_ascii(string $string, bool $expected)
-	{
-		$this->assertEquals(
-			$expected,
-			StringHelper::is_ascii($string)
-		);
-	}
-
-	/**
-	 * @testdox  UTF-8 aware strpos() is performed on a string
-	 *
-	 * @param   string|boolean        $expected  Expected result
-	 * @param   string                $haystack  String being examined
-	 * @param   string                $needle    String being searched for
-	 * @param   integer|null|boolean  $offset    Optional, specifies the position from which the search should be performed
-	 *
-	 * @dataProvider  seedTestStrpos
-	 */
-	public function testStrpos($expected, string $haystack, string $needle, $offset = 0)
-	{
-		$this->assertEquals(
-			$expected,
-			StringHelper::strpos($haystack, $needle, $offset)
-		);
-	}
-
-	/**
-	 * @testdox  UTF-8 aware strrpos() is performed on a string
-	 *
-	 * @param   string|boolean        $expected  Expected result
-	 * @param   string                $haystack  String being examined
-	 * @param   string                $needle    String being searched for
-	 * @param   integer|null|boolean  $offset    Optional, specifies the position from which the search should be performed
-	 *
-	 * @dataProvider  seedTestStrrpos
-	 */
-	public function testStrrpos($expected, string $haystack, string $needle, int $offset = 0)
-	{
-		$this->assertEquals(
-			$expected,
-			StringHelper::strrpos($haystack, $needle, $offset)
-		);
-	}
-
-	/**
-	 * @testdox  UTF-8 aware substr() is performed on a string
-	 *
-	 * @param   string|boolean        $expected  Expected result
-	 * @param   string                $string    String being processed
-	 * @param   integer               $offset    Number of UTF-8 characters offset (from left)
-	 * @param   integer|null|boolean  $offset    Optional, specifies the position from which the search should be performed
-	 *
-	 * @dataProvider  seedTestSubstr
-	 */
-	public function testSubstr($expected, string $string, int $start, $length = false)
-	{
-		$this->assertEquals(
-			$expected,
-			StringHelper::substr($string, $start, $length)
-		);
-	}
-
-	/**
-	 * @testdox  UTF-8 aware strtolower() is performed on a string
-	 *
-	 * @param   string          $string    String being processed
-	 * @param   string|boolean  $expected  Expected result
-	 *
-	 * @dataProvider  seedTestStrtolower
-	 */
-	public function testStrtolower(string $string, $expected)
-	{
-		$this->assertEquals(
-			$expected,
-			StringHelper::strtolower($string)
-		);
-	}
-
-	/**
-	 * @testdox  UTF-8 aware strtoupper() is performed on a string
-	 *
-	 * @param   string          $string    String being processed
-	 * @param   string|boolean  $expected  Expected result
-	 *
-	 * @dataProvider  seedTestStrtoupper
-	 */
-	public function testStrtoupper($string, $expected)
-	{
-		$this->assertEquals(
-			$expected,
-			StringHelper::strtoupper($string)
-		);
-	}
-
-	/**
-	 * @testdox  UTF-8 aware strlen() is performed on a string
-	 *
-	 * @param   string          $string    String being processed
-	 * @param   string|boolean  $expected  Expected result
-	 *
-	 * @dataProvider  seedTestStrlen
-	 */
-	public function testStrlen(string $string, $expected)
-	{
-		$this->assertEquals(
-			$expected,
-			StringHelper::strlen($string)
-		);
-	}
-
-	/**
-	 * @testdox  UTF-8 aware str_ireplace() is performed on a string
-	 *
-	 * @param   string                $search    String to search
-	 * @param   string                $replace   Existing string to replace
-	 * @param   string                $subject   New string to replace with
-	 * @param   integer|null|boolean  $count     Optional count value to be passed by reference
-	 * @param   string                $expected  Expected result
-	 *
-	 * @return  array
-	 *
-	 * @dataProvider  seedTestStr_ireplace
-	 */
-	public function testStr_ireplace($search, $replace, $subject, $count, $expected)
-	{
-		$this->assertEquals(
-			$expected,
-			StringHelper::str_ireplace($search, $replace, $subject, $count)
-		);
-	}
-
-	/**
-	 * @testdox  UTF-8 aware str_split() is performed on a string
-	 *
-	 * @param   string                $string    UTF-8 encoded string to process
-	 * @param   integer               $splitLen  Number to characters to split string by
-	 * @param   array|string|boolean  $expected  Expected result
-	 *
-	 * @dataProvider  seedTestStr_split
-	 */
-	public function testStr_split($string, $splitLen, $expected)
-	{
-		$this->assertEquals(
-			$expected,
-			StringHelper::str_split($string, $splitLen)
-		);
-	}
-
-	/**
-	 * @testdox  UTF-8 aware strcasecmp() is performed on a string
-	 *
-	 * @param   string                $string1   String 1 to compare
-	 * @param   string                $string2   String 2 to compare
-	 * @param   array|string|boolean  $locale    The locale used by strcoll or false to use classical comparison
-	 * @param   integer               $expected  Expected result
-	 *
-	 * @dataProvider  seedTestStrcasecmp
-	 */
-	public function testStrcasecmp(string $string1, string $string2, $locale, int $expected)
-	{
-		// Convert the $locale param to a string if it is an array
-		if (\is_array($locale))
-		{
-			$locale = "'" . implode("', '", $locale) . "'";
-		}
-
-		if (substr(php_uname(), 0, 6) == 'Darwin' && $locale != false)
-		{
-			$this->markTestSkipped('Darwin bug prevents foreign conversion from working properly');
-		}
-
-		if ($locale != false && !setlocale(LC_COLLATE, $locale))
-		{
-			$this->markTestSkipped("Locale {$locale} is not available.");
-		}
-
-		$actual = StringHelper::strcasecmp($string1, $string2, $locale);
-
-		if ($actual != 0)
-		{
-			$actual /= abs($actual);
-		}
-
-		$this->assertEquals($expected, $actual);
-	}
-
-	/**
-	 * @testdox  UTF-8 aware strcmp() is performed on a string
-	 *
-	 * @param   string   $string1   String 1 to compare
-	 * @param   string   $string2   String 2 to compare
-	 * @param   mixed    $locale    The locale used by strcoll or false to use classical comparison
-	 * @param   integer  $expected  Expected result
-	 *
-	 * @dataProvider  seedTestStrcmp
-	 */
-	public function testStrcmp(string $string1, string $string2, $locale, int $expected)
-	{
-		// Convert the $locale param to a string if it is an array
-		if (\is_array($locale))
-		{
-			$locale = "'" . implode("', '", $locale) . "'";
-		}
-
-		if (substr(php_uname(), 0, 6) == 'Darwin' && $locale != false)
-		{
-			$this->markTestSkipped('Darwin bug prevents foreign conversion from working properly');
-		}
-
-		if ($locale != false && !setlocale(LC_COLLATE, $locale))
-		{
-			// If the locale is not available, we can't have to transcode the string and can't reliably compare it.
-			$this->markTestSkipped("Locale {$locale} is not available.");
-		}
-
-		$actual = StringHelper::strcmp($string1, $string2, $locale);
-
-		if ($actual != 0)
-		{
-			$actual = $actual / abs($actual);
-		}
-
-		$this->assertEquals($expected, $actual);
-	}
-
-	/**
-	 * @testdox  UTF-8 aware strcspn() is performed on a string
-	 *
-	 * @param   string           $haystack  The string to process
-	 * @param   string           $needles   The mask
-	 * @param   integer|boolean  $start     Optional starting character position (in characters)
-	 * @param   integer|boolean  $len       Optional length
-	 * @param   integer          $expected  Expected result
-	 *
-	 * @dataProvider  seedTestStrcspn
-	 */
-	public function testStrcspn(string $haystack, string $needles, $start, $len, int $expected)
-	{
-		$this->assertEquals(
-			$expected,
-			StringHelper::strcspn($haystack, $needles, $start, $len)
-		);
-	}
-
-	/**
-	 * @testdox  UTF-8 aware stristr() is performed on a string
-	 *
-	 * @param   string          $haystack  The haystack
-	 * @param   string          $needle    The needle
-	 * @param   string|boolean  $expect    Expected result
-	 *
-	 * @dataProvider  seedTestStristr
-	 */
-	public function testStristr(string $haystack, string $needle, $expected)
-	{
-		$this->assertEquals(
-			$expected,
-			StringHelper::stristr($haystack, $needle)
-		);
-	}
-
-	/**
-	 * @testdox  UTF-8 aware strrev() is performed on a string
-	 *
-	 * @param   string  $string    String to be reversed
-	 * @param   string  $expected  Expected result
-	 *
-	 * @dataProvider  seedTestStrrev
-	 */
-	public function testStrrev(string $string, string $expected)
-	{
-		$this->assertEquals(
-			$expected,
-			StringHelper::strrev($string)
-		);
-	}
-
-	/**
-	 * @testdox  UTF-8 aware strspn() is performed on a string
-	 *
-	 * @param   string        $subject  The haystack
-	 * @param   string        $mask     The mask
-	 * @param   integer|null  $start    Start optional
-	 * @param   integer|null  $length   Length optional
-	 * @param   integer       $expect   Expected result
-	 *
-	 * @dataProvider  seedTestStrspn
-	 */
-	public function testStrspn(string $subject, string $mask, $start, $length, int $expected)
-	{
-		$this->assertEquals(
-			$expected,
-			StringHelper::strspn($subject, $mask, $start, $length)
-		);
-	}
-
-	/**
-	 * @testdox  UTF-8 aware substr_replace() is performed on a string
-	 *
-	 * @param   string                $expected     Expected result
-	 * @param   string                $string       The haystack
-	 * @param   string                $replacement  The replacement string
-	 * @param   integer               $start        Start
-	 * @param   integer|boolean|null  $length       Length (optional)
-	 *
-	 * @dataProvider  seedTestSubstr_replace
-	 */
-	public function testSubstr_replace(string $expected, string $string, string $replacement, int $start, $length)
-	{
-		$this->assertEquals(
-			$expected,
-			StringHelper::substr_replace($string, $replacement, $start, $length)
-		);
-	}
-
-	/**
-	 * @testdox  UTF-8 aware ltrim() is performed on a string
-	 *
-	 * @param   string          $string    The string to be trimmed
-	 * @param   string|boolean  $charlist  The optional charlist of additional characters to trim
-	 * @param   string          $expected  Expected result
-	 *
-	 * @dataProvider  seedTestLtrim
-	 */
-	public function testLtrim(string $string, $charlist, string $expected)
-	{
-		$this->assertEquals(
-			$expected,
-			StringHelper::ltrim($string, $charlist)
-		);
-	}
-
-	/**
-	 * @testdox  UTF-8 aware rtrim() is performed on a string
-	 *
-	 * @param   string          $string    The string to be trimmed
-	 * @param   string|boolean  $charlist  The optional charlist of additional characters to trim
-	 * @param   string          $expected  Expected result
-	 *
-	 * @dataProvider  seedTestRtrim
-	 */
-	public function testRtrim(string $string, $charlist, string $expected)
-	{
-		$this->assertEquals(
-			$expected,
-			StringHelper::rtrim($string, $charlist)
-		);
-	}
-
-	/**
-	 * @testdox  UTF-8 aware trim() is performed on a string
-	 *
-	 * @param   string          $string    The string to be trimmed
-	 * @param   string|boolean  $charlist  The optional charlist of additional characters to trim
-	 * @param   string          $expected  Expected result
-	 *
-	 * @dataProvider  seedTestTrim
-	 */
-	public function testTrim(string $string, $charlist, string $expected)
-	{
-		$this->assertEquals(
-			$expected,
-			StringHelper::trim($string, $charlist)
-		);
-	}
-
-	/**
-	 * @testdox  UTF-8 aware ucfirst() is performed on a string
-	 *
-	 * @param   string       $string        String to be processed
-	 * @param   string|null  $delimiter     The words delimiter (null means do not split the string)
-	 * @param   string|null  $newDelimiter  The new words delimiter (null means equal to $delimiter)
-	 * @param   string       $expected      Expected result
-	 *
-	 * @dataProvider  seedTestUcfirst
-	 */
-	public function testUcfirst(string $string, ?string $delimiter, ?string $newDelimiter, string $expected)
-	{
-		$this->assertEquals(
-			$expected,
-			StringHelper::ucfirst($string, $delimiter, $newDelimiter)
-		);
-	}
-
-	/**
-	 * @testdox  UTF-8 aware ucwords() is performed on a string
-	 *
-	 * @param   string  $string    String to be processed
-	 * @param   string  $expected  Expected result
-	 *
-	 * @dataProvider  seedTestUcwords
-	 */
-	public function testUcwords(string $string, string $expected)
-	{
-		$this->assertEquals(
-			$expected,
-			StringHelper::ucwords($string)
-		);
-	}
-
-	/**
-	 * @testdox  A string is transcoded
-	 *
-	 * @param   string       $source        The string to transcode.
-	 * @param   string       $fromEncoding  The source encoding.
-	 * @param   string       $toEncoding    The target encoding.
-	 * @param   string|null  $expect        Expected result.
-	 *
-	 * @dataProvider  seedTestTranscode
-	 */
-	public function testTranscode(string $source, string $fromEncoding, string $toEncoding, ?string $expected)
-	{
-		$this->assertEquals(
-			$expected,
-			StringHelper::transcode($source, $fromEncoding, $toEncoding)
-		);
-	}
-
-	/**
-	 * @testdox  A string is tested as valid UTF-8
+	 * @testdox       StringHelper::valid() validates UTF-8 strings
 	 *
 	 * @param   string   $string    UTF-8 encoded string.
 	 * @param   boolean  $expected  Expected result.
 	 *
 	 * @dataProvider  seedCompliantStrings
 	 */
-	public function testValid(string $string, bool $expected)
+	public function testValid(string $string, bool $expected): void
 	{
 		$this->assertEquals(
 			$expected,
@@ -880,50 +1081,203 @@ class StringHelperTest extends TestCase
 	}
 
 	/**
-	 * @testdox  A string is converted from unicode to UTF-8
-	 *
-	 * @param   string  $string    Unicode string to convert
-	 * @param   string  $expected  Expected result
-	 *
-	 * @dataProvider  seedTestUnicodeToUtf8
+	 * @return \Generator
 	 */
-	public function testUnicodeToUtf8(string $string, string $expected)
+	public function seedTestIncrementSignature(): \Generator
 	{
-		$this->assertEquals(
-			$expected,
-			StringHelper::unicode_to_utf8($string)
+		// Note: string, style
+		yield 'unnumbered default' => ['test', 'default'];
+		yield 'unnumbered dash' => ['test', 'dash'];
+		yield 'numbered default' => ['test (3)', 'default'];
+		yield 'numbered dash' => ['test-3', 'dash'];
+	}
+
+	/**
+	 * @testdox Change of default value in StringHelper::increment() is backward compatible
+	 *
+	 * @dataProvider seedTestIncrementSignature
+	 */
+	public function testIncrementSignature(string $string, string $style): void
+	{
+		$curDefault = StringHelper::increment($string, $style);
+		$oldDefault = StringHelper::increment($string, $style, 0);
+		$newDefault = StringHelper::increment($string, $style, null);
+
+		$this->assertSame(
+			$curDefault,
+			$oldDefault,
+			'Omitting argument should give the same result as providing the old default value'
+		);
+		$this->assertSame(
+			$curDefault,
+			$newDefault,
+			'Omitting argument should give the same result as providing the new default value'
 		);
 	}
 
 	/**
-	 * @testdox  A string is converted from unicode to UTF-16
-	 *
-	 * @param   string  $string    Unicode string to convert
-	 * @param   string  $expected  Expected result
-	 *
-	 * @dataProvider  seedTestUnicodeToUtf16
+	 * @return \Generator
 	 */
-	public function testUnicodeToUtf16(string $string, string $expected)
+	public function seedTestStrPosSignature(): \Generator
 	{
-		$this->assertEquals(
-			$expected,
-			StringHelper::unicode_to_utf16($string)
+		// Note: haystack, needle
+		yield 'existing substring at the beginning' => ['teststring', 'test'];
+		yield 'existing substring within the string' => ['teststring', 'string'];
+		yield 'non-existing substring' => ['teststring', 'foo'];
+	}
+
+	/**
+	 * @testdox Change of default value in StringHelper::strpos() is backward compatible
+	 *
+	 * @dataProvider seedTestStrPosSignature
+	 */
+	public function testStrPosSignature(string $haystack, string $needle): void
+	{
+		$curDefault = StringHelper::strpos($haystack, $needle);
+		$actDefault = StringHelper::strpos($haystack, $needle, 0);
+		$oldDefault = StringHelper::strpos($haystack, $needle, false);
+		$newDefault = StringHelper::strpos($haystack, $needle, null);
+
+		$this->assertSame(
+			$curDefault,
+			$actDefault,
+			'Omitting argument should give the same result as providing the actual default value'
+		);
+		$this->assertSame(
+			$curDefault,
+			$oldDefault,
+			'Omitting argument should give the same result as providing the old default value'
+		);
+		$this->assertSame(
+			$curDefault,
+			$newDefault,
+			'Omitting argument should give the same result as providing the new default value'
 		);
 	}
 
 	/**
-	 * @testdox  A string is checked for UTF-8 compliance
+	 * @testdox Change of default value in StringHelper::strrpos() is backward compatible
 	 *
-	 * @param   string   $string    UTF-8 string to check
-	 * @param   boolean  $expected  Expected result
-	 *
-	 * @dataProvider  seedCompliantStrings
+	 * @dataProvider seedTestStrPosSignature
 	 */
-	public function testCompliant(string $string, bool $expected)
+	public function testStrRPosSignature(string $haystack, string $needle): void
 	{
-		$this->assertEquals(
-			$expected,
-			StringHelper::compliant($string)
+		$curDefault = StringHelper::strrpos($haystack, $needle);
+		$oldDefault = StringHelper::strrpos($haystack, $needle, 0);
+		$newDefault = StringHelper::strrpos($haystack, $needle, null);
+
+		$this->assertSame(
+			$curDefault,
+			$oldDefault,
+			'Omitting argument should give the same result as providing the old default value'
 		);
+		$this->assertSame(
+			$curDefault,
+			$newDefault,
+			'Omitting argument should give the same result as providing the new default value'
+		);
+	}
+
+	/**
+	 * @return \Generator
+	 */
+	public function seedTestSubStrSignature(): \Generator
+	{
+		// Note: haystack, needle
+		yield 'offset at the beginning' => ['teststring', 0];
+		yield 'offset within the string' => ['teststring', 4];
+		yield 'offset out of bounds' => ['teststring', 12];
+	}
+
+	/**
+	 * @testdox Change of default value in StringHelper::substr() is backward compatible
+	 *
+	 * @dataProvider seedTestSubStrSignature
+	 */
+	public function testSubStrSignature(string $str, int $offset): void
+	{
+		$curDefault = StringHelper::substr($str, $offset);
+		$oldDefault = StringHelper::substr($str, $offset, false);
+		$newDefault = StringHelper::substr($str, $offset, null);
+
+		$this->assertSame(
+			$curDefault,
+			$oldDefault,
+			'Omitting argument should give the same result as providing the old default value'
+		);
+		$this->assertSame(
+			$curDefault,
+			$newDefault,
+			'Omitting argument should give the same result as providing the new default value'
+		);
+	}
+
+	/**
+	 * @return \Generator
+	 */
+	public function seedTestStrCmpSignature(): \Generator
+	{
+		// Note: haystack, needle
+		yield 'a < b' => ['a', 'b'];
+		yield 'a = a' => ['a', 'a'];
+		yield 'b > a' => ['b', 'a'];
+	}
+
+	/**
+	 * @testdox Change of default value in StringHelper::strcasecmp() is backward compatible
+	 *
+	 * @dataProvider seedTestStrCmpSignature
+	 */
+	public function testStrCaseCmpSignature(string $str1, string $str2): void
+	{
+		$curDefault = StringHelper::strcasecmp($str1, $str2);
+		$oldDefault = StringHelper::strcasecmp($str1, $str2, false);
+		$newDefault = StringHelper::strcasecmp($str1, $str2, null);
+
+		$this->assertSame(
+			$this->sign($curDefault),
+			$this->sign($oldDefault),
+			'Omitting argument should give the same result as providing the old default value'
+		);
+		$this->assertSame(
+			$this->sign($curDefault),
+			$this->sign($newDefault),
+			'Omitting argument should give the same result as providing the new default value'
+		);
+	}
+
+	/**
+	 * @testdox Change of default value in StringHelper::strcmp() is backward compatible
+	 *
+	 * @dataProvider seedTestStrCmpSignature
+	 */
+	public function testStrCmpSignature(string $str1, string $str2): void
+	{
+		$curDefault = StringHelper::strcmp($str1, $str2);
+		$oldDefault = StringHelper::strcmp($str1, $str2, false);
+		$newDefault = StringHelper::strcmp($str1, $str2, null);
+
+		$this->assertSame(
+			$this->sign($curDefault),
+			$this->sign($oldDefault),
+			'Omitting argument should give the same result as providing the old default value'
+		);
+		$this->assertSame(
+			$this->sign($curDefault),
+			$this->sign($newDefault),
+			'Omitting argument should give the same result as providing the new default value'
+		);
+	}
+
+	/**
+	 * Determine the sign of an integer
+	 *
+	 * @param   int  $value
+	 *
+	 * @return int
+	 */
+	private function sign(int $value): int
+	{
+		return $value <=> 0;
 	}
 }
