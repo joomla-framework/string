@@ -30,6 +30,10 @@ abstract class StringHelper
             '#-(\d+)$#',
             '-%d',
         ],
+        'underscore' => [
+            '#_(\d+)$#',
+            '_%d',
+        ],
         'default' => [
             ['#\((\d+)\)$#', '#\(\d+\)$#'],
             [' (%d)', '(%d)'],
