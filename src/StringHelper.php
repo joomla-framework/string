@@ -70,10 +70,10 @@ abstract class StringHelper
         }
 
         if (preg_match($rxSearch, $string, $matches)) {
-            $n = empty($n) ? ($matches[1] + 1) : $n;
+            $n      = empty($n) ? ($matches[1] + 1) : $n;
             $string = preg_replace($rxSearch, sprintf($rxReplace, $n), $string);
         } else {
-            $n = empty($n) ? 2 : $n;
+            $n       = empty($n) ? 2 : $n;
             $string .= sprintf($rxReplace, $n);
         }
 
