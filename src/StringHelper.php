@@ -65,7 +65,7 @@ abstract class StringHelper
                 $rxReplace = $styleSpec[1][0];
             }
         } else {
-            $rxSearch = $styleSpec[0];
+            $rxSearch  = $styleSpec[0];
             $rxReplace = $styleSpec[1];
         }
 
@@ -73,7 +73,7 @@ abstract class StringHelper
             $n      = empty($n) ? ($matches[1] + 1) : $n;
             $string = preg_replace($rxSearch, sprintf($rxReplace, $n), $string);
         } else {
-            $n       = empty($n) ? 2 : $n;
+            $n = empty($n) ? 2 : $n;
             $string .= sprintf($rxReplace, $n);
         }
 
