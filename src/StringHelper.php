@@ -55,32 +55,25 @@ abstract class StringHelper
     public static function increment($string, $style = 'default', $n = 0)
     {
         $styleSpec = static::$incrementStyles[$style] ?? static::$incrementStyles['default'];
-        error_log('This is the style: ' . $style);
 
         // Regular expression search and replace patterns.
         if (\is_array($styleSpec[0])) {
             $rxSearch  = $styleSpec[0][0];
-            error_log('This is the rxSearch: ' . $rxSearch);
             $rxReplace = $styleSpec[0][1];
-            error_log('This is the rxReplace: ' . $rxReplace);
         } else {
             $rxSearch = $rxReplace = $styleSpec[0];
-            error_log('This is the rxSearch and rxReplace: ' . $rxSearch);
         }
 
         // New and old (existing) sprintf formats.
         if (\is_array($styleSpec[1])) {
             $newFormat = $styleSpec[1][0];
-            error_log('This is the newFormat: ' . $newFormat);
             $oldFormat = $styleSpec[1][1];
-            error_log('This is the oldFormat: ' . $oldFormat);
         } else {
             $newFormat = $oldFormat = $styleSpec[1];
-            error_log('This is the newFormat and oldFormat: ' . $newFormat);
         }
 
         // Check if we are incrementing an existing pattern, or appending a new one.
-        if (preg_match('/^(.*?)-(\d+)(?:-(\d+))?$/',$string, $match)) {
+        if (preg_match('/^(.*?)-(\d+)(?:-(\d+))?$/', $string, $match)) {
             if (isset($match[3])) {
                 // For "august-2024-3" --> "august-2024-4".
                 $counter = (int)$match[3] + 1;
@@ -95,15 +88,12 @@ abstract class StringHelper
                 }
             }
         } elseif (preg_match($rxSearch, $string, $matches)) {
-            error_log('This is the matches[1]: ' . $matches[1]);
             $n      = empty($n) ? ((int)$matches[1] + 1) : $n;
-            error_log('This is the n: ' . $n);
             if ($style == 'dash') {
                 $string = preg_replace($rxReplace, '-' . $n, $string);
             } else {
                 $string = preg_replace($rxReplace, sprintf($oldFormat, $n), $string);
             }
-            error_log('This is the string: ' . $string);
         } else {
             if (preg_match('/-(\d+)$/', $string, $matches)) {
                 $n = empty($n) ? ((int)$matches[1] + 1) : $n;
@@ -115,11 +105,9 @@ abstract class StringHelper
                 } else {
                     $string .= sprintf($newFormat, $n);
                 }
-                error_log('This is the string: ' . $string);
             }
         }
-        
-        error_log('This is the string again: ' . $string);
+
         return $string;
     }
 
