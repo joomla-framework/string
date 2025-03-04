@@ -57,14 +57,7 @@ abstract class StringHelper
         $styleSpec = static::$incrementStyles[$style] ?? static::$incrementStyles['default'];
 
         // Regular expression search and replace patterns for both cases
-        if ($style === 'default') {
-            if (preg_match('#\((\d+)\)$#', $string, $matches)) {
-                $n = empty($n) ? ($matches[1] + 1) : $n;
-                $string = preg_replace('#\((\d+)\)$#', "($n)", $string);
-            } else {
-                $string .= ' (2)';
-            }
-        } else {
+        if ($style === 'dash') {
             $rxSearch = '#-(\d+)$#';  // Match the trailing number after a hyphen (e.g., "dog-2")
             $rxReplace = '-%d';        // Replace it with "-number"
 
@@ -74,6 +67,14 @@ abstract class StringHelper
             } else {
                 $n = empty($n) ? 2 : $n;
                 $string .= sprintf($rxReplace, $n);
+            }
+        } else {
+            if (preg_match('#\((\d+)\)$#', $string, $matches)) {
+                $n = empty($n) ? ($matches[1] + 1) : $n;
+                $string = preg_replace('#\((\d+)\)$#', "($n)", $string);
+            } else {
+                $n = empty($n) ? 2 : $n;
+                $string .= " ($n)";
             }
         }
 
