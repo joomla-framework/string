@@ -31,7 +31,7 @@ abstract class StringHelper
             '-%d',
         ],
         'default' => [
-            ['#\((\d+)\)$#', '#\(\d+\)$#'],
+            ['#\((\d+)\)$#', '#\((\d+\))$#'],
             [' (%d)', '(%d)'],
         ],
     ];
@@ -56,34 +56,25 @@ abstract class StringHelper
     {
         $styleSpec = static::$incrementStyles[$style] ?? static::$incrementStyles['default'];
 
-        // Handle cases where the string ends with a four-digit year (e.g., "august-2024")
-        if (preg_match('/-\d{4}$/', $string)) {
-            return $string . '-2';
-        }
-
-        // Regular expression search and replace patterns.
         if (\is_array($styleSpec[0])) {
-            $rxSearch  = $styleSpec[0][0];
-            $rxReplace = $styleSpec[0][1];
+            if (preg_match($styleSpec[0][1], $string)) {
+                $rxSearch  = $styleSpec[0][1];
+                $rxReplace = $styleSpec[1][1];
+            } else {
+                $rxSearch  = $styleSpec[0][0];
+                $rxReplace = $styleSpec[1][0];
+            }
         } else {
-            $rxSearch = $rxReplace = $styleSpec[0];
+            $rxSearch = $styleSpec[0];
+            $rxReplace = $styleSpec[1];
         }
 
-        // New and old (existing) sprintf formats.
-        if (\is_array($styleSpec[1])) {
-            $newFormat = $styleSpec[1][0];
-            $oldFormat = $styleSpec[1][1];
-        } else {
-            $newFormat = $oldFormat = $styleSpec[1];
-        }
-
-        // Check if we are incrementing an existing pattern, or appending a new one.
         if (preg_match($rxSearch, $string, $matches)) {
-            $n      = empty($n) ? ($matches[1] + 1) : $n;
-            $string = preg_replace($rxReplace, sprintf($oldFormat, $n), $string);
+            $n = empty($n) ? ($matches[1] + 1) : $n;
+            $string = preg_replace($rxSearch, sprintf($rxReplace, $n), $string);
         } else {
             $n = empty($n) ? 2 : $n;
-            $string .= sprintf($newFormat, $n);
+            $string .= sprintf($rxReplace, $n);
         }
 
         return $string;
