@@ -27,8 +27,8 @@ abstract class StringHelper
      */
     protected static $incrementStyles = [
         'dash' => [
-            '/-(\d+)$/',
-            '%s-%d'
+            '#-(\d+)$#',
+            '-%d',
         ],
         'default' => [
             ['#\((\d+)\)$#', '#\(\d+\)$#'],
@@ -56,6 +56,11 @@ abstract class StringHelper
     {
         $styleSpec = static::$incrementStyles[$style] ?? static::$incrementStyles['default'];
 
+        // Handle cases where the string ends with a four-digit year (e.g., "august-2024")
+        if (preg_match('/-\d{4}$/', $string)) {
+            return $string . '-2';
+        }
+
         // Regular expression search and replace patterns.
         if (\is_array($styleSpec[0])) {
             $rxSearch  = $styleSpec[0][0];
@@ -73,39 +78,12 @@ abstract class StringHelper
         }
 
         // Check if we are incrementing an existing pattern, or appending a new one.
-        if (preg_match('/^(.*?)-(\d+)(?:-(\d+))?$/', $string, $match)) {
-            if (isset($match[3])) {
-                // For "august-2024-3" --> "august-2024-4".
-                $counter = (int)$match[3] + 1;
-                $string = preg_replace('/^(.*?)-(\d+)-(\d+)$/', $match[1] . '-' . $match[2] . '-' . $counter, $string);
-            } else {
-                // Handle versioning without incrementing year.
-                if (preg_match('/^(.*?)-(\d{4})$/', $string, $match)) {
-                    $string .= '-2';
-                } elseif (preg_match('/^(.*?)-(\d+)$/', $string, $match)) {
-                    $counter = (int)$match[2] + 1;
-                    $string = preg_replace('/^(.*?)-(\d+)$/', $match[1] . '-' . $counter, $string);
-                }
-            }
-        } elseif (preg_match($rxSearch, $string, $matches)) {
-            $n      = empty($n) ? ((int)$matches[1] + 1) : $n;
-            if ($style == 'dash') {
-                $string = preg_replace($rxReplace, '-' . $n, $string);
-            } else {
-                $string = preg_replace($rxReplace, sprintf($oldFormat, $n), $string);
-            }
+        if (preg_match($rxSearch, $string, $matches)) {
+            $n      = empty($n) ? ($matches[1] + 1) : $n;
+            $string = preg_replace($rxReplace, sprintf($oldFormat, $n), $string);
         } else {
-            if (preg_match('/-(\d+)$/', $string, $matches)) {
-                $n = empty($n) ? ((int)$matches[1] + 1) : $n;
-                $string = preg_replace('/-(\d+)$/', '-' . $n, $string);
-            } else {
-                $n = empty($n) ? 2 : $n;
-                if ($style == 'dash') {
-                    $string = sprintf($newFormat, $string, $n);
-                } else {
-                    $string .= sprintf($newFormat, $n);
-                }
-            }
+            $n = empty($n) ? 2 : $n;
+            $string .= sprintf($newFormat, $n);
         }
 
         return $string;
