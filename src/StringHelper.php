@@ -543,6 +543,9 @@ abstract class StringHelper
             $str = mb_substr($str, $start, $length);
         } elseif (is_int($start) && !is_int($length)) {
             $str = mb_substr($str, $start);
+        } elseif (!is_int($start) && is_int($length)) {
+            trigger_error('\Joomla\String\StringHelper::strspn(): Passing null to parameter #3 ($start) of type int is deprecated', E_USER_DEPRECATED);
+            $str = mb_substr($str, 0, $length);
         }
 
         preg_match('/^[' . $mask . ']+/u', $str, $matches);

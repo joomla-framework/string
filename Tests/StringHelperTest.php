@@ -248,11 +248,11 @@ class StringHelperTest extends TestCase
     public function seedTestStrspn(): \Generator
     {
         yield ['A321 Main Street', '0123456789', 1, 2, 2];
-        yield ['321 Main Street', '0123456789', null, 2, 3];
+        yield ['321 Main Street', '0123456789', null, 2, 2];
         yield ['A321 Main Street', '0123456789', null, 10, 0];
         yield ['321 Main Street', '0123456789', null, null, 3];
         yield ['Main Street 321', '0123456789', null, -3, 0];
-        yield ['321 Main Street', '0123456789', null, -13, 3];
+        yield ['321 Main Street', '0123456789', null, -13, 2];
         yield ['321 Main Street', '0123456789', null, -12, 3];
         yield ['A321 Main Street', '0123456789', 0, null, 0];
         yield ['A321 Main Street', '0123456789', 1, 10, 3];
