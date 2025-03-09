@@ -110,7 +110,8 @@ abstract class StringHelper
      */
     public static function is_ascii($str)
     {
-        return utf8_is_ascii($str);
+        // Search for any bytes which are outside the ASCII range...
+        return (preg_match('/(?:[^\x00-\x7F])/', $str) !== 1);
     }
 
     /**
@@ -127,7 +128,7 @@ abstract class StringHelper
      */
     public static function ord($chr)
     {
-        return utf8_ord($chr);
+        return mb_ord($chr);
     }
 
     /**
@@ -147,10 +148,10 @@ abstract class StringHelper
     public static function strpos($str, $search, $offset = false)
     {
         if ($offset === false) {
-            return utf8_strpos($str, $search);
+            return mb_strpos($str, $search);
         }
 
-        return utf8_strpos($str, $search, $offset);
+        return mb_strpos($str, $search, $offset);
     }
 
     /**
@@ -169,7 +170,7 @@ abstract class StringHelper
      */
     public static function strrpos($str, $search, $offset = 0)
     {
-        return utf8_strrpos($str, $search, $offset);
+        return mb_strrpos($str, $search, $offset);
     }
 
     /**
@@ -189,10 +190,10 @@ abstract class StringHelper
     public static function substr($str, $offset, $length = false)
     {
         if ($length === false) {
-            return utf8_substr($str, $offset);
+            return mb_substr($str, $offset);
         }
 
-        return utf8_substr($str, $offset, $length);
+        return mb_substr($str, $offset, $length);
     }
 
     /**
@@ -212,7 +213,7 @@ abstract class StringHelper
      */
     public static function strtolower($str)
     {
-        return utf8_strtolower($str);
+        return mb_strtolower($str);
     }
 
     /**
@@ -232,7 +233,7 @@ abstract class StringHelper
      */
     public static function strtoupper($str)
     {
-        return utf8_strtoupper($str);
+        return mb_strtoupper($str);
     }
 
     /**
@@ -249,7 +250,7 @@ abstract class StringHelper
      */
     public static function strlen($str)
     {
-        return utf8_strlen($str);
+        return mb_strlen($str);
     }
 
     /**
@@ -269,11 +270,45 @@ abstract class StringHelper
      */
     public static function str_ireplace($search, $replace, $str, $count = null)
     {
-        if ($count === false) {
-            return utf8_ireplace($search, $replace, $str);
-        }
+        if (!is_array($search)) {
+            $slen = strlen($search);
+            if ($slen == 0) {
+                return $str;
+            }
 
-        return utf8_ireplace($search, $replace, $str, $count);
+            $lendif = strlen($replace) - strlen($search);
+            $search = mb_strtolower($search);
+
+            $search  = preg_quote($search, '/');
+            $lstr    = mb_strtolower($str);
+            $i       = 0;
+            $matched = 0;
+            while (preg_match('/(.*)' . $search . '/Us', $lstr, $matches)) {
+                if ($i === $count) {
+                    break;
+                }
+                $mlen = strlen($matches[0]);
+                $lstr = substr($lstr, $mlen);
+                $str  = substr_replace($str, $replace, $matched + strlen($matches[1]), $slen);
+                $matched += $mlen + $lendif;
+                $i++;
+            }
+            return $str;
+        } else {
+            foreach (array_keys($search) as $k) {
+                if (is_array($replace)) {
+                    if (array_key_exists($k, $replace)) {
+                        $str = self::str_ireplace($search[$k], $replace[$k], $str, $count);
+                    } else {
+                        $str = self::str_ireplace($search[$k], '', $str, $count);
+                    }
+                } else {
+                    $str = self::str_ireplace($search[$k], $replace, $str, $count);
+                }
+            }
+
+            return $str;
+        }
     }
 
     /**
@@ -294,7 +329,7 @@ abstract class StringHelper
      */
     public static function str_pad($input, $length, $padStr = ' ', $type = STR_PAD_RIGHT)
     {
-        return utf8_str_pad($input, $length, $padStr, $type);
+        return mb_str_pad($input, $length, $padStr, $type);
     }
 
     /**
@@ -312,7 +347,7 @@ abstract class StringHelper
      */
     public static function str_split($str, $splitLen = 1)
     {
-        return utf8_str_split($str, $splitLen);
+        return mb_str_split($str, $splitLen);
     }
 
     /**
@@ -324,7 +359,7 @@ abstract class StringHelper
      * @param   string          $str2    string 2 to compare
      * @param   string|boolean  $locale  The locale used by strcoll or false to use classical comparison
      *
-     * @return  integer   < 0 if str1 is less than str2; > 0 if str1 is greater than str2, and 0 if they are equal.
+     * @return  integer   returns < 0 if str1 is less than str2; > 0 if str1 is greater than str2, and 0 if they are equal.
      *
      * @link    https://www.php.net/strcasecmp
      * @link    https://www.php.net/strcoll
@@ -334,7 +369,9 @@ abstract class StringHelper
     public static function strcasecmp($str1, $str2, $locale = false)
     {
         if ($locale === false) {
-            return utf8_strcasecmp($str1, $str2);
+            $strX = mb_strtolower($str1);
+            $strY = mb_strtolower($str2);
+            return strcmp($strX, $strY);
         }
 
         // Get current locale
@@ -355,12 +392,12 @@ abstract class StringHelper
 
         // If we successfully set encoding it to utf-8 or encoding is sth weird don't recode
         if ($encoding == 'UTF-8' || $encoding == 'nonrecodable') {
-            return strcoll(utf8_strtolower($str1), utf8_strtolower($str2));
+            return strcoll(mb_strtolower($str1), mb_strtolower($str2));
         }
 
         return strcoll(
-            static::transcode(utf8_strtolower($str1), 'UTF-8', $encoding),
-            static::transcode(utf8_strtolower($str2), 'UTF-8', $encoding)
+            static::transcode(mb_strtolower($str1), 'UTF-8', $encoding),
+            static::transcode(mb_strtolower($str2), 'UTF-8', $encoding)
         );
     }
 
@@ -373,7 +410,7 @@ abstract class StringHelper
      * @param   string  $str2    string 2 to compare
      * @param   mixed   $locale  The locale used by strcoll or false to use classical comparison
      *
-     * @return  integer  < 0 if str1 is less than str2; > 0 if str1 is greater than str2, and 0 if they are equal.
+     * @return  integer  returns < 0 if str1 is less than str2; > 0 if str1 is greater than str2, and 0 if they are equal.
      *
      * @link    https://www.php.net/strcmp
      * @link    https://www.php.net/strcoll
@@ -427,15 +464,23 @@ abstract class StringHelper
      */
     public static function strcspn($str, $mask, $start = null, $length = null)
     {
-        if ($start === false && $length === false) {
-            return utf8_strcspn($str, $mask);
+        if (empty($mask) || strlen($mask) == 0) {
+            return 0;
         }
 
-        if ($length === false) {
-            return utf8_strcspn($str, $mask, $start);
+        $mask = preg_replace('!([\\\\\\-\\]\\[/^])!', '\\\${1}', $mask);
+
+        if ($start != null || $length != null) {
+            $str = mb_substr($str, $start, $length);
         }
 
-        return utf8_strcspn($str, $mask, $start, $length);
+        preg_match('/^[^' . $mask . ']+/u', $str, $matches);
+
+        if (isset($matches[0])) {
+            return mb_strlen($matches[0]);
+        }
+
+        return 0;
     }
 
     /**
@@ -454,7 +499,7 @@ abstract class StringHelper
      */
     public static function stristr($str, $search)
     {
-        return utf8_stristr($str, $search);
+        return mb_stristr($str, $search);
     }
 
     /**
@@ -471,7 +516,8 @@ abstract class StringHelper
      */
     public static function strrev($str)
     {
-        return utf8_strrev($str);
+        preg_match_all('/./us', $str, $ar);
+        return join('', array_reverse($ar[0]));
     }
 
     /**
@@ -479,10 +525,10 @@ abstract class StringHelper
      *
      * Find length of initial segment matching mask.
      *
-     * @param   string        $str     The haystack
-     * @param   string        $mask    The mask
-     * @param   integer|null  $start   Start optional
-     * @param   integer|null  $length  Length optional
+     * @param   string    $str     The haystack
+     * @param   string    $mask    The mask
+     * @param   ?integer  $start   Start optional
+     * @param   ?integer  $length  Length optional
      *
      * @return  integer
      *
@@ -491,15 +537,21 @@ abstract class StringHelper
      */
     public static function strspn($str, $mask, $start = null, $length = null)
     {
-        if ($start === null && $length === null) {
-            return utf8_strspn($str, $mask);
+        $mask = preg_replace('!([\\\\\\-\\]\\[/^])!', '\\\${1}', $mask);
+
+        if (is_int($start) && is_int($length)) {
+            $str = mb_substr($str, $start, $length);
+        } elseif (is_int($start) && !is_int($length)) {
+            $str = mb_substr($str, $start);
         }
 
-        if ($length === null) {
-            return utf8_strspn($str, $mask, $start);
+        preg_match('/^[' . $mask . ']+/u', $str, $matches);
+
+        if (isset($matches[0])) {
+            return mb_strlen($matches[0]);
         }
 
-        return utf8_strspn($str, $mask, $start, $length);
+        return 0;
     }
 
     /**
@@ -519,12 +571,13 @@ abstract class StringHelper
      */
     public static function substr_replace($str, $repl, $start, $length = null)
     {
-        // Loaded by library loader
-        if ($length === false) {
-            return utf8_substr_replace($str, $repl, $start);
+        preg_match_all('/./us', $str, $ar);
+        preg_match_all('/./us', $repl, $rar);
+        if ($length === null || $length === false) {
+            $length = mb_strlen($str);
         }
-
-        return utf8_substr_replace($str, $repl, $start, $length);
+        array_splice($ar[0], $start, $length, $rar[0]);
+        return join('', $ar[0]);
     }
 
     /**
@@ -548,10 +601,10 @@ abstract class StringHelper
         }
 
         if ($charlist === false) {
-            return utf8_ltrim($str);
+            return mb_ltrim($str);
         }
 
-        return utf8_ltrim($str, $charlist);
+        return mb_ltrim($str, $charlist);
     }
 
     /**
@@ -575,10 +628,10 @@ abstract class StringHelper
         }
 
         if ($charlist === false) {
-            return utf8_rtrim($str);
+            return mb_rtrim($str);
         }
 
-        return utf8_rtrim($str, $charlist);
+        return mb_rtrim($str, $charlist);
     }
 
     /**
@@ -602,10 +655,10 @@ abstract class StringHelper
         }
 
         if ($charlist === false) {
-            return utf8_trim($str);
+            return mb_trim($str);
         }
 
-        return utf8_trim($str, $charlist);
+        return mb_trim($str, $charlist);
     }
 
     /**
@@ -627,14 +680,14 @@ abstract class StringHelper
     public static function ucfirst($str, $delimiter = null, $newDelimiter = null)
     {
         if ($delimiter === null) {
-            return utf8_ucfirst($str);
+            return mb_ucfirst($str);
         }
 
         if ($newDelimiter === null) {
             $newDelimiter = $delimiter;
         }
 
-        return implode($newDelimiter, array_map('utf8_ucfirst', explode($delimiter, $str)));
+        return implode($newDelimiter, array_map('mb_ucfirst', explode($delimiter, $str)));
     }
 
     /**
@@ -651,7 +704,17 @@ abstract class StringHelper
      */
     public static function ucwords($str)
     {
-        return utf8_ucwords($str);
+        // Note: [\x0c\x09\x0b\x0a\x0d\x20] matches;
+        // form feeds, horizontal tabs, vertical tabs, linefeeds and carriage returns
+        // This corresponds to the definition of a "word" defined at http://www.php.net/ucwords
+        $pattern = '/(^|([\x0c\x09\x0b\x0a\x0d\x20]+))([^\x0c\x09\x0b\x0a\x0d\x20]{1})[^\x0c\x09\x0b\x0a\x0d\x20]*/u';
+
+        return preg_replace_callback($pattern, function ($matches) {
+            $leadingws = $matches[2];
+            $ucfirst   = mb_strtoupper($matches[3]);
+            $ucword    = StringHelper::substr_replace(ltrim($matches[0]), $ucfirst, 0, 1);
+            return $leadingws . $ucword;
+        }, $str);
     }
 
     /**
@@ -695,7 +758,119 @@ abstract class StringHelper
      */
     public static function valid($str)
     {
-        return utf8_is_valid($str);
+        $mState = 0;     // cached expected number of octets after the current octet
+        // until the beginning of the next UTF8 character sequence
+        $mUcs4  = 0;     // cached Unicode character
+        $mBytes = 1;     // cached expected number of octets in the current sequence
+
+        $len = strlen($str);
+
+        for ($i = 0; $i < $len; $i++) {
+            /*
+             * Joomla modification - As of PHP 7.4, curly brace access has been deprecated. As a result the line below has
+             * been modified to use square brace syntax
+             * See https://github.com/php/php-src/commit/d574df63dc375f5fc9202ce5afde23f866b6450a
+             * for additional references
+             */
+            $in = ord($str[$i]);
+
+            if ($mState == 0) {
+                // When mState is zero we expect either a US-ASCII character or a
+                // multi-octet sequence.
+                if (0 == (0x80 & ($in))) {
+                    // US-ASCII, pass straight through.
+                    $mBytes = 1;
+                } elseif (0xC0 == (0xE0 & ($in))) {
+                    // First octet of 2 octet sequence
+                    $mUcs4  = ($in);
+                    $mUcs4  = ($mUcs4 & 0x1F) << 6;
+                    $mState = 1;
+                    $mBytes = 2;
+                } elseif (0xE0 == (0xF0 & ($in))) {
+                    // First octet of 3 octet sequence
+                    $mUcs4  = ($in);
+                    $mUcs4  = ($mUcs4 & 0x0F) << 12;
+                    $mState = 2;
+                    $mBytes = 3;
+                } elseif (0xF0 == (0xF8 & ($in))) {
+                    // First octet of 4 octet sequence
+                    $mUcs4  = ($in);
+                    $mUcs4  = ($mUcs4 & 0x07) << 18;
+                    $mState = 3;
+                    $mBytes = 4;
+                } elseif (0xF8 == (0xFC & ($in))) {
+                    /* First octet of 5 octet sequence.
+                    *
+                    * This is illegal because the encoded codepoint must be either
+                    * (a) not the shortest form or
+                    * (b) outside the Unicode range of 0-0x10FFFF.
+                    * Rather than trying to resynchronize, we will carry on until the end
+                    * of the sequence and let the later error handling code catch it.
+                    */
+                    $mUcs4  = ($in);
+                    $mUcs4  = ($mUcs4 & 0x03) << 24;
+                    $mState = 4;
+                    $mBytes = 5;
+                } elseif (0xFC == (0xFE & ($in))) {
+                    // First octet of 6 octet sequence, see comments for 5 octet sequence.
+                    $mUcs4  = ($in);
+                    $mUcs4  = ($mUcs4 & 1) << 30;
+                    $mState = 5;
+                    $mBytes = 6;
+                } else {
+                    /* Current octet is neither in the US-ASCII range nor a legal first
+                     * octet of a multi-octet sequence.
+                     */
+                    return false;
+                }
+            } else {
+                // When mState is non-zero, we expect a continuation of the multi-octet
+                // sequence
+                if (0x80 == (0xC0 & ($in))) {
+                    // Legal continuation.
+                    $shift = ($mState - 1) * 6;
+                    $tmp   = $in;
+                    $tmp   = ($tmp & 0x0000003F) << $shift;
+                    $mUcs4 |= $tmp;
+
+                    /**
+                     * End of the multi-octet sequence. mUcs4 now contains the final
+                     * Unicode codepoint to be output
+                     */
+                    if (0 == --$mState) {
+                        /*
+                        * Check for illegal sequences and codepoints.
+                        */
+                        // From Unicode 3.1, non-shortest form is illegal
+                        if (
+                            ((2 == $mBytes) && ($mUcs4 < 0x0080)) ||
+                            ((3 == $mBytes) && ($mUcs4 < 0x0800)) ||
+                            ((4 == $mBytes) && ($mUcs4 < 0x10000)) ||
+                            (4 < $mBytes) ||
+                            // From Unicode 3.2, surrogate characters are illegal
+                            (($mUcs4 & 0xFFFFF800) == 0xD800) ||
+                            // Codepoints outside the Unicode range are illegal
+                            ($mUcs4 > 0x10FFFF)
+                        ) {
+                            return false;
+                        }
+
+                        //initialize UTF8 cache
+                        $mState = 0;
+                        $mUcs4  = 0;
+                        $mBytes = 1;
+                    }
+                } else {
+                    /**
+                     *((0xC0 & (*in) != 0x80) && (mState != 0))
+                     * Incomplete multi-octet sequence.
+                     */
+
+                    return false;
+                }
+            }
+        }
+        return true;
     }
 
     /**
@@ -716,7 +891,14 @@ abstract class StringHelper
      */
     public static function compliant($str)
     {
-        return utf8_compliant($str);
+        if (strlen($str) == 0) {
+            return true;
+        }
+        // If even just the first character can be matched, when the /u
+        // modifier is used, then it's valid UTF-8. If the UTF-8 is somehow
+        // invalid, nothing at all will match, even if the string contains
+        // some valid sequences
+        return (preg_match('/^.{1}/us', $str, $ar) == 1);
     }
 
     /**
