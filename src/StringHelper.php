@@ -324,7 +324,7 @@ abstract class StringHelper
      * @param   string          $str2    string 2 to compare
      * @param   string|boolean  $locale  The locale used by strcoll or false to use classical comparison
      *
-     * @return  integer   < 0 if str1 is less than str2; > 0 if str1 is greater than str2, and 0 if they are equal.
+     * @return  integer   Either < 0 if str1 is less than str2; > 0 if str1 is greater than str2, and 0 if they are equal.
      *
      * @link    https://www.php.net/strcasecmp
      * @link    https://www.php.net/strcoll
@@ -373,7 +373,7 @@ abstract class StringHelper
      * @param   string  $str2    string 2 to compare
      * @param   mixed   $locale  The locale used by strcoll or false to use classical comparison
      *
-     * @return  integer  < 0 if str1 is less than str2; > 0 if str1 is greater than str2, and 0 if they are equal.
+     * @return  integer  Either < 0 if str1 is less than str2; > 0 if str1 is greater than str2, and 0 if they are equal.
      *
      * @link    https://www.php.net/strcmp
      * @link    https://www.php.net/strcoll
