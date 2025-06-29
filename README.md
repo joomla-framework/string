@@ -1,4 +1,4 @@
-# The String Package [![Build Status](https://ci.joomla.org/api/badges/joomla-framework/string/status.svg?ref=refs/heads/3.x-dev)](https://ci.joomla.org/joomla-framework/string)
+# The String Package [![Build Status](https://github.com/joomla-framework/string/actions/workflows/ci.yml/badge.svg?branch=3.x-dev)](https://github.com/joomla-framework/string)
 
 [![Latest Stable Version](https://poser.pugx.org/joomla/string/v/stable)](https://packagist.org/packages/joomla/string)
 [![Total Downloads](https://poser.pugx.org/joomla/string/downloads)](https://packagist.org/packages/joomla/string)
