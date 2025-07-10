@@ -8,6 +8,7 @@
 namespace Joomla\String\Tests;
 
 use Joomla\String\Normalise;
+use PHPUnit\Framework\Attributes\DataProvider;
 use PHPUnit\Framework\TestCase;
 
 /**
@@ -20,147 +21,163 @@ class NormaliseTest extends TestCase
     /**
      * Method to seed data to testFromCamelCase.
      *
-     * @return  \Generator
+     * @return  array
      *
      * @since   1.0
      */
-    public function seedTestFromCamelCase(): \Generator
+    public static function seedTestFromCamelCaseProvider(): array
     {
-        // Note: string, expected
-        yield ['FooBarABCDef', ['Foo', 'Bar', 'ABC', 'Def']];
-        yield ['JFooBar', ['J', 'Foo', 'Bar']];
-        yield ['J001FooBar002', ['J001', 'Foo', 'Bar002']];
-        yield ['abcDef', ['abc', 'Def']];
-        yield ['abc_defGhi_Jkl', ['abc_def', 'Ghi_Jkl']];
-        yield ['ThisIsA_NASAAstronaut', ['This', 'Is', 'A_NASA', 'Astronaut']];
-        yield ['JohnFitzgerald_Kennedy', ['John', 'Fitzgerald_Kennedy']];
+        return [
+            // Note: string, expected
+            ['FooBarABCDef', ['Foo', 'Bar', 'ABC', 'Def']],
+            ['JFooBar', ['J', 'Foo', 'Bar']],
+            ['J001FooBar002', ['J001', 'Foo', 'Bar002']],
+            ['abcDef', ['abc', 'Def']],
+            ['abc_defGhi_Jkl', ['abc_def', 'Ghi_Jkl']],
+            ['ThisIsA_NASAAstronaut', ['This', 'Is', 'A_NASA', 'Astronaut']],
+            ['JohnFitzgerald_Kennedy', ['John', 'Fitzgerald_Kennedy']],
+        ];
     }
 
     /**
      * Method to seed data to testFromCamelCase.
      *
-     * @return  \Generator
+     * @return  array
      *
      * @since   1.0
      */
-    public function seedTestFromCamelCase_nongrouped(): \Generator
+    public static function seedTestFromCamelCaseNongroupedProvider(): array
     {
-        yield ['Foo Bar', 'FooBar'];
-        yield ['foo Bar', 'fooBar'];
-        yield ['Foobar', 'Foobar'];
-        yield ['foobar', 'foobar'];
+        return [
+            ['Foo Bar', 'FooBar'],
+            ['foo Bar', 'fooBar'],
+            ['Foobar', 'Foobar'],
+            ['foobar', 'foobar'],
+        ];
     }
 
     /**
      * Method to seed data to testToCamelCase.
      *
-     * @return  \Generator
+     * @return  array
      *
      * @since   1.0
      */
-    public function seedTestToCamelCase(): \Generator
+    public static function seedTestToCamelCaseProvider(): array
     {
-        yield ['FooBar', 'Foo Bar'];
-        yield ['FooBar', 'Foo-Bar'];
-        yield ['FooBar', 'Foo_Bar'];
-        yield ['FooBar', 'foo bar'];
-        yield ['FooBar', 'foo-bar'];
-        yield ['FooBar', 'foo_bar'];
+        return [
+            ['FooBar', 'Foo Bar'],
+            ['FooBar', 'Foo-Bar'],
+            ['FooBar', 'Foo_Bar'],
+            ['FooBar', 'foo bar'],
+            ['FooBar', 'foo-bar'],
+            ['FooBar', 'foo_bar'],
+        ];
     }
 
     /**
      * Method to seed data to testToDashSeparated.
      *
-     * @return  \Generator
+     * @return  array
      *
      * @since   1.0
      */
-    public function seedTestToDashSeparated(): \Generator
+    public static function seedTestToDashSeparatedProvider(): array
     {
-        yield ['Foo-Bar', 'Foo Bar'];
-        yield ['Foo-Bar', 'Foo-Bar'];
-        yield ['Foo-Bar', 'Foo_Bar'];
-        yield ['foo-bar', 'foo bar'];
-        yield ['foo-bar', 'foo-bar'];
-        yield ['foo-bar', 'foo_bar'];
-        yield ['foo-bar', 'foo   bar'];
-        yield ['foo-bar', 'foo---bar'];
-        yield ['foo-bar', 'foo___bar'];
+        return [
+            ['Foo-Bar', 'Foo Bar'],
+            ['Foo-Bar', 'Foo-Bar'],
+            ['Foo-Bar', 'Foo_Bar'],
+            ['foo-bar', 'foo bar'],
+            ['foo-bar', 'foo-bar'],
+            ['foo-bar', 'foo_bar'],
+            ['foo-bar', 'foo   bar'],
+            ['foo-bar', 'foo---bar'],
+            ['foo-bar', 'foo___bar'],
+        ];
     }
 
     /**
      * Method to seed data to testToSpaceSeparated.
      *
-     * @return  \Generator
+     * @return  array
      *
      * @since   1.0
      */
-    public function seedTestToSpaceSeparated(): \Generator
+    public static function seedTestToSpaceSeparatedProvider(): array
     {
-        yield ['Foo Bar', 'Foo Bar'];
-        yield ['Foo Bar', 'Foo-Bar'];
-        yield ['Foo Bar', 'Foo_Bar'];
-        yield ['foo bar', 'foo bar'];
-        yield ['foo bar', 'foo-bar'];
-        yield ['foo bar', 'foo_bar'];
-        yield ['foo bar', 'foo   bar'];
-        yield ['foo bar', 'foo---bar'];
-        yield ['foo bar', 'foo___bar'];
+        return [
+            ['Foo Bar', 'Foo Bar'],
+            ['Foo Bar', 'Foo-Bar'],
+            ['Foo Bar', 'Foo_Bar'],
+            ['foo bar', 'foo bar'],
+            ['foo bar', 'foo-bar'],
+            ['foo bar', 'foo_bar'],
+            ['foo bar', 'foo   bar'],
+            ['foo bar', 'foo---bar'],
+            ['foo bar', 'foo___bar'],
+        ];
     }
 
     /**
      * Method to seed data to testToUnderscoreSeparated.
      *
-     * @return  \Generator
+     * @return  array
      *
      * @since   1.0
      */
-    public function seedTestToUnderscoreSeparated(): \Generator
+    public static function seedTestToUnderscoreSeparatedProvider(): array
     {
-        yield ['Foo_Bar', 'Foo Bar'];
-        yield ['Foo_Bar', 'Foo-Bar'];
-        yield ['Foo_Bar', 'Foo_Bar'];
-        yield ['foo_bar', 'foo bar'];
-        yield ['foo_bar', 'foo-bar'];
-        yield ['foo_bar', 'foo_bar'];
-        yield ['foo_bar', 'foo   bar'];
-        yield ['foo_bar', 'foo---bar'];
-        yield ['foo_bar', 'foo___bar'];
+        return [
+            ['Foo_Bar', 'Foo Bar'],
+            ['Foo_Bar', 'Foo-Bar'],
+            ['Foo_Bar', 'Foo_Bar'],
+            ['foo_bar', 'foo bar'],
+            ['foo_bar', 'foo-bar'],
+            ['foo_bar', 'foo_bar'],
+            ['foo_bar', 'foo   bar'],
+            ['foo_bar', 'foo---bar'],
+            ['foo_bar', 'foo___bar'],
+        ];
     }
 
     /**
      * Method to seed data to testToVariable.
      *
-     * @return  \Generator
+     * @return  array
      *
      * @since   1.0
      */
-    public function seedTestToVariable(): \Generator
+    public static function seedTestToVariableProvider(): array
     {
-        yield ['myFooBar', 'My Foo Bar'];
-        yield ['myFooBar', 'My Foo-Bar'];
-        yield ['myFooBar', 'My Foo_Bar'];
-        yield ['myFooBar', 'my foo bar'];
-        yield ['myFooBar', 'my foo-bar'];
-        yield ['myFooBar', 'my foo_bar'];
-        yield ['abc3def4', '1abc3def4'];
+        return [
+            ['myFooBar', 'My Foo Bar'],
+            ['myFooBar', 'My Foo-Bar'],
+            ['myFooBar', 'My Foo_Bar'],
+            ['myFooBar', 'my foo bar'],
+            ['myFooBar', 'my foo-bar'],
+            ['myFooBar', 'my foo_bar'],
+            ['abc3def4', '1abc3def4'],
+        ];
     }
 
     /**
      * Method to seed data to testToKey.
      *
-     * @return  \Generator
+     * @return  array
      *
      * @since   1.0
      */
-    public function seedTestToKey(): \Generator
+    public static function seedTestToKeyProvider(): array
     {
-        yield ['foo_bar', 'Foo Bar'];
-        yield ['foo_bar', 'Foo-Bar'];
-        yield ['foo_bar', 'Foo_Bar'];
-        yield ['foo_bar', 'foo bar'];
-        yield ['foo_bar', 'foo-bar'];
-        yield ['foo_bar', 'foo_bar'];
+        return [
+            ['foo_bar', 'Foo Bar'],
+            ['foo_bar', 'Foo-Bar'],
+            ['foo_bar', 'Foo_Bar'],
+            ['foo_bar', 'foo bar'],
+            ['foo_bar', 'foo-bar'],
+            ['foo_bar', 'foo_bar'],
+        ];
     }
 
     /**
@@ -168,9 +185,8 @@ class NormaliseTest extends TestCase
      *
      * @param   string  $expected  The expected value from the method.
      * @param   string  $input     The input value for the method.
-     *
-     * @dataProvider  seedTestFromCamelCase_nongrouped
      */
+    #[DataProvider('seedTestFromCamelCaseNongroupedProvider')]
     public function testFromCamelCase_nongrouped(string $expected, string $input)
     {
         $this->assertEquals($expected, Normalise::fromCamelcase($input));
@@ -181,9 +197,8 @@ class NormaliseTest extends TestCase
      *
      * @param   string        $input     The input value for the method.
      * @param   array|string  $expected  The expected value from the method.
-     *
-     * @dataProvider  seedTestFromCamelCase
      */
+    #[DataProvider('seedTestFromCamelCaseProvider')]
     public function testFromCamelCase_grouped(string $input, $expected)
     {
         $this->assertEquals($expected, Normalise::fromCamelcase($input, true));
@@ -194,9 +209,8 @@ class NormaliseTest extends TestCase
      *
      * @param   string  $expected  The expected value from the method.
      * @param   string  $input     The input value for the method.
-     *
-     * @dataProvider  seedTestToCamelCase
      */
+    #[DataProvider('seedTestToCamelCaseProvider')]
     public function testToCamelCase(string $expected, string $input)
     {
         $this->assertEquals($expected, Normalise::toCamelcase($input));
@@ -207,9 +221,8 @@ class NormaliseTest extends TestCase
      *
      * @param   string  $expected  The expected value from the method.
      * @param   string  $input     The input value for the method.
-     *
-     * @dataProvider  seedTestToDashSeparated
      */
+    #[DataProvider('seedTestToDashSeparatedProvider')]
     public function testToDashSeparated(string $expected, string $input)
     {
         $this->assertEquals($expected, Normalise::toDashSeparated($input));
@@ -220,9 +233,8 @@ class NormaliseTest extends TestCase
      *
      * @param   string  $expected  The expected value from the method.
      * @param   string  $input     The input value for the method.
-     *
-     * @dataProvider  seedTestToSpaceSeparated
      */
+    #[DataProvider('seedTestToSpaceSeparatedProvider')]
     public function testToSpaceSeparated(string $expected, string $input)
     {
         $this->assertEquals($expected, Normalise::toSpaceSeparated($input));
@@ -233,9 +245,8 @@ class NormaliseTest extends TestCase
      *
      * @param   string  $expected  The expected value from the method.
      * @param   string  $input     The input value for the method.
-     *
-     * @dataProvider  seedTestToUnderscoreSeparated
      */
+    #[DataProvider('seedTestToUnderscoreSeparatedProvider')]
     public function testToUnderscoreSeparated(string $expected, string $input)
     {
         $this->assertEquals($expected, Normalise::toUnderscoreSeparated($input));
@@ -246,9 +257,8 @@ class NormaliseTest extends TestCase
      *
      * @param   string  $expected  The expected value from the method.
      * @param   string  $input     The input value for the method.
-     *
-     * @dataProvider  seedTestToVariable
      */
+    #[DataProvider('seedTestToVariableProvider')]
     public function testToVariable(string $expected, string $input)
     {
         $this->assertEquals($expected, Normalise::toVariable($input));
@@ -259,9 +269,8 @@ class NormaliseTest extends TestCase
      *
      * @param   string  $expected  The expected value from the method.
      * @param   string  $input     The input value for the method.
-     *
-     * @dataProvider  seedTestToKey
      */
+    #[DataProvider('seedTestToKeyProvider')]
     public function testToKey(string $expected, string $input)
     {
         $this->assertEquals($expected, Normalise::toKey($input));

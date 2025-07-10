@@ -8,6 +8,7 @@
 namespace Joomla\String\Tests;
 
 use Joomla\String\StringHelper;
+use PHPUnit\Framework\Attributes\DataProvider;
 use PHPUnit\Framework\TestCase;
 
 /**
@@ -18,406 +19,459 @@ class StringHelperTest extends TestCase
     /**
      * Data provider for testIncrement
      *
-     * @return  \Generator
+     * @return  array
      */
-    public function seedTestIncrement(): \Generator
+    public static function seedTestIncrementProvider(): array
     {
-        // Note: string, style, number, expected
-        yield 'First default increment' => ['title', null, 0, 'title (2)'];
-        yield 'Second default increment' => ['title(2)', null, 0, 'title(3)'];
-        yield 'First dash increment' => ['title', 'dash', 0, 'title-2'];
-        yield 'Second dash increment' => ['title-2', 'dash', 0, 'title-3'];
-        yield 'Set default increment' => ['title', null, 4, 'title (4)'];
-        yield 'Unknown style fallback to default' => ['title', 'foo', 0, 'title (2)'];
+        return [
+            // Note: string, style, number, expected
+            'First default increment' => ['title', null, 0, 'title (2)'],
+            'Second default increment' => ['title(2)', null, 0, 'title(3)'],
+            'First dash increment' => ['title', 'dash', 0, 'title-2'],
+            'Second dash increment' => ['title-2', 'dash', 0, 'title-3'],
+            'Set default increment' => ['title', null, 4, 'title (4)'],
+            'Unknown style fallback to default' => ['title', 'foo', 0, 'title (2)'],
+        ];
     }
 
     /**
      * Data provider for testIs_ascii
      *
-     * @return  \Generator
+     * @return  array
      */
-    public function seedTestIs_ascii(): \Generator
+    public static function seedTestIsAsciiProvider(): array
     {
-        yield ['ascii', true];
-        yield ['1024', true];
-        yield ['#$#@$%', true];
-        yield ['áÑ', false];
-        yield ['ÿ©', false];
-        yield ['¡¾', false];
-        yield ['÷™', false];
+        return [
+            ['ascii', true],
+            ['1024', true],
+            ['#$#@$%', true],
+            ['áÑ', false],
+            ['ÿ©', false],
+            ['¡¾', false],
+            ['÷™', false],
+        ];
     }
 
     /**
      * Data provider for testStrpos
      *
-     * @return  \Generator
+     * @return  array
      */
-    public function seedTestStrpos(): \Generator
+    public static function seedTestStrposProvider(): array
     {
-        yield [3, 'missing', 'sing', 0];
-        yield [false, 'missing', 'sting', 0];
-        yield [4, 'missing', 'ing', 0];
-        yield [10, ' объектов на карте с', 'на карте', 0];
-        yield [0, 'на карте с', 'на карте', 0, 0];
-        yield [false, 'на карте с', 'на каррте', 0];
-        yield [false, 'на карте с', 'на карте', 2];
-        yield [3, 'missing', 'sing', false];
+        return [
+            [3, 'missing', 'sing', 0],
+            [false, 'missing', 'sting', 0],
+            [4, 'missing', 'ing', 0],
+            [10, ' объектов на карте с', 'на карте', 0],
+            [0, 'на карте с', 'на карте', 0],
+            [false, 'на карте с', 'на каррте', 0],
+            [false, 'на карте с', 'на карте', 2],
+            [3, 'missing', 'sing', false],
+        ];
     }
 
     /**
      * Data provider for testStrrpos
      *
-     * @return  \Generator
+     * @return  array
      *
      * @since   1.0
      */
-    public function seedTestStrrpos(): \Generator
+    public static function seedTestStrrposProvider(): array
     {
-        yield [3, 'missing', 'sing', 0];
-        yield [false, 'missing', 'sting', 0];
-        yield [4, 'missing', 'ing', 0];
-        yield [10, ' объектов на карте с', 'на карте', 0];
-        yield [0, 'на карте с', 'на карте', 0];
-        yield [false, 'на карте с', 'на каррте', 0];
-        yield [3, 'на карте с', 'карт', 2];
+        return [
+            [3, 'missing', 'sing', 0],
+            [false, 'missing', 'sting', 0],
+            [4, 'missing', 'ing', 0],
+            [10, ' объектов на карте с', 'на карте', 0],
+            [0, 'на карте с', 'на карте', 0],
+            [false, 'на карте с', 'на каррте', 0],
+            [3, 'на карте с', 'карт', 2],
+        ];
     }
 
     /**
      * Data provider for testSubstr
      *
-     * @return  \Generator
+     * @return  array
      */
-    public function seedTestSubstr(): \Generator
+    public static function seedTestSubstrProvider(): array
     {
-        yield ['issauga', 'Mississauga', 4, false];
-        yield ['на карте с', ' объектов на карте с', 10, false];
-        yield ['на ка', ' объектов на карте с', 10, 5];
-        yield ['те с', ' объектов на карте с', -4, false];
-        yield [false, ' объектов на карте с', 99, false];
+        return [
+            ['issauga', 'Mississauga', 4, false],
+            ['на карте с', ' объектов на карте с', 10, false],
+            ['на ка', ' объектов на карте с', 10, 5],
+            ['те с', ' объектов на карте с', -4, false],
+            [false, ' объектов на карте с', 99, false],
+        ];
     }
 
     /**
      * Data provider for testStrtolower
      *
-     * @return  \Generator
+     * @return  array
      */
-    public function seedTestStrtolower(): \Generator
+    public static function seedTestStrtolowerProvider(): array
     {
-        yield ['Joomla! Rocks', 'joomla! rocks'];
+        return [
+            ['Joomla! Rocks', 'joomla! rocks'],
+        ];
     }
 
     /**
      * Data provider for testStrtoupper
      *
-     * @return  \Generator
+     * @return  array
      */
-    public function seedTestStrtoupper(): \Generator
+    public static function seedTestStrtoupperProvider(): array
     {
-        yield ['Joomla! Rocks', 'JOOMLA! ROCKS'];
+        return [
+            ['Joomla! Rocks', 'JOOMLA! ROCKS'],
+        ];
     }
 
     /**
      * Data provider for testStrlen
      *
-     * @return  \Generator
+     * @return  array
      */
-    public function seedTestStrlen(): \Generator
+    public static function seedTestStrlenProvider(): array
     {
-        yield ['Joomla! Rocks', 13];
+        return [
+            ['Joomla! Rocks', 13],
+        ];
     }
 
     /**
      * Data provider for testStr_ireplace
      *
-     * @return  \Generator
+     * @return  array
      */
-    public function seedTestStr_ireplace(): \Generator
+    public static function seedTestStrIreplaceProvider(): array
     {
-        yield ['Pig', 'cow', 'the pig jumped', false, 'the cow jumped'];
-        yield ['Pig', 'cow', 'the pig jumped', true, 'the cow jumped'];
-        yield ['Pig', 'cow', 'the pig jumped over the cow', true, 'the cow jumped over the cow'];
-        yield [['PIG', 'JUMPED'], ['cow', 'hopped'], 'the pig jumped over the pig', true, 'the cow hopped over the cow'];
-        yield ['шил', 'биш', 'Би шил идэй чадна', true, 'Би биш идэй чадна'];
-        yield ['/', ':', '/test/slashes/', true, ':test:slashes:'];
+        return [
+            ['Pig', 'cow', 'the pig jumped', false, 'the cow jumped'],
+            ['Pig', 'cow', 'the pig jumped', true, 'the cow jumped'],
+            ['Pig', 'cow', 'the pig jumped over the cow', true, 'the cow jumped over the cow'],
+            [['PIG', 'JUMPED'], ['cow', 'hopped'], 'the pig jumped over the pig', true, 'the cow hopped over the cow'],
+            ['шил', 'биш', 'Би шил идэй чадна', true, 'Би биш идэй чадна'],
+            ['/', ':', '/test/slashes/', true, ':test:slashes:'],
+        ];
     }
 
     /**
      * Data provider for testStr_split
      *
-     * @return  \Generator
+     * @return  array
      */
-    public function seedTestStr_split(): \Generator
+    public static function seedTestStrSplitProvider(): array
     {
-        yield ['string', 1, ['s', 't', 'r', 'i', 'n', 'g']];
-        yield ['string', 2, ['st', 'ri', 'ng']];
-        yield ['волн', 3, ['вол', 'н']];
-        yield ['волн', 1, ['в', 'о', 'л', 'н']];
+        return [
+            ['string', 1, ['s', 't', 'r', 'i', 'n', 'g']],
+            ['string', 2, ['st', 'ri', 'ng']],
+            ['волн', 3, ['вол', 'н']],
+            ['волн', 1, ['в', 'о', 'л', 'н']],
+        ];
     }
 
     /**
      * Data provider for testStrcasecmp
      *
-     * @return  \Generator
+     * @return  array
      */
-    public function seedTestStrcasecmp(): \Generator
+    public static function seedTestStrcasecmpProvider(): array
     {
-        yield ['THIS IS STRING1', 'this is string1', false, 0];
-        yield ['this is string1', 'this is string2', false, -1];
-        yield ['this is string2', 'this is string1', false, 1];
-        yield ['бгдпт', 'бгдпт', false, 0];
-        yield ['àbc', 'abc', ['fr_FR.utf8', 'fr_FR.UTF-8', 'fr_FR.UTF-8@euro', 'French_Standard', 'french', 'fr_FR', 'fre_FR'], 1];
-        yield ['àbc', 'bcd', ['fr_FR.utf8', 'fr_FR.UTF-8', 'fr_FR.UTF-8@euro', 'French_Standard', 'french', 'fr_FR', 'fre_FR'], -1];
-        yield ['é', 'è', ['fr_FR.utf8', 'fr_FR.UTF-8', 'fr_FR.UTF-8@euro', 'French_Standard', 'french', 'fr_FR', 'fre_FR'], -1];
-        yield ['É', 'é', ['fr_FR.utf8', 'fr_FR.UTF-8', 'fr_FR.UTF-8@euro', 'French_Standard', 'french', 'fr_FR', 'fre_FR'], 0];
-        yield ['œ', 'p', ['fr_FR.utf8', 'fr_FR.UTF-8', 'fr_FR.UTF-8@euro', 'French_Standard', 'french', 'fr_FR', 'fre_FR'], -1];
-        yield ['œ', 'n', ['fr_FR.utf8', 'fr_FR.UTF-8', 'fr_FR.UTF-8@euro', 'French_Standard', 'french', 'fr_FR', 'fre_FR'], 1];
+        return [
+            ['THIS IS STRING1', 'this is string1', false, 0],
+            ['this is string1', 'this is string2', false, -1],
+            ['this is string2', 'this is string1', false, 1],
+            ['бгдпт', 'бгдпт', false, 0],
+            ['àbc', 'abc', ['fr_FR.utf8', 'fr_FR.UTF-8', 'fr_FR.UTF-8@euro', 'French_Standard', 'french', 'fr_FR', 'fre_FR'], 1],
+            ['àbc', 'bcd', ['fr_FR.utf8', 'fr_FR.UTF-8', 'fr_FR.UTF-8@euro', 'French_Standard', 'french', 'fr_FR', 'fre_FR'], -1],
+            ['é', 'è', ['fr_FR.utf8', 'fr_FR.UTF-8', 'fr_FR.UTF-8@euro', 'French_Standard', 'french', 'fr_FR', 'fre_FR'], -1],
+            ['É', 'é', ['fr_FR.utf8', 'fr_FR.UTF-8', 'fr_FR.UTF-8@euro', 'French_Standard', 'french', 'fr_FR', 'fre_FR'], 0],
+            ['œ', 'p', ['fr_FR.utf8', 'fr_FR.UTF-8', 'fr_FR.UTF-8@euro', 'French_Standard', 'french', 'fr_FR', 'fre_FR'], -1],
+            ['œ', 'n', ['fr_FR.utf8', 'fr_FR.UTF-8', 'fr_FR.UTF-8@euro', 'French_Standard', 'french', 'fr_FR', 'fre_FR'], 1],
+        ];
     }
 
     /**
      * Data provider for testStrcmp
      *
-     * @return  \Generator
+     * @return  array
      *
      * @since   1.0
      */
-    public function seedTestStrcmp(): \Generator
+    public static function seedTestStrcmpProvider(): array
     {
-        yield ['THIS IS STRING1', 'this is string1', false, -1];
-        yield ['this is string1', 'this is string2', false, -1];
-        yield ['this is string2', 'this is string1', false, 1];
-        yield ['a', 'B', false, 1];
-        yield ['A', 'b', false, -1];
-        yield ['Àbc', 'abc', ['fr_FR.utf8', 'fr_FR.UTF-8', 'fr_FR.UTF-8@euro', 'French_Standard', 'french', 'fr_FR', 'fre_FR'], 1];
-        yield ['Àbc', 'bcd', ['fr_FR.utf8', 'fr_FR.UTF-8', 'fr_FR.UTF-8@euro', 'French_Standard', 'french', 'fr_FR', 'fre_FR'], -1];
-        yield ['É', 'è', ['fr_FR.utf8', 'fr_FR.UTF-8', 'fr_FR.UTF-8@euro', 'French_Standard', 'french', 'fr_FR', 'fre_FR'], -1];
-        yield ['é', 'È', ['fr_FR.utf8', 'fr_FR.UTF-8', 'fr_FR.UTF-8@euro', 'French_Standard', 'french', 'fr_FR', 'fre_FR'], -1];
-        yield ['Œ', 'p', ['fr_FR.utf8', 'fr_FR.UTF-8', 'fr_FR.UTF-8@euro', 'French_Standard', 'french', 'fr_FR', 'fre_FR'], -1];
-        yield ['Œ', 'n', ['fr_FR.utf8', 'fr_FR.UTF-8', 'fr_FR.UTF-8@euro', 'French_Standard', 'french', 'fr_FR', 'fre_FR'], 1];
-        yield ['œ', 'N', ['fr_FR.utf8', 'fr_FR.UTF-8', 'fr_FR.UTF-8@euro', 'French_Standard', 'french', 'fr_FR', 'fre_FR'], 1];
-        yield ['œ', 'P', ['fr_FR.utf8', 'fr_FR.UTF-8', 'fr_FR.UTF-8@euro', 'French_Standard', 'french', 'fr_FR', 'fre_FR'], -1];
+        return [
+            ['THIS IS STRING1', 'this is string1', false, -1],
+            ['this is string1', 'this is string2', false, -1],
+            ['this is string2', 'this is string1', false, 1],
+            ['a', 'B', false, 1],
+            ['A', 'b', false, -1],
+            ['Àbc', 'abc', ['fr_FR.utf8', 'fr_FR.UTF-8', 'fr_FR.UTF-8@euro', 'French_Standard', 'french', 'fr_FR', 'fre_FR'], 1],
+            ['Àbc', 'bcd', ['fr_FR.utf8', 'fr_FR.UTF-8', 'fr_FR.UTF-8@euro', 'French_Standard', 'french', 'fr_FR', 'fre_FR'], -1],
+            ['É', 'è', ['fr_FR.utf8', 'fr_FR.UTF-8', 'fr_FR.UTF-8@euro', 'French_Standard', 'french', 'fr_FR', 'fre_FR'], -1],
+            ['é', 'È', ['fr_FR.utf8', 'fr_FR.UTF-8', 'fr_FR.UTF-8@euro', 'French_Standard', 'french', 'fr_FR', 'fre_FR'], -1],
+            ['Œ', 'p', ['fr_FR.utf8', 'fr_FR.UTF-8', 'fr_FR.UTF-8@euro', 'French_Standard', 'french', 'fr_FR', 'fre_FR'], -1],
+            ['Œ', 'n', ['fr_FR.utf8', 'fr_FR.UTF-8', 'fr_FR.UTF-8@euro', 'French_Standard', 'french', 'fr_FR', 'fre_FR'], 1],
+            ['œ', 'N', ['fr_FR.utf8', 'fr_FR.UTF-8', 'fr_FR.UTF-8@euro', 'French_Standard', 'french', 'fr_FR', 'fre_FR'], 1],
+            ['œ', 'P', ['fr_FR.utf8', 'fr_FR.UTF-8', 'fr_FR.UTF-8@euro', 'French_Standard', 'french', 'fr_FR', 'fre_FR'], -1],
+        ];
     }
 
     /**
      * Data provider for testStrcspn
      *
-     * @return  \Generator
+     * @return  array
      *
      * @since   1.0
      */
-    public function seedTestStrcspn(): \Generator
+    public static function seedTestStrcspnProvider(): array
     {
-        yield ['subject <a> string <a>', '<>', false, false, 8];
-        yield ['Би шил {123} идэй {456} чадна', '}{', null, false, 7];
-        yield ['Би шил {123} идэй {456} чадна', '}{', 13, 10, 5];
+        return [
+            ['subject <a> string <a>', '<>', false, false, 8],
+            ['Би шил {123} идэй {456} чадна', '}{', null, false, 7],
+            ['Би шил {123} идэй {456} чадна', '}{', 13, 10, 5],
+        ];
     }
 
     /**
      * Data provider for testStristr
      *
-     * @return  \Generator
+     * @return  array
      *
      * @since   1.0
      */
-    public function seedTestStristr(): \Generator
+    public static function seedTestStristrProvider(): array
     {
-        yield ['haystack', 'needle', false];
-        yield ['before match, after match', 'match', 'match, after match'];
-        yield ['Би шил идэй чадна', 'шил', 'шил идэй чадна'];
+        return [
+            ['haystack', 'needle', false],
+            ['before match, after match', 'match', 'match, after match'],
+            ['Би шил идэй чадна', 'шил', 'шил идэй чадна'],
+        ];
     }
 
     /**
      * Data provider for testStrrev
      *
-     * @return  \Generator
+     * @return  array
      *
      * @since   1.0
      */
-    public function seedTestStrrev(): \Generator
+    public static function seedTestStrrevProvider(): array
     {
-        yield ['abc def', 'fed cba'];
-        yield ['Би шил', 'лиш иБ'];
+        return [
+            ['abc def', 'fed cba'],
+            ['Би шил', 'лиш иБ'],
+
+        ];
     }
 
     /**
      * Data provider for testStrspn
      *
-     * @return  \Generator
+     * @return  array
      *
      * @since   1.0
      */
-    public function seedTestStrspn(): \Generator
+    public static function seedTestStrspnProvider(): array
     {
-        yield ['A321 Main Street', '0123456789', 1, 2, 2];
-        yield ['321 Main Street', '0123456789', null, 2, 2];
-        yield ['A321 Main Street', '0123456789', null, 10, 0];
-        yield ['321 Main Street', '0123456789', null, null, 3];
-        yield ['Main Street 321', '0123456789', null, -3, 0];
-        yield ['321 Main Street', '0123456789', null, -13, 2];
-        yield ['321 Main Street', '0123456789', null, -12, 3];
-        yield ['A321 Main Street', '0123456789', 0, null, 0];
-        yield ['A321 Main Street', '0123456789', 1, 10, 3];
-        yield ['A321 Main Street', '0123456789', 1, null, 3];
-        yield ['Би шил идэй чадна', 'Би', null, null, 2];
-        yield ['чадна Би шил идэй чадна', 'Би', null, null, 0];
+        return [
+            ['A321 Main Street', '0123456789', 1, 2, 2],
+            ['321 Main Street', '0123456789', null, 2, 2],
+            ['A321 Main Street', '0123456789', null, 10, 0],
+            ['321 Main Street', '0123456789', null, null, 3],
+            ['Main Street 321', '0123456789', null, -3, 0],
+            ['321 Main Street', '0123456789', null, -13, 2],
+            ['321 Main Street', '0123456789', null, -12, 3],
+            ['A321 Main Street', '0123456789', 0, null, 0],
+            ['A321 Main Street', '0123456789', 1, 10, 3],
+            ['A321 Main Street', '0123456789', 1, null, 3],
+            ['Би шил идэй чадна', 'Би', null, null, 2],
+            ['чадна Би шил идэй чадна', 'Би', null, null, 0],
+        ];
     }
 
     /**
      * Data provider for testSubstr_replace
      *
-     * @return  \Generator
+     * @return  array
      *
      * @since   1.0
      */
-    public function seedTestSubstr_replace(): \Generator
+    public static function seedTestSubstrReplaceProvider(): array
     {
-        yield ['321 Broadway Avenue', '321 Main Street', 'Broadway Avenue', 4, false];
-        yield ['321 Broadway Street', '321 Main Street', 'Broadway', 4, 4];
-        yield ['чадна 我能吞', 'чадна Би шил идэй чадна', '我能吞', 6, false];
-        yield ['чадна 我能吞 шил идэй чадна', 'чадна Би шил идэй чадна', '我能吞', 6, 2];
+        return [
+            ['321 Broadway Avenue', '321 Main Street', 'Broadway Avenue', 4, false],
+            ['321 Broadway Street', '321 Main Street', 'Broadway', 4, 4],
+            ['чадна 我能吞', 'чадна Би шил идэй чадна', '我能吞', 6, false],
+            ['чадна 我能吞 шил идэй чадна', 'чадна Би шил идэй чадна', '我能吞', 6, 2],
+        ];
     }
 
     /**
      * Data provider for testLtrim
      *
-     * @return  \Generator
+     * @return  array
      *
      * @since   1.0
      */
-    public function seedTestLtrim(): \Generator
+    public static function seedTestLtrimProvider(): array
     {
-        yield ['   abc def', false, 'abc def'];
-        yield ['   abc def', '', '   abc def'];
-        yield [' Би шил', false, 'Би шил'];
-        yield ["\t\n\r\x0BБи шил", false, 'Би шил'];
-        yield ["\x0B\t\n\rБи шил", "\t\n\x0B", "\rБи шил"];
-        yield ["\x09Би шил\x0A", "\x09\x0A", "Би шил\x0A"];
-        yield ['1234abc', '0123456789', 'abc'];
+        return [
+            ['   abc def', false, 'abc def'],
+            ['   abc def', '', '   abc def'],
+            [' Би шил', false, 'Би шил'],
+            ["\t\n\r\x0BБи шил", false, 'Би шил'],
+            ["\x0B\t\n\rБи шил", "\t\n\x0B", "\rБи шил"],
+            ["\x09Би шил\x0A", "\x09\x0A", "Би шил\x0A"],
+            ['1234abc', '0123456789', 'abc'],
+        ];
     }
 
     /**
      * Data provider for testRtrim
      *
-     * @return  \Generator
+     * @return  array
      *
      * @since   1.0
      */
-    public function seedTestRtrim(): \Generator
+    public static function seedTestRtrimProvider(): array
     {
-        yield ['abc def   ', false, 'abc def'];
-        yield ['abc def   ', '', 'abc def   '];
-        yield ['Би шил ', false, 'Би шил'];
-        yield ["Би шил\t\n\r\x0B", false, 'Би шил'];
-        yield ["Би шил\r\x0B\t\n", "\t\n\x0B", "Би шил\r"];
-        yield ["\x09Би шил\x0A", "\x09\x0A", "\x09Би шил"];
-        yield ['1234abc', 'abc', '1234'];
+        return [
+            ['abc def   ', false, 'abc def'],
+            ['abc def   ', '', 'abc def   '],
+            ['Би шил ', false, 'Би шил'],
+            ["Би шил\t\n\r\x0B", false, 'Би шил'],
+            ["Би шил\r\x0B\t\n", "\t\n\x0B", "Би шил\r"],
+            ["\x09Би шил\x0A", "\x09\x0A", "\x09Би шил"],
+            ['1234abc', 'abc', '1234'],
+        ];
     }
 
     /**
      * Data provider for testTrim
      *
-     * @return  \Generator
+     * @return  array
      *
      * @since   1.0
      */
-    public function seedTestTrim(): \Generator
+    public static function seedTestTrimProvider(): array
     {
-        yield ['  abc def   ', false, 'abc def'];
-        yield ['  abc def   ', '', '  abc def   '];
-        yield ['   Би шил ', false, 'Би шил'];
-        yield ["\t\n\r\x0BБи шил\t\n\r\x0B", false, 'Би шил'];
-        yield ["\x0B\t\n\rБи шил\r\x0B\t\n", "\t\n\x0B", "\rБи шил\r"];
-        yield ["\x09Би шил\x0A", "\x09\x0A", "Би шил"];
-        yield ['1234abc56789', '0123456789', 'abc'];
+        return [
+            ['  abc def   ', false, 'abc def'],
+            ['  abc def   ', '', '  abc def   '],
+            ['   Би шил ', false, 'Би шил'],
+            ["\t\n\r\x0BБи шил\t\n\r\x0B", false, 'Би шил'],
+            ["\x0B\t\n\rБи шил\r\x0B\t\n", "\t\n\x0B", "\rБи шил\r"],
+            ["\x09Би шил\x0A", "\x09\x0A", "Би шил"],
+            ['1234abc56789', '0123456789', 'abc'],
+        ];
     }
 
     /**
      * Data provider for testUcfirst
      *
-     * @return  \Generator
+     * @return  array
      *
      * @since   1.0
      */
-    public function seedTestUcfirst(): \Generator
+    public static function seedTestUcfirstProvider(): array
     {
-        yield ['george', null, null, 'George'];
-        yield ['мога', null, null, 'Мога'];
-        yield ['ψυχοφθόρα', null, null, 'Ψυχοφθόρα'];
-        yield ['dr jekill and mister hyde', ' ', null, 'Dr Jekill And Mister Hyde'];
-        yield ['dr jekill and mister hyde', ' ', '_', 'Dr_Jekill_And_Mister_Hyde'];
-        yield ['dr jekill and mister hyde', ' ', '', 'DrJekillAndMisterHyde'];
+        return [
+            ['george', null, null, 'George'],
+            ['мога', null, null, 'Мога'],
+            ['ψυχοφθόρα', null, null, 'Ψυχοφθόρα'],
+            ['dr jekill and mister hyde', ' ', null, 'Dr Jekill And Mister Hyde'],
+            ['dr jekill and mister hyde', ' ', '_', 'Dr_Jekill_And_Mister_Hyde'],
+            ['dr jekill and mister hyde', ' ', '', 'DrJekillAndMisterHyde'],
+        ];
     }
 
     /**
      * Data provider for testUcwords
      *
-     * @return  \Generator
+     * @return  array
      *
      * @since   1.0
      */
-    public function seedTestUcwords(): \Generator
+    public static function seedTestUcwordsProvider(): array
     {
-        yield ['george washington', 'George Washington'];
-        yield ["george\r\nwashington", "George\r\nWashington"];
-        yield ['мога', 'Мога'];
-        yield ['αβγ δεζ', 'Αβγ Δεζ'];
-        yield ['åbc öde', 'Åbc Öde'];
+        return [
+            ['george washington', 'George Washington'],
+            ["george\r\nwashington", "George\r\nWashington"],
+            ['мога', 'Мога'],
+            ['αβγ δεζ', 'Αβγ Δεζ'],
+            ['åbc öde', 'Åbc Öde'],
+        ];
     }
 
     /**
      * Data provider for testTranscode
      *
-     * @return  \Generator
+     * @return  array
      *
      * @since   1.0
      */
-    public function seedTestTranscode(): \Generator
+    public static function seedTestTranscodeProvider(): array
     {
-        yield ['Åbc Öde €100', 'UTF-8', 'ISO-8859-1', "\xc5bc \xd6de EUR100"];
+        return [
+            ['Åbc Öde €100', 'UTF-8', 'ISO-8859-1', "\xc5bc \xd6de EUR100"],
+        ];
     }
 
     /**
      * Data provider for testing compliant strings
      *
-     * @return  \Generator
+     * @return  array
      *
      * @since   1.0
      */
-    public function seedCompliantStrings(): \Generator
+    public static function seedCompliantStringsProvider(): array
     {
-        yield ["\xCF\xB0", true];
-        yield ["\xFBa", false];
-        yield ["\xFDa", false];
-        yield ["foo\xF7bar", false];
-        yield ['george Мога Ž Ψυχοφθόρα ฉันกินกระจกได้ 我能吞下玻璃而不伤身体 ', true];
-        yield ["\xFF ABC", false];
-        yield ["0xfffd ABC", true];
-        yield ['', true];
+        return [
+            ["\xCF\xB0", true],
+            ["\xFBa", false],
+            ["\xFDa", false],
+            ["foo\xF7bar", false],
+            ['george Мога Ž Ψυχοφθόρα ฉันกินกระจกได้ 我能吞下玻璃而不伤身体 ', true],
+            ["\xFF ABC", false],
+            ["0xfffd ABC", true],
+            ['', true],
+        ];
     }
 
     /**
      * Data provider for testUnicodeToUtf8
      *
-     * @return  \Generator
+     * @return  array
      *
      * @since   1.2.0
      */
-    public function seedTestUnicodeToUtf8(): \Generator
+    public static function seedTestUnicodeToUtf8Provider(): array
     {
-        yield ["\u0422\u0435\u0441\u0442 \u0441\u0438\u0441\u0442\u0435\u043c\u044b", "Тест системы"];
-        yield ["\u00dcberpr\u00fcfung der Systemumstellung", "Überprüfung der Systemumstellung"];
+        return [
+            ["\u0422\u0435\u0441\u0442 \u0441\u0438\u0441\u0442\u0435\u043c\u044b", "Тест системы"],
+            ["\u00dcberpr\u00fcfung der Systemumstellung", "Überprüfung der Systemumstellung"],
+        ];
     }
 
     /**
      * Data provider for testUnicodeToUtf16
      *
-     * @return  \Generator
+     * @return  array
      *
      * @since   1.2.0
      */
-    public function seedTestUnicodeToUtf16(): \Generator
+    public static function seedTestUnicodeToUtf16Provider(): array
     {
-        yield ["\u0422\u0435\u0441\u0442 \u0441\u0438\u0441\u0442\u0435\u043c\u044b", "Тест системы"];
-        yield ["\u00dcberpr\u00fcfung der Systemumstellung", "Überprüfung der Systemumstellung"];
+        return [
+            ["\u0422\u0435\u0441\u0442 \u0441\u0438\u0441\u0442\u0435\u043c\u044b", "Тест системы"],
+            ["\u00dcberpr\u00fcfung der Systemumstellung", "Überprüfung der Systemumstellung"],
+        ];
     }
 
     /**
@@ -427,9 +481,8 @@ class StringHelperTest extends TestCase
      * @param   string|null  $style     The the style (default|dash).
      * @param   integer      $number    If supplied, this number is used for the copy, otherwise it is the 'next' number.
      * @param   string       $expected  Expected result.
-     *
-     * @dataProvider  seedTestIncrement
      */
+    #[DataProvider('seedTestIncrementProvider')]
     public function testIncrement(string $string, ?string $style, int $number, string $expected)
     {
         $this->assertEquals(
@@ -443,9 +496,8 @@ class StringHelperTest extends TestCase
      *
      * @param   string   $string    The string to test.
      * @param   boolean  $expected  Expected result.
-     *
-     * @dataProvider  seedTestIs_ascii
      */
+    #[DataProvider('seedTestIsAsciiProvider')]
     public function testIs_ascii(string $string, bool $expected)
     {
         $this->assertEquals(
@@ -461,9 +513,8 @@ class StringHelperTest extends TestCase
      * @param   string                $haystack  String being examined
      * @param   string                $needle    String being searched for
      * @param   integer|null|boolean  $offset    Optional, specifies the position from which the search should be performed
-     *
-     * @dataProvider  seedTestStrpos
      */
+    #[DataProvider('seedTestStrposProvider')]
     public function testStrpos($expected, string $haystack, string $needle, $offset = 0)
     {
         $this->assertEquals(
@@ -479,9 +530,8 @@ class StringHelperTest extends TestCase
      * @param   string                $haystack  String being examined
      * @param   string                $needle    String being searched for
      * @param   integer|null|boolean  $offset    Optional, specifies the position from which the search should be performed
-     *
-     * @dataProvider  seedTestStrrpos
      */
+    #[DataProvider('seedTestStrrposProvider')]
     public function testStrrpos($expected, string $haystack, string $needle, int $offset = 0)
     {
         $this->assertEquals(
@@ -497,9 +547,8 @@ class StringHelperTest extends TestCase
      * @param   string                $string    String being processed
      * @param   integer               $offset    Number of UTF-8 characters offset (from left)
      * @param   integer|null|boolean  $offset    Optional, specifies the position from which the search should be performed
-     *
-     * @dataProvider  seedTestSubstr
      */
+    #[DataProvider('seedTestSubstrProvider')]
     public function testSubstr($expected, string $string, int $start, $length = false)
     {
         $this->assertEquals(
@@ -513,9 +562,8 @@ class StringHelperTest extends TestCase
      *
      * @param   string          $string    String being processed
      * @param   string|boolean  $expected  Expected result
-     *
-     * @dataProvider  seedTestStrtolower
      */
+    #[DataProvider('seedTestStrtolowerProvider')]
     public function testStrtolower(string $string, $expected)
     {
         $this->assertEquals(
@@ -529,9 +577,8 @@ class StringHelperTest extends TestCase
      *
      * @param   string          $string    String being processed
      * @param   string|boolean  $expected  Expected result
-     *
-     * @dataProvider  seedTestStrtoupper
      */
+    #[DataProvider('seedTestStrtoupperProvider')]
     public function testStrtoupper($string, $expected)
     {
         $this->assertEquals(
@@ -545,9 +592,8 @@ class StringHelperTest extends TestCase
      *
      * @param   string          $string    String being processed
      * @param   string|boolean  $expected  Expected result
-     *
-     * @dataProvider  seedTestStrlen
      */
+    #[DataProvider('seedTestStrlenProvider')]
     public function testStrlen(string $string, $expected)
     {
         $this->assertEquals(
@@ -566,9 +612,8 @@ class StringHelperTest extends TestCase
      * @param   string                $expected  Expected result
      *
      * @return  array
-     *
-     * @dataProvider  seedTestStr_ireplace
      */
+    #[DataProvider('seedTestStrIreplaceProvider')]
     public function testStr_ireplace($search, $replace, $subject, $count, $expected)
     {
         $this->assertEquals(
@@ -583,9 +628,8 @@ class StringHelperTest extends TestCase
      * @param   string                $string    UTF-8 encoded string to process
      * @param   integer               $splitLen  Number to characters to split string by
      * @param   array|string|boolean  $expected  Expected result
-     *
-     * @dataProvider  seedTestStr_split
      */
+    #[DataProvider('seedTestStrSplitProvider')]
     public function testStr_split($string, $splitLen, $expected)
     {
         $this->assertEquals(
@@ -601,9 +645,8 @@ class StringHelperTest extends TestCase
      * @param   string                $string2   String 2 to compare
      * @param   array|string|boolean  $locale    The locale used by strcoll or false to use classical comparison
      * @param   integer               $expected  Expected result
-     *
-     * @dataProvider  seedTestStrcasecmp
      */
+    #[DataProvider('seedTestStrcasecmpProvider')]
     public function testStrcasecmp(string $string1, string $string2, $locale, int $expected)
     {
         // Convert the $locale param to a string if it is an array
@@ -635,9 +678,8 @@ class StringHelperTest extends TestCase
      * @param   string   $string2   String 2 to compare
      * @param   mixed    $locale    The locale used by strcoll or false to use classical comparison
      * @param   integer  $expected  Expected result
-     *
-     * @dataProvider  seedTestStrcmp
      */
+    #[DataProvider('seedTestStrcmpProvider')]
     public function testStrcmp(string $string1, string $string2, $locale, int $expected)
     {
         // Convert the $locale param to a string if it is an array
@@ -671,9 +713,8 @@ class StringHelperTest extends TestCase
      * @param   integer|boolean  $start     Optional starting character position (in characters)
      * @param   integer|boolean  $len       Optional length
      * @param   integer          $expected  Expected result
-     *
-     * @dataProvider  seedTestStrcspn
      */
+    #[DataProvider('seedTestStrcspnProvider')]
     public function testStrcspn(string $haystack, string $needles, $start, $len, int $expected)
     {
         $this->assertEquals(
@@ -688,9 +729,8 @@ class StringHelperTest extends TestCase
      * @param   string          $haystack  The haystack
      * @param   string          $needle    The needle
      * @param   string|boolean  $expect    Expected result
-     *
-     * @dataProvider  seedTestStristr
      */
+    #[DataProvider('seedTestStristrProvider')]
     public function testStristr(string $haystack, string $needle, $expected)
     {
         $this->assertEquals(
@@ -704,9 +744,8 @@ class StringHelperTest extends TestCase
      *
      * @param   string  $string    String to be reversed
      * @param   string  $expected  Expected result
-     *
-     * @dataProvider  seedTestStrrev
      */
+    #[DataProvider('seedTestStrrevProvider')]
     public function testStrrev(string $string, string $expected)
     {
         $this->assertEquals(
@@ -723,9 +762,8 @@ class StringHelperTest extends TestCase
      * @param   integer|null  $start    Start optional
      * @param   integer|null  $length   Length optional
      * @param   integer       $expect   Expected result
-     *
-     * @dataProvider  seedTestStrspn
      */
+    #[DataProvider('seedTestStrspnProvider')]
     public function testStrspn(string $subject, string $mask, $start, $length, int $expected)
     {
         $this->assertEquals(
@@ -742,9 +780,8 @@ class StringHelperTest extends TestCase
      * @param   string                $replacement  The replacement string
      * @param   integer               $start        Start
      * @param   integer|boolean|null  $length       Length (optional)
-     *
-     * @dataProvider  seedTestSubstr_replace
      */
+    #[DataProvider('seedTestSubstrReplaceProvider')]
     public function testSubstr_replace(string $expected, string $string, string $replacement, int $start, $length)
     {
         $this->assertEquals(
@@ -759,9 +796,8 @@ class StringHelperTest extends TestCase
      * @param   string          $string    The string to be trimmed
      * @param   string|boolean  $charlist  The optional charlist of additional characters to trim
      * @param   string          $expected  Expected result
-     *
-     * @dataProvider  seedTestLtrim
      */
+    #[DataProvider('seedTestLtrimProvider')]
     public function testLtrim(string $string, $charlist, string $expected)
     {
         $this->assertEquals(
@@ -776,9 +812,8 @@ class StringHelperTest extends TestCase
      * @param   string          $string    The string to be trimmed
      * @param   string|boolean  $charlist  The optional charlist of additional characters to trim
      * @param   string          $expected  Expected result
-     *
-     * @dataProvider  seedTestRtrim
      */
+    #[DataProvider('seedTestRtrimProvider')]
     public function testRtrim(string $string, $charlist, string $expected)
     {
         $this->assertEquals(
@@ -793,9 +828,8 @@ class StringHelperTest extends TestCase
      * @param   string          $string    The string to be trimmed
      * @param   string|boolean  $charlist  The optional charlist of additional characters to trim
      * @param   string          $expected  Expected result
-     *
-     * @dataProvider  seedTestTrim
      */
+    #[DataProvider('seedTestTrimProvider')]
     public function testTrim(string $string, $charlist, string $expected)
     {
         $this->assertEquals(
@@ -811,9 +845,8 @@ class StringHelperTest extends TestCase
      * @param   string|null  $delimiter     The words delimiter (null means do not split the string)
      * @param   string|null  $newDelimiter  The new words delimiter (null means equal to $delimiter)
      * @param   string       $expected      Expected result
-     *
-     * @dataProvider  seedTestUcfirst
      */
+    #[DataProvider('seedTestUcfirstProvider')]
     public function testUcfirst(string $string, ?string $delimiter, ?string $newDelimiter, string $expected)
     {
         $this->assertEquals(
@@ -827,9 +860,8 @@ class StringHelperTest extends TestCase
      *
      * @param   string  $string    String to be processed
      * @param   string  $expected  Expected result
-     *
-     * @dataProvider  seedTestUcwords
      */
+    #[DataProvider('seedTestUcwordsProvider')]
     public function testUcwords(string $string, string $expected)
     {
         $this->assertEquals(
@@ -845,9 +877,8 @@ class StringHelperTest extends TestCase
      * @param   string       $fromEncoding  The source encoding.
      * @param   string       $toEncoding    The target encoding.
      * @param   string|null  $expect        Expected result.
-     *
-     * @dataProvider  seedTestTranscode
      */
+    #[DataProvider('seedTestTranscodeProvider')]
     public function testTranscode(string $source, string $fromEncoding, string $toEncoding, ?string $expected)
     {
         $this->assertEquals(
@@ -861,9 +892,8 @@ class StringHelperTest extends TestCase
      *
      * @param   string   $string    UTF-8 encoded string.
      * @param   boolean  $expected  Expected result.
-     *
-     * @dataProvider  seedCompliantStrings
      */
+    #[DataProvider('seedCompliantStringsProvider')]
     public function testValid(string $string, bool $expected)
     {
         $this->assertEquals(
@@ -877,9 +907,8 @@ class StringHelperTest extends TestCase
      *
      * @param   string  $string    Unicode string to convert
      * @param   string  $expected  Expected result
-     *
-     * @dataProvider  seedTestUnicodeToUtf8
      */
+    #[DataProvider('seedTestUnicodeToUtf8Provider')]
     public function testUnicodeToUtf8(string $string, string $expected)
     {
         $this->assertEquals(
@@ -893,9 +922,8 @@ class StringHelperTest extends TestCase
      *
      * @param   string  $string    Unicode string to convert
      * @param   string  $expected  Expected result
-     *
-     * @dataProvider  seedTestUnicodeToUtf16
      */
+    #[DataProvider('seedTestUnicodeToUtf16Provider')]
     public function testUnicodeToUtf16(string $string, string $expected)
     {
         $this->assertEquals(
@@ -909,9 +937,8 @@ class StringHelperTest extends TestCase
      *
      * @param   string   $string    UTF-8 string to check
      * @param   boolean  $expected  Expected result
-     *
-     * @dataProvider  seedCompliantStrings
      */
+    #[DataProvider('seedCompliantStringsProvider')]
     public function testCompliant(string $string, bool $expected)
     {
         $this->assertEquals(

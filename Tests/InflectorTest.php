@@ -10,6 +10,7 @@ namespace Joomla\String\Tests;
 use Doctrine\Common\Inflector\Inflector as DoctrineInflector;
 use Joomla\String\Inflector;
 use Joomla\Test\TestHelper;
+use PHPUnit\Framework\Attributes\DataProvider;
 use PHPUnit\Framework\TestCase;
 
 /**
@@ -28,51 +29,55 @@ class InflectorTest extends TestCase
     /**
      * Method to seed data to testIsCountable.
      *
-     * @return  \Generator
+     * @return  array
      */
-    public function seedIsCountable(): \Generator
+    public static function seedIsCountableProvider(): array
     {
-        yield ['id', true];
-        yield ['title', false];
+        return [
+            ['id', true],
+            ['title', false],
+        ];
     }
 
     /**
      * Method to seed data to testToPlural.
      *
-     * @return  \Generator
+     * @return  array
      *
      * @since   1.0
      */
-    public function seedSinglePlural(): \Generator
+    public static function seedSinglePluralProvider(): array
     {
-        // Regular plurals
-        yield ['bus', 'buses'];
-        yield ['notify', 'notifies'];
-        yield ['click', 'clicks'];
+        return [
+            // Regular plurals
+            ['bus', 'buses'],
+            ['notify', 'notifies'],
+            ['click', 'clicks'],
 
-        // Almost regular plurals.
-        yield ['photo', 'photos'];
-        yield ['zero', 'zeros'];
+            // Almost regular plurals.
+            ['photo', 'photos'],
+            ['zero', 'zeros'],
 
-        // Irregular identicals
-        yield ['salmon', 'salmon'];
+            // Irregular identicals
+            ['salmon', 'salmon'],
 
-        // Irregular plurals
-        yield ['ox', 'oxen'];
-        yield ['quiz', 'quizzes'];
-        yield ['status', 'statuses'];
-        yield ['matrix', 'matrices'];
-        yield ['index', 'indices'];
-        yield ['vertex', 'vertices'];
-        yield ['hive', 'hives'];
+            // Irregular plurals
+            ['ox', 'oxen'],
+            ['quiz', 'quizzes'],
+            ['status', 'statuses'],
+            ['matrix', 'matrices'],
+            ['index', 'indices'],
+            ['vertex', 'vertices'],
+            ['hive', 'hives'],
 
-        // Ablaut plurals
-        yield ['foot', 'feet'];
-        yield ['louse', 'lice'];
-        yield ['man', 'men'];
-        yield ['mouse', 'mice'];
-        yield ['tooth', 'teeth'];
-        yield ['woman', 'women'];
+            // Ablaut plurals
+            ['foot', 'feet'],
+            ['louse', 'lice'],
+            ['man', 'men'],
+            ['mouse', 'mice'],
+            ['tooth', 'teeth'],
+            ['woman', 'women'],
+        ];
     }
 
     /**
@@ -269,9 +274,8 @@ class InflectorTest extends TestCase
      *
      * @param   string   $input     A string.
      * @param   boolean  $expected  The expected result of the function call.
-     *
-     * @dataProvider  seedIsCountable
      */
+    #[DataProvider('seedIsCountableProvider')]
     public function testIsCountable(string $input, bool $expected)
     {
         $this->assertEquals(
@@ -285,9 +289,8 @@ class InflectorTest extends TestCase
      *
      * @param   string  $singular  The singular form of a word.
      * @param   string  $plural    The plural form of a word.
-     *
-     * @dataProvider  seedSinglePlural
      */
+    #[DataProvider('seedSinglePluralProvider')]
     public function testIsPlural(string $singular, string $plural)
     {
         if ($singular === 'bus' && !$this->checkInflectorImplementation($this->inflector)) {
@@ -312,9 +315,8 @@ class InflectorTest extends TestCase
      *
      * @param   string  $singular  The singular form of a word.
      * @param   string  $plural    The plural form of a word.
-     *
-     * @dataProvider  seedSinglePlural
      */
+    #[DataProvider('seedSinglePluralProvider')]
     public function testIsSingular(string $singular, string $plural)
     {
         if ($singular === 'bus' && !$this->checkInflectorImplementation($this->inflector)) {
@@ -339,9 +341,8 @@ class InflectorTest extends TestCase
      *
      * @param   string  $singular  The singular form of a word.
      * @param   string  $plural    The plural form of a word.
-     *
-     * @dataProvider  seedSinglePlural
      */
+    #[DataProvider('seedSinglePluralProvider')]
     public function testToPlural(string $singular, string $plural)
     {
         $this->assertSame(
@@ -368,9 +369,8 @@ class InflectorTest extends TestCase
      *
      * @param   string  $singular  The singular form of a word.
      * @param   string  $plural    The plural form of a word.
-     *
-     * @dataProvider  seedSinglePlural
      */
+    #[DataProvider('seedSinglePluralProvider')]
     public function testToSingular(string $singular, string $plural)
     {
         $this->assertSame(
