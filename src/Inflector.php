@@ -127,7 +127,7 @@ class Inflector
     /**
      * Proxy for Inflector::tableize()
      */
-    public static function tableize(string $word) : string
+    public static function tableize(string $word): string
     {
         $inflector = InflectorFactory::create()->build();
 
@@ -137,7 +137,7 @@ class Inflector
     /**
      * Proxy for Inflector::classify()
      */
-    public static function classify(string $word) : string
+    public static function classify(string $word): string
     {
         $inflector = InflectorFactory::create()->build();
 
@@ -147,7 +147,7 @@ class Inflector
     /**
      * Proxy for Inflector::camelize()
      */
-    public static function camelize(string $word) : string
+    public static function camelize(string $word): string
     {
         $inflector = InflectorFactory::create()->build();
 
@@ -157,7 +157,7 @@ class Inflector
     /**
      * Proxy for Inflector::ucwords()
      */
-    public static function ucwords(string $string, string $delimiters = " \n\t\r\0\x0B-") : string
+    public static function ucwords(string $string, string $delimiters = " \n\t\r\0\x0B-"): string
     {
         return ucwords($string, $delimiters);
     }
@@ -165,21 +165,21 @@ class Inflector
     /**
      * Empty method to suffice the former interface
      */
-    public static function reset() : void
+    public static function reset(): void
     {
     }
 
     /**
      * Empty method to suffice the former interface
      */
-    public static function rules(string $type, iterable $rules, bool $reset = false) : void
+    public static function rules(string $type, iterable $rules, bool $reset = false): void
     {
     }
 
     /**
      * Proxy for Inflector::pluralize()
      */
-    public static function pluralize(string $word) : string
+    public static function pluralize(string $word): string
     {
         $inflector = InflectorFactory::create()->build();
 
@@ -189,7 +189,7 @@ class Inflector
     /**
      * Proxy for Inflector::singularize()
      */
-    public static function singularize(string $word) : string
+    public static function singularize(string $word): string
     {
         $inflector = InflectorFactory::create()->build();
 
