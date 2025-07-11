@@ -9,7 +9,7 @@
 
 namespace Joomla\String;
 
-use Doctrine\Common\Inflector\Inflector as DoctrineInflector;
+use Doctrine\Inflector\InflectorFactory;
 
 /**
  * Joomla Framework String Inflector Class
@@ -19,7 +19,7 @@ use Doctrine\Common\Inflector\Inflector as DoctrineInflector;
  * @since  1.0
  * @deprecated  5.0  Use doctrine/inflector package as complete replacement instead.
  */
-class Inflector extends DoctrineInflector
+class Inflector
 {
     /**
      * The inflector rules for countability.
@@ -122,5 +122,77 @@ class Inflector extends DoctrineInflector
     public function isSingular($word)
     {
         return static::singularize($word) === $word;
+    }
+
+    /**
+     * Proxy for Inflector::tableize()
+     */
+    public static function tableize(string $word) : string
+    {
+        $inflector = InflectorFactory::create()->build();
+
+        return $inflector->tableize($word);
+    }
+
+    /**
+     * Proxy for Inflector::classify()
+     */
+    public static function classify(string $word) : string
+    {
+        $inflector = InflectorFactory::create()->build();
+
+        return $inflector->classify($word);
+    }
+
+    /**
+     * Proxy for Inflector::camelize()
+     */
+    public static function camelize(string $word) : string
+    {
+        $inflector = InflectorFactory::create()->build();
+
+        return $inflector->camelize($word);
+    }
+
+    /**
+     * Proxy for Inflector::ucwords()
+     */
+    public static function ucwords(string $string, string $delimiters = " \n\t\r\0\x0B-") : string
+    {
+        return ucwords($string, $delimiters);
+    }
+
+    /**
+     * Empty method to suffice the former interface
+     */
+    public static function reset() : void
+    {
+    }
+
+    /**
+     * Empty method to suffice the former interface
+     */
+    public static function rules(string $type, iterable $rules, bool $reset = false) : void
+    {
+    }
+
+    /**
+     * Proxy for Inflector::pluralize()
+     */
+    public static function pluralize(string $word) : string
+    {
+        $inflector = InflectorFactory::create()->build();
+
+        return $inflector->pluralize($word);
+    }
+
+    /**
+     * Proxy for Inflector::singularize()
+     */
+    public static function singularize(string $word) : string
+    {
+        $inflector = InflectorFactory::create()->build();
+
+        return $inflector->singularize($word);
     }
 }

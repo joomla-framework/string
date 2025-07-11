@@ -92,20 +92,6 @@ class InflectorTest extends TestCase
         parent::setUp();
 
         $this->inflector = new Inflector();
-        DoctrineInflector::reset();
-    }
-
-    /**
-     * Tears down the fixture, for example, close a network connection.
-     * This method is called after a test is executed.
-     *
-     * @return  void
-     */
-    protected function tearDown(): void
-    {
-        DoctrineInflector::reset();
-
-        parent::tearDown();
     }
 
     /**
@@ -214,7 +200,7 @@ class InflectorTest extends TestCase
         }
     }
 
-    private function checkInflectorImplementation(DoctrineInflector $inflector): bool
+    private function checkInflectorImplementation(Inflector $inflector): bool
     {
         $reflectionClass = new \ReflectionClass($inflector);
 
