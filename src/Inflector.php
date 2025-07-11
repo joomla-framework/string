@@ -17,6 +17,7 @@ use Doctrine\Common\Inflector\Inflector as DoctrineInflector;
  * The Inflector transforms words
  *
  * @since  1.0
+ * @deprecated  5.0  Use doctrine/inflector package as complete replacement instead.
  */
 class Inflector extends DoctrineInflector
 {
