@@ -17,4 +17,4 @@ The following deprecated methods have been removed in this release:
 
 ### The `Inflector` class has been deprecated
 
-The `Inflector` class in this package depends on the `doctrine/inflector` v1 package, which has been EOL for some time. The newer v2 version of that package does not allow our class to inherit from their `Inflector` class anymore. At the same time, the new `doctrine/inflector` package provides basically everything our `Inflector` class supplied, so our class is not necessary anymore. Thus the `Inflector` class in this package is deprecated and should not be used anymore. Use the `doctrine/inflector` package directly instead. This class will be removed in 5.0 of this package.
+The `Inflector` class in this package does not provide benefits over the original `doctrine/inflector` package anymore and is currently only there to keep backwards compatibility with version 3. Use `doctrine/inflector` directly instead. This class will be removed in 5.0 of this package.
