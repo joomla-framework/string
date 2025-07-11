@@ -56,29 +56,26 @@ abstract class StringHelper
     {
         $styleSpec = static::$incrementStyles[$style] ?? static::$incrementStyles['default'];
 
-        // Regular expression search and replace patterns.
-        if (\is_array($styleSpec[0])) {
-            $rxSearch  = $styleSpec[0][0];
-            $rxReplace = $styleSpec[0][1];
-        } else {
-            $rxSearch = $rxReplace = $styleSpec[0];
-        }
+        // Regular expression search and replace patterns for both cases
+        if ($style === 'dash') {
+            $rxSearch = '#-(\d+)$#';  // Match the trailing number after a hyphen (e.g., "dog-2")
+            $rxReplace = '-%d';        // Replace it with "-number"
 
-        // New and old (existing) sprintf formats.
-        if (\is_array($styleSpec[1])) {
-            $newFormat = $styleSpec[1][0];
-            $oldFormat = $styleSpec[1][1];
+            if (preg_match($rxSearch, $string, $matches)) {
+                $n = empty($n) ? ($matches[1] + 1) : $n;
+                $string = preg_replace($rxReplace, sprintf($rxReplace, $n), $string);
+            } else {
+                $n = empty($n) ? 2 : $n;
+                $string .= sprintf($rxReplace, $n);
+            }
         } else {
-            $newFormat = $oldFormat = $styleSpec[1];
-        }
-
-        // Check if we are incrementing an existing pattern, or appending a new one.
-        if (preg_match($rxSearch, $string, $matches)) {
-            $n      = empty($n) ? ($matches[1] + 1) : $n;
-            $string = preg_replace($rxReplace, sprintf($oldFormat, $n), $string);
-        } else {
-            $n = empty($n) ? 2 : $n;
-            $string .= sprintf($newFormat, $n);
+            if (preg_match('#\((\d+)\)$#', $string, $matches)) {
+                $n = empty($n) ? ($matches[1] + 1) : $n;
+                $string = preg_replace('#\((\d+)\)$#', "($n)", $string);
+            } else {
+                $n = empty($n) ? 2 : $n;
+                $string .= " ($n)";
+            }
         }
 
         return $string;
