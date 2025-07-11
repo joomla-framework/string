@@ -9,7 +9,7 @@
 
 namespace Joomla\String;
 
-use Doctrine\Common\Inflector\Inflector as DoctrineInflector;
+use Doctrine\Inflector\InflectorFactory;
 
 /**
  * Joomla Framework String Inflector Class
@@ -17,18 +17,10 @@ use Doctrine\Common\Inflector\Inflector as DoctrineInflector;
  * The Inflector transforms words
  *
  * @since  1.0
+ * @deprecated  5.0  Use doctrine/inflector package as complete replacement instead.
  */
-class Inflector extends DoctrineInflector
+class Inflector
 {
-    /**
-     * The singleton instance.
-     *
-     * @var    Inflector
-     * @since  1.0
-     * @deprecated  3.0
-     */
-    private static $instance;
-
     /**
      * The inflector rules for countability.
      *
@@ -91,140 +83,6 @@ class Inflector extends DoctrineInflector
     }
 
     /**
-     * Adds a specific singular-plural pair for a word.
-     *
-     * @param   string  $singular  The singular form of the word.
-     * @param   string  $plural    The plural form of the word. If omitted, it is assumed the singular and plural are identical.
-     *
-     * @return  $this
-     *
-     * @since   1.0
-     * @deprecated  3.0  Use Doctrine\Common\Inflector\Inflector::rules() instead.
-     */
-    public function addWord($singular, $plural = '')
-    {
-        trigger_deprecation(
-            'joomla/string',
-            '2.0.0',
-            '%s() is deprecated and will be removed in 3.0, use %s::rules() instead.',
-            __METHOD__,
-            DoctrineInflector::class
-        );
-
-        if ($plural !== '') {
-            static::rules(
-                'plural',
-                [
-                    'irregular' => [$plural => $singular],
-                ]
-            );
-
-            static::rules(
-                'singular',
-                [
-                    'irregular' => [$singular => $plural],
-                ]
-            );
-        } else {
-            static::rules(
-                'plural',
-                [
-                    'uninflected' => [$singular],
-                ]
-            );
-
-            static::rules(
-                'singular',
-                [
-                    'uninflected' => [$singular],
-                ]
-            );
-        }
-
-        return $this;
-    }
-
-    /**
-     * Adds a pluralisation rule.
-     *
-     * @param   mixed  $data  A string or an array of regex rules to add.
-     *
-     * @return  $this
-     *
-     * @since   1.0
-     * @deprecated  3.0  Use Doctrine\Common\Inflector\Inflector::rules() instead.
-     */
-    public function addPluraliseRule($data)
-    {
-        trigger_deprecation(
-            'joomla/string',
-            '2.0.0',
-            '%s() is deprecated and will be removed in 3.0, use %s::rules() instead.',
-            __METHOD__,
-            DoctrineInflector::class
-        );
-
-        $this->addRule($data, 'plural');
-
-        return $this;
-    }
-
-    /**
-     * Adds a singularisation rule.
-     *
-     * @param   mixed  $data  A string or an array of regex rules to add.
-     *
-     * @return  $this
-     *
-     * @since   1.0
-     * @deprecated  3.0  Use Doctrine\Common\Inflector\Inflector::rules() instead.
-     */
-    public function addSingulariseRule($data)
-    {
-        trigger_deprecation(
-            'joomla/string',
-            '2.0.0',
-            '%s() is deprecated and will be removed in 3.0, use %s::rules() instead.',
-            __METHOD__,
-            DoctrineInflector::class
-        );
-
-        $this->addRule($data, 'singular');
-
-        return $this;
-    }
-
-    /**
-     * Gets an instance of the Inflector singleton.
-     *
-     * @param   boolean  $new  If true (default is false), returns a new instance regardless if one exists. This argument is mainly used for testing.
-     *
-     * @return  static
-     *
-     * @since   1.0
-     * @deprecated  3.0  Use static methods without a class instance instead.
-     */
-    public static function getInstance($new = false)
-    {
-        trigger_deprecation(
-            'joomla/string',
-            '2.0.0',
-            '%s() is deprecated and will be removed in 3.0.',
-            __METHOD__
-        );
-
-        if ($new) {
-            return new static();
-        }
-
-        if (!\is_object(self::$instance)) {
-            self::$instance = new static();
-        }
-
-        return self::$instance;
-    }
-
-    /**
      * Checks if a word is countable.
      *
      * @param   string  $word  The string input.
@@ -249,7 +107,7 @@ class Inflector extends DoctrineInflector
      */
     public function isPlural($word)
     {
-        return $this->toPlural($this->toSingular($word)) === $word;
+        return static::pluralize(static::singularize($word)) === $word;
     }
 
     /**
@@ -263,52 +121,78 @@ class Inflector extends DoctrineInflector
      */
     public function isSingular($word)
     {
-        return $this->toSingular($word) === $word;
+        return static::singularize($word) === $word;
     }
 
     /**
-     * Converts a word into its plural form.
-     *
-     * @param   string  $word  The singular word to pluralise.
-     *
-     * @return  string  The word in plural form.
-     *
-     * @since   1.0
-     * @deprecated  3.0  Use Doctrine\Common\Inflector\Inflector::pluralize() instead.
+     * Proxy for Inflector::tableize()
      */
-    public function toPlural($word)
+    public static function tableize(string $word): string
     {
-        trigger_deprecation(
-            'joomla/string',
-            '2.0.0',
-            '%s() is deprecated and will be removed in 3.0, use %s::pluralize() instead.',
-            __METHOD__,
-            DoctrineInflector::class
-        );
+        $inflector = InflectorFactory::create()->build();
 
-        return static::pluralize($word);
+        return $inflector->tableize($word);
     }
 
     /**
-     * Converts a word into its singular form.
-     *
-     * @param   string  $word  The plural word to singularise.
-     *
-     * @return  string  The word in singular form.
-     *
-     * @since   1.0
-     * @deprecated  3.0  Use Doctrine\Common\Inflector\Inflector::singularize() instead.
+     * Proxy for Inflector::classify()
      */
-    public function toSingular($word)
+    public static function classify(string $word): string
     {
-        trigger_deprecation(
-            'joomla/string',
-            '2.0.0',
-            '%s() is deprecated and will be removed in 3.0, use %s::singularize() instead.',
-            __METHOD__,
-            DoctrineInflector::class
-        );
+        $inflector = InflectorFactory::create()->build();
 
-        return static::singularize($word);
+        return $inflector->classify($word);
+    }
+
+    /**
+     * Proxy for Inflector::camelize()
+     */
+    public static function camelize(string $word): string
+    {
+        $inflector = InflectorFactory::create()->build();
+
+        return $inflector->camelize($word);
+    }
+
+    /**
+     * Proxy for Inflector::ucwords()
+     */
+    public static function ucwords(string $string, string $delimiters = " \n\t\r\0\x0B-"): string
+    {
+        return ucwords($string, $delimiters);
+    }
+
+    /**
+     * Empty method to suffice the former interface
+     */
+    public static function reset(): void
+    {
+    }
+
+    /**
+     * Empty method to suffice the former interface
+     */
+    public static function rules(string $type, iterable $rules, bool $reset = false): void
+    {
+    }
+
+    /**
+     * Proxy for Inflector::pluralize()
+     */
+    public static function pluralize(string $word): string
+    {
+        $inflector = InflectorFactory::create()->build();
+
+        return $inflector->pluralize($word);
+    }
+
+    /**
+     * Proxy for Inflector::singularize()
+     */
+    public static function singularize(string $word): string
+    {
+        $inflector = InflectorFactory::create()->build();
+
+        return $inflector->singularize($word);
     }
 }

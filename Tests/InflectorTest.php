@@ -10,6 +10,7 @@ namespace Joomla\String\Tests;
 use Doctrine\Common\Inflector\Inflector as DoctrineInflector;
 use Joomla\String\Inflector;
 use Joomla\Test\TestHelper;
+use PHPUnit\Framework\Attributes\DataProvider;
 use PHPUnit\Framework\TestCase;
 
 /**
@@ -28,51 +29,55 @@ class InflectorTest extends TestCase
     /**
      * Method to seed data to testIsCountable.
      *
-     * @return  \Generator
+     * @return  array
      */
-    public function seedIsCountable(): \Generator
+    public static function seedIsCountable(): array
     {
-        yield ['id', true];
-        yield ['title', false];
+        return [
+            ['id', true],
+            ['title', false],
+        ];
     }
 
     /**
      * Method to seed data to testToPlural.
      *
-     * @return  \Generator
+     * @return  array
      *
      * @since   1.0
      */
-    public function seedSinglePlural(): \Generator
+    public static function seedSinglePlural(): array
     {
-        // Regular plurals
-        yield ['bus', 'buses'];
-        yield ['notify', 'notifies'];
-        yield ['click', 'clicks'];
+        return [
+            // Regular plurals
+            ['bus', 'buses'],
+            ['notify', 'notifies'],
+            ['click', 'clicks'],
 
-        // Almost regular plurals.
-        yield ['photo', 'photos'];
-        yield ['zero', 'zeros'];
+            // Almost regular plurals.
+            ['photo', 'photos'],
+            ['zero', 'zeros'],
 
-        // Irregular identicals
-        yield ['salmon', 'salmon'];
+            // Irregular identicals
+            ['salmon', 'salmon'],
 
-        // Irregular plurals
-        yield ['ox', 'oxen'];
-        yield ['quiz', 'quizzes'];
-        yield ['status', 'statuses'];
-        yield ['matrix', 'matrices'];
-        yield ['index', 'indices'];
-        yield ['vertex', 'vertices'];
-        yield ['hive', 'hives'];
+            // Irregular plurals
+            ['ox', 'oxen'],
+            ['quiz', 'quizzes'],
+            ['status', 'statuses'],
+            ['matrix', 'matrices'],
+            ['index', 'indices'],
+            ['vertex', 'vertices'],
+            ['hive', 'hives'],
 
-        // Ablaut plurals
-        yield ['foot', 'feet'];
-        yield ['louse', 'lice'];
-        yield ['man', 'men'];
-        yield ['mouse', 'mice'];
-        yield ['tooth', 'teeth'];
-        yield ['woman', 'women'];
+            // Ablaut plurals
+            ['foot', 'feet'],
+            ['louse', 'lice'],
+            ['man', 'men'],
+            ['mouse', 'mice'],
+            ['tooth', 'teeth'],
+            ['woman', 'women'],
+        ];
     }
 
     /**
@@ -86,21 +91,7 @@ class InflectorTest extends TestCase
     {
         parent::setUp();
 
-        $this->inflector = Inflector::getInstance(true);
-        DoctrineInflector::reset();
-    }
-
-    /**
-     * Tears down the fixture, for example, close a network connection.
-     * This method is called after a test is executed.
-     *
-     * @return  void
-     */
-    protected function tearDown(): void
-    {
-        DoctrineInflector::reset();
-
-        parent::tearDown();
+        $this->inflector = new Inflector();
     }
 
     /**
@@ -143,135 +134,12 @@ class InflectorTest extends TestCase
     }
 
     /**
-     * @testdox  A word can be added to the inflector without a plural form
-     */
-    public function testAddWordWithoutPlural()
-    {
-        if (!$this->checkInflectorImplementation($this->inflector)) {
-            $this->markTestSkipped('This test depends on the library\'s implementation');
-        }
-
-        $this->assertSame(
-            $this->inflector,
-            $this->inflector->addWord('foo')
-        );
-
-        $plural = TestHelper::getValue(DoctrineInflector::class, 'plural');
-
-        $this->assertTrue(
-            in_array('foo', $plural['uninflected'])
-        );
-
-        $singular = TestHelper::getValue(DoctrineInflector::class, 'singular');
-
-        $this->assertTrue(
-            in_array('foo', $singular['uninflected'])
-        );
-    }
-
-    /**
-     * @testdox  A word can be added to the inflector with a plural form
-     */
-    public function testAddWordWithPlural()
-    {
-        if (!$this->checkInflectorImplementation($this->inflector)) {
-            $this->markTestSkipped('This test depends on the library\'s implementation');
-        }
-
-        $this->assertEquals(
-            $this->inflector,
-            $this->inflector->addWord('bar', 'foo')
-        );
-
-        $plural = TestHelper::getValue(DoctrineInflector::class, 'plural');
-
-        $this->assertArrayHasKey(
-            'foo',
-            $plural['irregular']
-        );
-
-        $singular = TestHelper::getValue(DoctrineInflector::class, 'singular');
-
-        $this->assertArrayHasKey(
-            'bar',
-            $singular['irregular']
-        );
-    }
-
-    /**
-     * @testdox  A pluralisation rule can be added to the inflector
-     */
-    public function testAddPluraliseRule()
-    {
-        if (!$this->checkInflectorImplementation($this->inflector)) {
-            $this->markTestSkipped('This test depends on the library\'s implementation');
-        }
-
-        $this->assertSame(
-            $this->inflector->addPluraliseRule(['/^(custom)$/i' => '\1izables']),
-            $this->inflector,
-            'Checks chaining.'
-        );
-
-        $plural = TestHelper::getValue(DoctrineInflector::class, 'plural');
-
-        $this->assertArrayHasKey(
-            '/^(custom)$/i',
-            $plural['rules'],
-            'Checks a pluralisation rule was added.'
-        );
-    }
-
-    /**
-     * @testdox  A singularisation rule can be added to the inflector
-     */
-    public function testAddSingulariseRule()
-    {
-        if (!$this->checkInflectorImplementation($this->inflector)) {
-            $this->markTestSkipped('This test depends on the library\'s implementation');
-        }
-
-        $this->assertSame(
-            $this->inflector->addSingulariseRule(['/^(inflec|contribu)tors$/i' => '\1ta']),
-            $this->inflector,
-            'Checks chaining.'
-        );
-
-        $singular = TestHelper::getValue(DoctrineInflector::class, 'singular');
-
-        $this->assertArrayHasKey(
-            '/^(inflec|contribu)tors$/i',
-            $singular['rules'],
-            'Checks a singularisation rule was added.'
-        );
-    }
-
-    /**
-     * @testdox  The singleton instance of the inflector can be retrieved
-     */
-    public function testGetInstance()
-    {
-        $this->assertInstanceOf(
-            Inflector::class,
-            Inflector::getInstance(),
-            'Check getInstance returns the right class.'
-        );
-
-        $this->assertNotSame(
-            Inflector::getInstance(),
-            Inflector::getInstance(true),
-            'getInstance with the new flag should not return the singleton instance'
-        );
-    }
-
-    /**
      * @testdox  A string is checked to determine if it a countable word
      *
      * @param   string   $input     A string.
      * @param   boolean  $expected  The expected result of the function call.
-     *
-     * @dataProvider  seedIsCountable
      */
+    #[DataProvider('seedIsCountable')]
     public function testIsCountable(string $input, bool $expected)
     {
         $this->assertEquals(
@@ -285,9 +153,8 @@ class InflectorTest extends TestCase
      *
      * @param   string  $singular  The singular form of a word.
      * @param   string  $plural    The plural form of a word.
-     *
-     * @dataProvider  seedSinglePlural
      */
+    #[Dataprovider('seedSinglePlural')]
     public function testIsPlural(string $singular, string $plural)
     {
         if ($singular === 'bus' && !$this->checkInflectorImplementation($this->inflector)) {
@@ -312,9 +179,8 @@ class InflectorTest extends TestCase
      *
      * @param   string  $singular  The singular form of a word.
      * @param   string  $plural    The plural form of a word.
-     *
-     * @dataProvider  seedSinglePlural
      */
+    #[Dataprovider('seedSinglePlural')]
     public function testIsSingular(string $singular, string $plural)
     {
         if ($singular === 'bus' && !$this->checkInflectorImplementation($this->inflector)) {
@@ -334,69 +200,7 @@ class InflectorTest extends TestCase
         }
     }
 
-    /**
-     * @testdox  A string is converted to its plural form
-     *
-     * @param   string  $singular  The singular form of a word.
-     * @param   string  $plural    The plural form of a word.
-     *
-     * @dataProvider  seedSinglePlural
-     */
-    public function testToPlural(string $singular, string $plural)
-    {
-        $this->assertSame(
-            $plural,
-            $this->inflector->toPlural($singular),
-            "'$plural' should be the plural form of '$singular'"
-        );
-    }
-
-    /**
-     * @testdox  A string that is already plural is returned in the same form
-     */
-    public function testToPluralAlreadyPlural()
-    {
-        $this->assertSame(
-            'buses',
-            $this->inflector->toPlural('buses'),
-            "'buses' should not be pluralised'"
-        );
-    }
-
-    /**
-     * @testdox  A string is converted to its singular form
-     *
-     * @param   string  $singular  The singular form of a word.
-     * @param   string  $plural    The plural form of a word.
-     *
-     * @dataProvider  seedSinglePlural
-     */
-    public function testToSingular(string $singular, string $plural)
-    {
-        $this->assertSame(
-            $singular,
-            $this->inflector->toSingular($plural),
-            "'$singular' should be the singular form of '$plural'"
-        );
-    }
-
-    /**
-     * @testdox  A string that is already singular is returned in the same form
-     */
-    public function testToSingularAlreadySingular()
-    {
-        if (!$this->checkInflectorImplementation($this->inflector)) {
-            $this->markTestSkipped('"bus/buses" is not known to the new implementation');
-        }
-
-        $this->assertSame(
-            'bus',
-            $this->inflector->toSingular('bus'),
-            "'bus' should not be singularised'"
-        );
-    }
-
-    private function checkInflectorImplementation(DoctrineInflector $inflector): bool
+    private function checkInflectorImplementation(Inflector $inflector): bool
     {
         $reflectionClass = new \ReflectionClass($inflector);
 

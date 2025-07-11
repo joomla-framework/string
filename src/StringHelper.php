@@ -74,7 +74,7 @@ abstract class StringHelper
 
         // Check if we are incrementing an existing pattern, or appending a new one.
         if (preg_match($rxSearch, $string, $matches)) {
-            $n      = empty($n) ? ($matches[1] + 1) : $n;
+            $n      = empty($n) ? (1 + (int) $matches[1]) : $n;
             $string = preg_replace($rxReplace, sprintf($oldFormat, $n), $string);
         } else {
             $n = empty($n) ? 2 : $n;
@@ -375,7 +375,7 @@ abstract class StringHelper
         }
 
         // Get current locale
-        $locale0 = setlocale(LC_COLLATE, 0);
+        $locale0 = setlocale(LC_COLLATE, null);
 
         if (!$locale = setlocale(LC_COLLATE, $locale)) {
             $locale = $locale0;
@@ -421,7 +421,7 @@ abstract class StringHelper
     {
         if ($locale) {
             // Get current locale
-            $locale0 = setlocale(LC_COLLATE, 0);
+            $locale0 = setlocale(LC_COLLATE, null);
 
             if (!$locale = setlocale(LC_COLLATE, $locale)) {
                 $locale = $locale0;
@@ -462,9 +462,9 @@ abstract class StringHelper
      * @link    https://www.php.net/strcspn
      * @since   1.3.0
      */
-    public static function strcspn($str, $mask, $start = null, $length = null)
+    public static function strcspn(string $str, string $mask, $start = null, $length = null)
     {
-        if (empty($mask) || strlen($mask) == 0) {
+        if (strlen($mask) == 0) {
             return 0;
         }
 
@@ -535,15 +535,15 @@ abstract class StringHelper
      * @link    https://www.php.net/strspn
      * @since   1.3.0
      */
-    public static function strspn($str, $mask, $start = null, $length = null)
+    public static function strspn(string $str, string $mask, ?int $start = null, ?int $length = null)
     {
         $mask = preg_replace('!([\\\\\\-\\]\\[/^])!', '\\\${1}', $mask);
 
-        if (is_int($start) && is_int($length)) {
+        if ($start && $length) {
             $str = mb_substr($str, $start, $length);
-        } elseif (is_int($start) && !is_int($length)) {
+        } elseif ($start) {
             $str = mb_substr($str, $start);
-        } elseif (!is_int($start) && is_int($length)) {
+        } elseif ($length) {
             trigger_error('\Joomla\String\StringHelper::strspn(): Passing null to parameter #3 ($start) of type int is deprecated', E_USER_DEPRECATED);
             $str = mb_substr($str, 0, $length);
         }
