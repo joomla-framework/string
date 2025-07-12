@@ -11,7 +11,7 @@
 * Note: requires utf8_strtolower
 * @param string
 * @param string
-* @return int
+* @return string|boolean
 * @see http://www.php.net/strcasecmp
 * @see utf8_strtolower
 * @package utf8

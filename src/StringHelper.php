@@ -74,7 +74,7 @@ abstract class StringHelper
 
         // Check if we are incrementing an existing pattern, or appending a new one.
         if (preg_match($rxSearch, $string, $matches)) {
-            $n      = empty($n) ? ($matches[1] + 1) : $n;
+            $n      = empty($n) ? (1 + (int) $matches[1]) : $n;
             $string = preg_replace($rxReplace, sprintf($oldFormat, $n), $string);
         } else {
             $n = empty($n) ? 2 : $n;
@@ -338,7 +338,7 @@ abstract class StringHelper
         }
 
         // Get current locale
-        $locale0 = setlocale(LC_COLLATE, 0);
+        $locale0 = setlocale(LC_COLLATE, '0');
 
         if (!$locale = setlocale(LC_COLLATE, $locale)) {
             $locale = $locale0;
@@ -384,7 +384,7 @@ abstract class StringHelper
     {
         if ($locale) {
             // Get current locale
-            $locale0 = setlocale(LC_COLLATE, 0);
+            $locale0 = setlocale(LC_COLLATE, '0');
 
             if (!$locale = setlocale(LC_COLLATE, $locale)) {
                 $locale = $locale0;
