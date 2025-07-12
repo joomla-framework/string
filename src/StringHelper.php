@@ -375,7 +375,7 @@ abstract class StringHelper
         }
 
         // Get current locale
-        $locale0 = setlocale(LC_COLLATE, null);
+        $locale0 = setlocale(LC_COLLATE, '0');
 
         if (!$locale = setlocale(LC_COLLATE, $locale)) {
             $locale = $locale0;
@@ -421,7 +421,7 @@ abstract class StringHelper
     {
         if ($locale) {
             // Get current locale
-            $locale0 = setlocale(LC_COLLATE, null);
+            $locale0 = setlocale(LC_COLLATE, '0');
 
             if (!$locale = setlocale(LC_COLLATE, $locale)) {
                 $locale = $locale0;
