@@ -462,7 +462,7 @@ abstract class StringHelper
      * @link    https://www.php.net/strcspn
      * @since   1.3.0
      */
-    public static function strcspn(string $str, string $mask, $start = null, $length = null)
+    public static function strcspn($str, $mask, $start = null, $length = null)
     {
         if (strlen($mask) == 0) {
             return 0;
@@ -535,7 +535,7 @@ abstract class StringHelper
      * @link    https://www.php.net/strspn
      * @since   1.3.0
      */
-    public static function strspn(string $str, string $mask, ?int $start = null, ?int $length = null)
+    public static function strspn($str, $mask, $start = null, $length = null)
     {
         $mask = preg_replace('!([\\\\\\-\\]\\[/^])!', '\\\${1}', $mask);
 
