@@ -12,14 +12,11 @@
     },
     "require-dev": {
         "doctrine/inflector": "^2.0.10",
-        "joomla/test": "dev-4.x-dev",
+        "joomla/test": "^4.0",
         "phpunit/phpunit": "^12.2.6",
         "squizlabs/php_codesniffer": "^3.7.2",
         "phpstan/phpstan": "2.1.17",
         "phpstan/phpstan-deprecation-rules": "2.0.3"
-    },
-    "conflict": {
-        "doctrine/inflector": "<1.2"
     },
     "suggest": {
         "ext-mbstring": "For improved processing",
@@ -35,12 +32,5 @@
             "Joomla\\String\\Tests\\": "Tests/"
         }
     },
-    "minimum-stability": "dev",
-    "extra": {
-        "branch-alias": {
-            "dev-2.0-dev": "2.0-dev",
-            "dev-3.x-dev": "3.x-dev",
-            "dev-4.x-dev": "4.x-dev"
-        }
-    }
+    "minimum-stability": "dev"
 }
