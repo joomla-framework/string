@@ -156,10 +156,6 @@ class InflectorTest extends TestCase
     #[DataProvider('seedSinglePlural')]
     public function testIsPlural(string $singular, string $plural)
     {
-        if ($singular === 'bus' && !$this->checkInflectorImplementation($this->inflector)) {
-            $this->markTestSkipped('"bus/buses" is not known to the new implementation');
-        }
-
         $this->assertTrue(
             $this->inflector->isPlural($plural),
             "'$plural' should be reported as plural"
@@ -182,10 +178,6 @@ class InflectorTest extends TestCase
     #[DataProvider('seedSinglePlural')]
     public function testIsSingular(string $singular, string $plural)
     {
-        if ($singular === 'bus' && !$this->checkInflectorImplementation($this->inflector)) {
-            $this->markTestSkipped('"bus/buses" is not known to the new implementation');
-        }
-
         $this->assertTrue(
             $this->inflector->isSingular($singular),
             "'$singular' should be reported as singular"
@@ -197,12 +189,5 @@ class InflectorTest extends TestCase
                 "'$plural' should not be reported as a singular form in comparison to '$singular'"
             );
         }
-    }
-
-    private function checkInflectorImplementation(Inflector $inflector): bool
-    {
-        $reflectionClass = new \ReflectionClass($inflector);
-
-        return $reflectionClass->hasProperty('plural');
     }
 }
