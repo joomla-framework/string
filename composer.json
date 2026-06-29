@@ -15,8 +15,8 @@
         "joomla/test": "^4.0",
         "phpunit/phpunit": "^12.2.6 || ^13.0",
         "squizlabs/php_codesniffer": "^4.0",
-        "phpstan/phpstan": "2.1.17",
-        "phpstan/phpstan-deprecation-rules": "2.0.3"
+        "phpstan/phpstan": "^2.1.17",
+        "phpstan/phpstan-deprecation-rules": "^2.0.3"
     },
     "suggest": {
         "ext-mbstring": "For improved processing",
