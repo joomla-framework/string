@@ -190,4 +190,60 @@ class InflectorTest extends TestCase
             );
         }
     }
+
+    /**
+     * @testdox  A string is converted to its plural form
+     *
+     * @param   string  $singular  The singular form of a word.
+     * @param   string  $plural    The plural form of a word.
+     */
+    #[DataProvider('seedSinglePlural')]
+    public function testPluralize(string $singular, string $plural)
+    {
+        $this->assertSame(
+            $plural,
+            $this->inflector->pluralize($singular),
+            "'$plural' should be the plural form of '$singular'"
+        );
+    }
+
+    /**
+     * @testdox  A string that is already plural is returned in the same form
+     */
+    public function testPluralizeAlreadyPlural()
+    {
+        $this->assertSame(
+            'glasses',
+            $this->inflector->pluralize('glasses'),
+            "'glasses' should not be pluralised'"
+        );
+    }
+
+    /**
+     * @testdox  A string is converted to its singular form
+     *
+     * @param   string  $singular  The singular form of a word.
+     * @param   string  $plural    The plural form of a word.
+     */
+    #[DataProvider('seedSinglePlural')]
+    public function testSingularize(string $singular, string $plural)
+    {
+        $this->assertSame(
+            $singular,
+            $this->inflector->singularize($plural),
+            "'$singular' should be the singular form of '$plural'"
+        );
+    }
+
+    /**
+     * @testdox  A string that is already singular is returned in the same form
+     */
+    public function testSingularizeAlreadySingular()
+    {
+        $this->assertSame(
+            'glass',
+            $this->inflector->singularize('glass'),
+            "'glass' should not be singularised'"
+        );
+    }
 }
