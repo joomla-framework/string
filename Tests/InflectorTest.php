@@ -7,7 +7,6 @@
 
 namespace Joomla\String\Tests;
 
-use Doctrine\Common\Inflector\Inflector as DoctrineInflector;
 use Joomla\String\Inflector;
 use Joomla\Test\TestHelper;
 use PHPUnit\Framework\Attributes\DataProvider;
@@ -154,7 +153,7 @@ class InflectorTest extends TestCase
      * @param   string  $singular  The singular form of a word.
      * @param   string  $plural    The plural form of a word.
      */
-    #[Dataprovider('seedSinglePlural')]
+    #[DataProvider('seedSinglePlural')]
     public function testIsPlural(string $singular, string $plural)
     {
         if ($singular === 'bus' && !$this->checkInflectorImplementation($this->inflector)) {
@@ -180,7 +179,7 @@ class InflectorTest extends TestCase
      * @param   string  $singular  The singular form of a word.
      * @param   string  $plural    The plural form of a word.
      */
-    #[Dataprovider('seedSinglePlural')]
+    #[DataProvider('seedSinglePlural')]
     public function testIsSingular(string $singular, string $plural)
     {
         if ($singular === 'bus' && !$this->checkInflectorImplementation($this->inflector)) {
