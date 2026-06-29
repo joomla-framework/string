@@ -54,6 +54,7 @@ abstract class StringHelper
      */
     public static function increment($string, $style = 'default', $n = 0)
     {
+        $style ??= 'default';
         $styleSpec = static::$incrementStyles[$style] ?? static::$incrementStyles['default'];
 
         // Regular expression search and replace patterns.
