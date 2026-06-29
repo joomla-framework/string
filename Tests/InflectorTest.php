@@ -49,7 +49,7 @@ class InflectorTest extends TestCase
     {
         return [
             // Regular plurals
-            ['bus', 'buses'],
+            ['glass', 'glasses'],
             ['notify', 'notifies'],
             ['click', 'clicks'],
 
