@@ -7,7 +7,6 @@
 
 namespace Joomla\String\Tests;
 
-use Doctrine\Common\Inflector\Inflector as DoctrineInflector;
 use Joomla\String\Inflector;
 use Joomla\Test\TestHelper;
 use PHPUnit\Framework\Attributes\DataProvider;
@@ -50,7 +49,7 @@ class InflectorTest extends TestCase
     {
         return [
             // Regular plurals
-            ['bus', 'buses'],
+            ['glass', 'glasses'],
             ['notify', 'notifies'],
             ['click', 'clicks'],
 
@@ -154,13 +153,9 @@ class InflectorTest extends TestCase
      * @param   string  $singular  The singular form of a word.
      * @param   string  $plural    The plural form of a word.
      */
-    #[Dataprovider('seedSinglePlural')]
+    #[DataProvider('seedSinglePlural')]
     public function testIsPlural(string $singular, string $plural)
     {
-        if ($singular === 'bus' && !$this->checkInflectorImplementation($this->inflector)) {
-            $this->markTestSkipped('"bus/buses" is not known to the new implementation');
-        }
-
         $this->assertTrue(
             $this->inflector->isPlural($plural),
             "'$plural' should be reported as plural"
@@ -180,13 +175,9 @@ class InflectorTest extends TestCase
      * @param   string  $singular  The singular form of a word.
      * @param   string  $plural    The plural form of a word.
      */
-    #[Dataprovider('seedSinglePlural')]
+    #[DataProvider('seedSinglePlural')]
     public function testIsSingular(string $singular, string $plural)
     {
-        if ($singular === 'bus' && !$this->checkInflectorImplementation($this->inflector)) {
-            $this->markTestSkipped('"bus/buses" is not known to the new implementation');
-        }
-
         $this->assertTrue(
             $this->inflector->isSingular($singular),
             "'$singular' should be reported as singular"
@@ -200,10 +191,59 @@ class InflectorTest extends TestCase
         }
     }
 
-    private function checkInflectorImplementation(Inflector $inflector): bool
+    /**
+     * @testdox  A string is converted to its plural form
+     *
+     * @param   string  $singular  The singular form of a word.
+     * @param   string  $plural    The plural form of a word.
+     */
+    #[DataProvider('seedSinglePlural')]
+    public function testPluralize(string $singular, string $plural)
     {
-        $reflectionClass = new \ReflectionClass($inflector);
+        $this->assertSame(
+            $plural,
+            $this->inflector->pluralize($singular),
+            "'$plural' should be the plural form of '$singular'"
+        );
+    }
 
-        return $reflectionClass->hasProperty('plural');
+    /**
+     * @testdox  A string that is already plural is returned in the same form
+     */
+    public function testPluralizeAlreadyPlural()
+    {
+        $this->assertSame(
+            'glasses',
+            $this->inflector->pluralize('glasses'),
+            "'glasses' should not be pluralised'"
+        );
+    }
+
+    /**
+     * @testdox  A string is converted to its singular form
+     *
+     * @param   string  $singular  The singular form of a word.
+     * @param   string  $plural    The plural form of a word.
+     */
+    #[DataProvider('seedSinglePlural')]
+    public function testSingularize(string $singular, string $plural)
+    {
+        $this->assertSame(
+            $singular,
+            $this->inflector->singularize($plural),
+            "'$singular' should be the singular form of '$plural'"
+        );
+    }
+
+    /**
+     * @testdox  A string that is already singular is returned in the same form
+     */
+    public function testSingularizeAlreadySingular()
+    {
+        $this->assertSame(
+            'glass',
+            $this->inflector->singularize('glass'),
+            "'glass' should not be singularised'"
+        );
     }
 }
