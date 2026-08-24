@@ -6,5 +6,7 @@ parameters:
 	level: 5
 	phpVersion: 80100
 	reportUnmatchedIgnoredErrors: false
+	scanDirectories:
+		- vendor/symfony/polyfill-mbstring
 	paths:
 		- src
