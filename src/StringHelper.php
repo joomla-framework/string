@@ -540,11 +540,11 @@ abstract class StringHelper
     {
         $mask = preg_replace('!([\\\\\\-\\]\\[/^])!', '\\\${1}', $mask);
 
-        if ($start && $length) {
+        if ($start !== null && $length !== null) {
             $str = mb_substr($str, $start, $length);
-        } elseif ($start) {
+        } elseif ($start !== null) {
             $str = mb_substr($str, $start);
-        } elseif ($length) {
+        } elseif ($length !== null) {
             trigger_error('\Joomla\String\StringHelper::strspn(): Passing null to parameter #3 ($start) of type int is deprecated', E_USER_DEPRECATED);
             $str = mb_substr($str, 0, $length);
         }
