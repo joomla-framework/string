@@ -906,7 +906,9 @@ abstract class StringHelper
     }
 
     /**
-     * Converts Unicode sequences to UTF-8 string.
+     * Converts Unicode escape sequences (\uXXXX) to a UTF-8 string.
+     *
+     * A surrogate pair such as "\uD83D\uDE00" is decoded into a single character.
      *
      * @param   string  $str  Unicode string to convert
      *
@@ -916,40 +918,42 @@ abstract class StringHelper
      */
     public static function unicode_to_utf8($str)
     {
-        if (\extension_loaded('mbstring')) {
-            return preg_replace_callback(
-                '/\\\\u([0-9a-fA-F]{4})/',
-                static function ($match) {
-                    return mb_convert_encoding(pack('H*', $match[1]), 'UTF-8', 'UCS-2BE');
-                },
-                $str
-            );
-        }
+        return preg_replace_callback(
+            '/\\\\u(D[89AB][0-9A-F]{2})\\\\u(D[C-F][0-9A-F]{2})|\\\\u([0-9A-F]{4})/i',
+            static function ($match) {
+                if ($match[1] !== '') {
+                    return mb_convert_encoding(pack('H*', $match[1] . $match[2]), 'UTF-8', 'UTF-16BE');
+                }
 
-        return $str;
+                return mb_convert_encoding(pack('H*', $match[3]), 'UTF-8', 'UCS-2BE');
+            },
+            $str
+        );
     }
 
     /**
-     * Converts Unicode sequences to UTF-16 string.
+     * Converts UTF-16 escape sequences (\uXXXX), as used in JSON, to a UTF-8 string.
+     *
+     * A surrogate pair such as "\uD83D\uDE00" is decoded into a single character.
      *
      * @param   string  $str  Unicode string to convert
      *
-     * @return  string  UTF-16 string
+     * @return  string  UTF-8 string. Despite the method name, the result is UTF-8, not UTF-16.
      *
      * @since   1.3.0
      */
     public static function unicode_to_utf16($str)
     {
-        if (\extension_loaded('mbstring')) {
-            return preg_replace_callback(
-                '/\\\\u([0-9a-fA-F]{4})/',
-                static function ($match) {
-                    return mb_convert_encoding(pack('H*', $match[1]), 'UTF-8', 'UTF-16BE');
-                },
-                $str
-            );
-        }
+        return preg_replace_callback(
+            '/\\\\u(D[89AB][0-9A-F]{2})\\\\u(D[C-F][0-9A-F]{2})|\\\\u([0-9A-F]{4})/i',
+            static function ($match) {
+                if ($match[1] !== '') {
+                    return mb_convert_encoding(pack('H*', $match[1] . $match[2]), 'UTF-8', 'UTF-16BE');
+                }
 
-        return $str;
+                return mb_convert_encoding(pack('H*', $match[3]), 'UTF-8', 'UTF-16BE');
+            },
+            $str
+        );
     }
 }
