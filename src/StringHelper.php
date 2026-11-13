@@ -262,7 +262,9 @@ abstract class StringHelper
      * @param   string|string[]       $search   String to search
      * @param   string|string[]       $replace  Existing string to replace
      * @param   string                $str      New string to replace with
-     * @param   integer|null|boolean  $count    Optional count value to be passed by reference
+     * @param   integer|null|boolean  $count    Optional maximum number of replacements per search string. Unlike the native
+     *                                          str_ireplace(), this is a limit, not a by-reference variable that receives
+     *                                          the number of replacements. Null, true or false mean no limit.
      *
      * @return  string  UTF-8 String
      *
@@ -272,29 +274,23 @@ abstract class StringHelper
     public static function str_ireplace($search, $replace, $str, $count = null)
     {
         if (!is_array($search)) {
-            $slen = strlen($search);
-            if ($slen == 0) {
+            $search = (string) $search;
+
+            if ($search === '') {
                 return $str;
             }
 
-            $lendif = strlen($replace) - strlen($search);
-            $search = mb_strtolower($search);
+            // Match on the original string, so offsets and lengths are not affected by case mapping
+            $result = preg_replace_callback(
+                '/' . preg_quote($search, '/') . '/iu',
+                static function () use ($replace) {
+                    return (string) $replace;
+                },
+                $str,
+                \is_int($count) ? $count : -1
+            );
 
-            $search  = preg_quote($search, '/');
-            $lstr    = mb_strtolower($str);
-            $i       = 0;
-            $matched = 0;
-            while (preg_match('/(.*)' . $search . '/Us', $lstr, $matches)) {
-                if ($i === $count) {
-                    break;
-                }
-                $mlen = strlen($matches[0]);
-                $lstr = substr($lstr, $mlen);
-                $str  = substr_replace($str, $replace, $matched + strlen($matches[1]), $slen);
-                $matched += $mlen + $lendif;
-                $i++;
-            }
-            return $str;
+            return $result ?? $str;
         } else {
             foreach (array_keys($search) as $k) {
                 if (is_array($replace)) {
