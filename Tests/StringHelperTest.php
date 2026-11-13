@@ -157,6 +157,13 @@ class StringHelperTest extends TestCase
             [['PIG', 'JUMPED'], ['cow', 'hopped'], 'the pig jumped over the pig', true, 'the cow hopped over the cow'],
             ['шил', 'биш', 'Би шил идэй чадна', true, 'Би биш идэй чадна'],
             ['/', ':', '/test/slashes/', true, ':test:slashes:'],
+            'lowercase is longer than the original' => ['x', 'y', 'Ⱥx', null, 'Ⱥy'],
+            'lowercase is shorter than the original' => ['ab', 'Z', 'ẞAB', null, 'ẞZ'],
+            'case variant of different byte length' => ['ß', 'ss', 'STRAẞE', null, 'STRAssE'],
+            'regular expression characters in search' => ['.*', '!', 'a.*b.*', null, 'a!b!'],
+            'replacement is taken literally' => ['b', '$0', 'abc', null, 'a$0c'],
+            'count limits the replacements' => ['b', 'c', 'abab', 1, 'acab'],
+            'count of zero replaces nothing' => ['b', 'c', 'abab', 0, 'abab'],
         ];
     }
 
