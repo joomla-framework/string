@@ -724,6 +724,9 @@ abstract class StringHelper
     /**
      * Transcode a string.
      *
+     * Uses iconv() with transliteration when the iconv extension is available. Without it, the string is converted with
+     * mb_convert_encoding(), which replaces characters that the target encoding cannot represent with "?".
+     *
      * @param   string  $source        The string to transcode.
      * @param   string  $fromEncoding  The source encoding.
      * @param   string  $toEncoding    The target encoding.
@@ -736,6 +739,10 @@ abstract class StringHelper
      */
     public static function transcode($source, $fromEncoding, $toEncoding)
     {
+        if (!\defined('ICONV_IMPL')) {
+            return mb_convert_encoding($source, $toEncoding, $fromEncoding);
+        }
+
         switch (ICONV_IMPL) {
             case 'glibc':
                 return @iconv($fromEncoding, $toEncoding . '//TRANSLIT,IGNORE', $source);
