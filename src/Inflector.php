@@ -9,6 +9,7 @@
 
 namespace Joomla\String;
 
+use Doctrine\Inflector\Inflector as DoctrineInflector;
 use Doctrine\Inflector\InflectorFactory;
 
 /**
@@ -34,6 +35,14 @@ class Inflector
             'clicks',
         ],
     ];
+
+    /**
+     * The Doctrine inflector the proxy methods use.
+     *
+     * @var    DoctrineInflector|null
+     * @since  __DEPLOY_VERSION__
+     */
+    private static $inflector;
 
     /**
      * Adds inflection regex rules to the inflector.
@@ -67,6 +76,56 @@ class Inflector
     }
 
     /**
+     * Returns the Doctrine inflector, building it on first use.
+     *
+     * @return  DoctrineInflector
+     *
+     * @since   __DEPLOY_VERSION__
+     */
+    private static function getInflector(): DoctrineInflector
+    {
+        return self::$inflector ??= InflectorFactory::create()->build();
+    }
+
+    /**
+     * Triggers the deprecation notice for the Inflector class.
+     *
+     * @return  void
+     *
+     * @since   __DEPLOY_VERSION__
+     */
+    private static function triggerClassDeprecation(): void
+    {
+        trigger_deprecation(
+            'joomla/string',
+            '__DEPLOY_VERSION__',
+            'The %s class is deprecated and will be removed in 5.0. Use the doctrine/inflector package instead.',
+            self::class
+        );
+    }
+
+    /**
+     * Triggers the deprecation notice for the inflection rule methods, which have no effect.
+     *
+     * @param   string  $method  The method that was called
+     *
+     * @return  void
+     *
+     * @since   __DEPLOY_VERSION__
+     */
+    private static function triggerRulesDeprecation(string $method): void
+    {
+        trigger_deprecation(
+            'joomla/string',
+            '__DEPLOY_VERSION__',
+            '%s::%s() has no effect and will be removed in 5.0. Configure the rules of doctrine/inflector with'
+            . ' InflectorFactory::create()->withSingularRules() and withPluralRules() instead.',
+            self::class,
+            $method
+        );
+    }
+
+    /**
      * Adds a countable word.
      *
      * @param   mixed  $data  A string or an array of strings to add.
@@ -77,6 +136,8 @@ class Inflector
      */
     public function addCountableRule($data)
     {
+        self::triggerClassDeprecation();
+
         $this->addRule($data, 'countable');
 
         return $this;
@@ -93,6 +154,8 @@ class Inflector
      */
     public function isCountable($word)
     {
+        self::triggerClassDeprecation();
+
         return \in_array($word, self::$countable['rules']);
     }
 
@@ -107,7 +170,11 @@ class Inflector
      */
     public function isPlural($word)
     {
-        return static::pluralize(static::singularize($word)) === $word;
+        self::triggerClassDeprecation();
+
+        $inflector = self::getInflector();
+
+        return $inflector->pluralize($inflector->singularize($word)) === $word;
     }
 
     /**
@@ -121,7 +188,9 @@ class Inflector
      */
     public function isSingular($word)
     {
-        return static::singularize($word) === $word;
+        self::triggerClassDeprecation();
+
+        return self::getInflector()->singularize($word) === $word;
     }
 
     /**
@@ -129,9 +198,9 @@ class Inflector
      */
     public static function tableize(string $word): string
     {
-        $inflector = InflectorFactory::create()->build();
+        self::triggerClassDeprecation();
 
-        return $inflector->tableize($word);
+        return self::getInflector()->tableize($word);
     }
 
     /**
@@ -139,9 +208,9 @@ class Inflector
      */
     public static function classify(string $word): string
     {
-        $inflector = InflectorFactory::create()->build();
+        self::triggerClassDeprecation();
 
-        return $inflector->classify($word);
+        return self::getInflector()->classify($word);
     }
 
     /**
@@ -149,9 +218,9 @@ class Inflector
      */
     public static function camelize(string $word): string
     {
-        $inflector = InflectorFactory::create()->build();
+        self::triggerClassDeprecation();
 
-        return $inflector->camelize($word);
+        return self::getInflector()->camelize($word);
     }
 
     /**
@@ -159,21 +228,29 @@ class Inflector
      */
     public static function ucwords(string $string, string $delimiters = " \n\t\r\0\x0B-"): string
     {
+        self::triggerClassDeprecation();
+
         return ucwords($string, $delimiters);
     }
 
     /**
      * Empty method to suffice the former interface
+     *
+     * @deprecated  5.0  Has no effect. Configure the rules of doctrine/inflector with InflectorFactory instead.
      */
     public static function reset(): void
     {
+        self::triggerRulesDeprecation('reset');
     }
 
     /**
      * Empty method to suffice the former interface
+     *
+     * @deprecated  5.0  Has no effect. Configure the rules of doctrine/inflector with InflectorFactory instead.
      */
     public static function rules(string $type, iterable $rules, bool $reset = false): void
     {
+        self::triggerRulesDeprecation('rules');
     }
 
     /**
@@ -181,9 +258,9 @@ class Inflector
      */
     public static function pluralize(string $word): string
     {
-        $inflector = InflectorFactory::create()->build();
+        self::triggerClassDeprecation();
 
-        return $inflector->pluralize($word);
+        return self::getInflector()->pluralize($word);
     }
 
     /**
@@ -191,8 +268,8 @@ class Inflector
      */
     public static function singularize(string $word): string
     {
-        $inflector = InflectorFactory::create()->build();
+        self::triggerClassDeprecation();
 
-        return $inflector->singularize($word);
+        return self::getInflector()->singularize($word);
     }
 }
