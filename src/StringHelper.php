@@ -9,9 +9,6 @@
 
 namespace Joomla\String;
 
-// PHP mbstring and iconv local configuration
-@ini_set('default_charset', 'UTF-8');
-
 /**
  * String handling class for UTF-8 data wrapping the phputf8 library. All functions assume the validity of UTF-8 strings.
  *
