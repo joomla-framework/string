@@ -67,7 +67,7 @@ class StringHelperTest extends TestCase
             [0, 'на карте с', 'на карте', 0],
             [false, 'на карте с', 'на каррте', 0],
             [false, 'на карте с', 'на карте', 2],
-            [3, 'missing', 'sing', false],
+            [3, 'missing', 'sing', null],
         ];
     }
 
@@ -99,10 +99,10 @@ class StringHelperTest extends TestCase
     public static function seedTestSubstr(): array
     {
         return [
-            ['issauga', 'Mississauga', 4, false],
-            ['на карте с', ' объектов на карте с', 10, false],
+            ['issauga', 'Mississauga', 4, null],
+            ['на карте с', ' объектов на карте с', 10, null],
             ['на ка', ' объектов на карте с', 10, 5],
-            ['те с', ' объектов на карте с', -4, false],
+            ['те с', ' объектов на карте с', -4, null],
             [false, ' объектов на карте с', 99, false],
         ];
     }
@@ -151,12 +151,12 @@ class StringHelperTest extends TestCase
     public static function seedTestStr_ireplace(): array
     {
         return [
-            ['Pig', 'cow', 'the pig jumped', false, 'the cow jumped'],
-            ['Pig', 'cow', 'the pig jumped', true, 'the cow jumped'],
-            ['Pig', 'cow', 'the pig jumped over the cow', true, 'the cow jumped over the cow'],
-            [['PIG', 'JUMPED'], ['cow', 'hopped'], 'the pig jumped over the pig', true, 'the cow hopped over the cow'],
-            ['шил', 'биш', 'Би шил идэй чадна', true, 'Би биш идэй чадна'],
-            ['/', ':', '/test/slashes/', true, ':test:slashes:'],
+            ['Pig', 'cow', 'the pig jumped', null, 'the cow jumped'],
+            ['Pig', 'cow', 'the pig jumped', null, 'the cow jumped'],
+            ['Pig', 'cow', 'the pig jumped over the cow', null, 'the cow jumped over the cow'],
+            [['PIG', 'JUMPED'], ['cow', 'hopped'], 'the pig jumped over the pig', null, 'the cow hopped over the cow'],
+            ['шил', 'биш', 'Би шил идэй чадна', null, 'Би биш идэй чадна'],
+            ['/', ':', '/test/slashes/', null, ':test:slashes:'],
         ];
     }
 
@@ -304,9 +304,9 @@ class StringHelperTest extends TestCase
     public static function seedTestSubstr_replace(): array
     {
         return [
-            ['321 Broadway Avenue', '321 Main Street', 'Broadway Avenue', 4, false],
+            ['321 Broadway Avenue', '321 Main Street', 'Broadway Avenue', 4, null],
             ['321 Broadway Street', '321 Main Street', 'Broadway', 4, 4],
-            ['чадна 我能吞', 'чадна Би шил идэй чадна', '我能吞', 6, false],
+            ['чадна 我能吞', 'чадна Би шил идэй чадна', '我能吞', 6, null],
             ['чадна 我能吞 шил идэй чадна', 'чадна Би шил идэй чадна', '我能吞', 6, 2],
         ];
     }
