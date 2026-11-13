@@ -9,6 +9,7 @@ namespace Joomla\String\Tests;
 
 use Joomla\String\StringHelper;
 use PHPUnit\Framework\Attributes\DataProvider;
+use PHPUnit\Framework\Attributes\RequiresPhpExtension;
 use PHPUnit\Framework\TestCase;
 
 /**
@@ -700,6 +701,97 @@ class StringHelperTest extends TestCase
         }
 
         $this->assertEquals($expected, $actual);
+    }
+
+    /**
+     * Data provider for testStrcmpWithCollator
+     *
+     * @return  array
+     */
+    public static function seedTestStrcmpWithCollator(): array
+    {
+        return [
+            ['a', 'B', 'fr_FR', -1],
+            ['B', 'a', 'fr_FR', 1],
+            ['Àbc', 'abc', 'fr_FR.UTF-8', 1],
+            ['Àbc', 'bcd', 'fr_FR', -1],
+            ['É', 'è', 'fr_FR', -1],
+            ['é', 'È', 'fr_FR', -1],
+            ['Œ', 'p', 'fr_FR', -1],
+            ['Œ', 'n', 'fr_FR', 1],
+            ['abc', 'abc', 'fr_FR', 0],
+        ];
+    }
+
+    /**
+     * @testdox  strcmp() with a locale compares with the collation rules of that locale
+     *
+     * @param   string   $string1   String 1 to compare
+     * @param   string   $string2   String 2 to compare
+     * @param   string   $locale    The locale
+     * @param   integer  $expected  Expected result
+     */
+    #[DataProvider('seedTestStrcmpWithCollator')]
+    #[RequiresPhpExtension('intl')]
+    public function testStrcmpWithCollator(string $string1, string $string2, string $locale, int $expected)
+    {
+        $this->assertSame($expected, StringHelper::strcmp($string1, $string2, $locale) <=> 0);
+    }
+
+    /**
+     * Data provider for testStrcasecmpWithCollator
+     *
+     * @return  array
+     */
+    public static function seedTestStrcasecmpWithCollator(): array
+    {
+        return [
+            ['THIS IS STRING1', 'this is string1', 'fr_FR', 0],
+            ['àbc', 'abc', 'fr_FR', 1],
+            ['àbc', 'bcd', 'fr_FR.UTF-8', -1],
+            ['é', 'è', 'fr_FR', -1],
+            ['É', 'é', 'fr_FR', 0],
+            ['œ', 'p', 'fr_FR', -1],
+            ['œ', 'n', 'fr_FR', 1],
+        ];
+    }
+
+    /**
+     * @testdox  strcasecmp() with a locale compares with the collation rules of that locale
+     *
+     * @param   string   $string1   String 1 to compare
+     * @param   string   $string2   String 2 to compare
+     * @param   string   $locale    The locale
+     * @param   integer  $expected  Expected result
+     */
+    #[DataProvider('seedTestStrcasecmpWithCollator')]
+    #[RequiresPhpExtension('intl')]
+    public function testStrcasecmpWithCollator(string $string1, string $string2, string $locale, int $expected)
+    {
+        $this->assertSame($expected, StringHelper::strcasecmp($string1, $string2, $locale) <=> 0);
+    }
+
+    /**
+     * @testdox  strcmp() and strcasecmp() with a locale do not change the process-wide LC_COLLATE locale
+     */
+    public function testComparisonWithLocaleKeepsProcessLocale()
+    {
+        $original = setlocale(LC_COLLATE, '0');
+        $other    = setlocale(LC_COLLATE, 'de_DE.UTF-8', 'de_DE.utf8', 'de_DE', 'German_Germany.1252', 'en_US.UTF-8', 'en_US.utf8', 'C.UTF-8');
+
+        if ($other === false || $other === 'C') {
+            setlocale(LC_COLLATE, $original);
+            $this->markTestSkipped('No locale other than "C" is available.');
+        }
+
+        try {
+            StringHelper::strcmp('a', 'b', 'C');
+            StringHelper::strcasecmp('a', 'b', 'C');
+
+            $this->assertSame($other, setlocale(LC_COLLATE, '0'));
+        } finally {
+            setlocale(LC_COLLATE, $original);
+        }
     }
 
     /**
