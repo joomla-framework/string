@@ -10,6 +10,7 @@
 namespace Joomla\String;
 
 // PHP mbstring and iconv local configuration
+// @deprecated  5.0  Loading this file will no longer change the process-wide default_charset setting. UTF-8 is PHP's default.
 @ini_set('default_charset', 'UTF-8');
 
 /**
