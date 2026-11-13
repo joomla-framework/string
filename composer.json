@@ -20,6 +20,7 @@
     },
     "suggest": {
         "ext-mbstring": "For improved processing",
+        "ext-intl": "To compare strings with a locale in StringHelper::strcmp() and StringHelper::strcasecmp()",
         "doctrine/inflector": "To use the string inflector"
     },
     "autoload": {

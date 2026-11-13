@@ -37,6 +37,14 @@ abstract class StringHelper
     ];
 
     /**
+     * Collators by locale, used by strcmp() and strcasecmp().
+     *
+     * @var    array<string, \Collator|null>
+     * @since  __DEPLOY_VERSION__
+     */
+    private static $collators = [];
+
+    /**
      * Increments a trailing number in a string.
      *
      * Used to easily create distinct labels when copying objects. The method has the following styles:
@@ -356,15 +364,18 @@ abstract class StringHelper
      *
      * A case insensitive string comparison.
      *
+     * With a locale, the strings are compared with the collation rules of that locale, using the Collator class of the intl
+     * extension. The process-wide locale is not changed. Without the intl extension, the comparison falls back to setlocale()
+     * and strcoll(), which is deprecated.
+     *
      * @param   string          $str1    string 1 to compare
      * @param   string          $str2    string 2 to compare
-     * @param   string|boolean  $locale  The locale used by strcoll or false to use classical comparison
+     * @param   string|boolean  $locale  The locale used for the collation or false to use classical comparison
      *
      * @return  integer   Either < 0 if str1 is less than str2; > 0 if str1 is greater than str2, and 0 if they are equal.
      *
      * @link    https://www.php.net/strcasecmp
-     * @link    https://www.php.net/strcoll
-     * @link    https://www.php.net/setlocale
+     * @link    https://www.php.net/collator.compare
      * @since   1.3.0
      */
     public static function strcasecmp($str1, $str2, $locale = false)
@@ -375,31 +386,7 @@ abstract class StringHelper
             return strcmp($strX, $strY);
         }
 
-        // Get current locale
-        $locale0 = setlocale(LC_COLLATE, '0');
-
-        if (!$locale = setlocale(LC_COLLATE, $locale)) {
-            $locale = $locale0;
-        }
-
-        // See if we have successfully set locale to UTF-8
-        if (!stristr($locale, 'UTF-8') && stristr($locale, '_') && preg_match('~\.(\d+)$~', $locale, $m)) {
-            $encoding = 'CP' . $m[1];
-        } elseif (stristr($locale, 'UTF-8') || stristr($locale, 'utf8')) {
-            $encoding = 'UTF-8';
-        } else {
-            $encoding = 'nonrecodable';
-        }
-
-        // If we successfully set encoding it to utf-8 or encoding is sth weird don't recode
-        if ($encoding == 'UTF-8' || $encoding == 'nonrecodable') {
-            return strcoll(mb_strtolower($str1), mb_strtolower($str2));
-        }
-
-        return strcoll(
-            static::transcode(mb_strtolower($str1), 'UTF-8', $encoding),
-            static::transcode(mb_strtolower($str2), 'UTF-8', $encoding)
-        );
+        return self::compareWithLocale(mb_strtolower($str1), mb_strtolower($str2), $locale);
     }
 
     /**
@@ -407,23 +394,76 @@ abstract class StringHelper
      *
      * A case sensitive string comparison.
      *
+     * With a locale, the strings are compared with the collation rules of that locale, using the Collator class of the intl
+     * extension. The process-wide locale is not changed. Without the intl extension, the comparison falls back to setlocale()
+     * and strcoll(), which is deprecated.
+     *
      * @param   string  $str1    string 1 to compare
      * @param   string  $str2    string 2 to compare
-     * @param   mixed   $locale  The locale used by strcoll or false to use classical comparison
+     * @param   mixed   $locale  The locale used for the collation or false to use classical comparison
      *
      * @return  integer  Either < 0 if str1 is less than str2; > 0 if str1 is greater than str2, and 0 if they are equal.
      *
      * @link    https://www.php.net/strcmp
-     * @link    https://www.php.net/strcoll
-     * @link    https://www.php.net/setlocale
+     * @link    https://www.php.net/collator.compare
      * @since   1.3.0
      */
     public static function strcmp($str1, $str2, $locale = false)
     {
         if ($locale) {
-            // Get current locale
-            $locale0 = setlocale(LC_COLLATE, '0');
+            return self::compareWithLocale($str1, $str2, $locale);
+        }
 
+        return strcmp($str1, $str2);
+    }
+
+    /**
+     * Compares two UTF-8 strings with the collation rules of a locale.
+     *
+     * @param   string           $str1    String 1 to compare
+     * @param   string           $str2    String 2 to compare
+     * @param   string|string[]  $locale  The locale, or a list of locales to try with setlocale()
+     *
+     * @return  integer  Either < 0 if str1 is less than str2; > 0 if str1 is greater than str2, and 0 if they are equal.
+     *
+     * @since   __DEPLOY_VERSION__
+     */
+    private static function compareWithLocale(string $str1, string $str2, $locale): int
+    {
+        $collatorLocale = (string) (\is_array($locale) ? reset($locale) : $locale);
+
+        if (class_exists(\Collator::class)) {
+            if (!\array_key_exists($collatorLocale, self::$collators)) {
+                try {
+                    self::$collators[$collatorLocale] = new \Collator($collatorLocale);
+                } catch (\Throwable $e) {
+                    self::$collators[$collatorLocale] = null;
+                }
+            }
+
+            $result = self::$collators[$collatorLocale] ? self::$collators[$collatorLocale]->compare($str1, $str2) : false;
+
+            if ($result !== false) {
+                return $result;
+            }
+        }
+
+        trigger_deprecation(
+            'joomla/string',
+            '__DEPLOY_VERSION__',
+            'Comparing strings with a locale in %1$s::strcmp() and %1$s::strcasecmp() without the intl extension is deprecated. Install the intl extension.',
+            self::class
+        );
+
+        // strcoll() is deprecated as of PHP 8.6
+        if (\PHP_VERSION_ID >= 80600 || !\function_exists('strcoll')) {
+            return strcmp($str1, $str2);
+        }
+
+        // Get current locale
+        $locale0 = setlocale(LC_COLLATE, '0');
+
+        try {
             if (!$locale = setlocale(LC_COLLATE, $locale)) {
                 $locale = $locale0;
             }
@@ -443,9 +483,10 @@ abstract class StringHelper
             }
 
             return strcoll(static::transcode($str1, 'UTF-8', $encoding), static::transcode($str2, 'UTF-8', $encoding));
+        } finally {
+            // Restore the process-wide locale
+            setlocale(LC_COLLATE, $locale0);
         }
-
-        return strcmp($str1, $str2);
     }
 
     /**
