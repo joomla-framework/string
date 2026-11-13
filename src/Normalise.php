@@ -38,7 +38,7 @@ abstract class Normalise
      *
      * @since   1.0
      */
-    public static function fromCamelCase($input, $grouped = false)
+    public static function fromCamelCase(string $input, bool $grouped = false): array|string
     {
         return $grouped
             ? preg_split('/(?<=[^A-Z_])(?=[A-Z])|(?<=[A-Z])(?=[A-Z][^A-Z_])/x', $input)
@@ -54,7 +54,7 @@ abstract class Normalise
      *
      * @since   1.0
      */
-    public static function toCamelCase($input)
+    public static function toCamelCase(string $input): string
     {
         // Convert words to uppercase and then remove spaces.
         $input = static::toSpaceSeparated($input);
@@ -73,7 +73,7 @@ abstract class Normalise
      *
      * @since   1.0
      */
-    public static function toDashSeparated($input)
+    public static function toDashSeparated(string $input): string
     {
         // Convert spaces and underscores to dashes.
         return preg_replace('#[ \-_]+#', '-', $input);
@@ -88,7 +88,7 @@ abstract class Normalise
      *
      * @since   1.0
      */
-    public static function toSpaceSeparated($input)
+    public static function toSpaceSeparated(string $input): string
     {
         // Convert underscores and dashes to spaces.
         return preg_replace('#[ \-_]+#', ' ', $input);
@@ -103,7 +103,7 @@ abstract class Normalise
      *
      * @since   1.0
      */
-    public static function toUnderscoreSeparated($input)
+    public static function toUnderscoreSeparated(string $input): string
     {
         // Convert spaces and dashes to underscores.
         return preg_replace('#[ \-_]+#', '_', $input);
@@ -118,7 +118,7 @@ abstract class Normalise
      *
      * @since   1.0
      */
-    public static function toVariable($input)
+    public static function toVariable(string $input): string
     {
         // Remove dashes and underscores, then convert to camel case.
         $input = static::toCamelCase($input);
@@ -141,7 +141,7 @@ abstract class Normalise
      *
      * @since   1.0
      */
-    public static function toKey($input)
+    public static function toKey(string $input): string
     {
         // Remove spaces and dashes, then convert to lower case.
         return strtolower(static::toUnderscoreSeparated($input));

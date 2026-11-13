@@ -25,7 +25,7 @@ abstract class StringHelper
      * @var    array
      * @since  1.3.0
      */
-    protected static $incrementStyles = [
+    protected static array $incrementStyles = [
         'dash' => [
             '#-(\d+)$#',
             '-%d',
@@ -52,7 +52,7 @@ abstract class StringHelper
      *
      * @since   1.3.0
      */
-    public static function increment($string, $style = 'default', $n = 0)
+    public static function increment(string $string, ?string $style = 'default', int $n = 0): string
     {
         $style ??= 'default';
         $styleSpec = static::$incrementStyles[$style] ?? static::$incrementStyles['default'];
@@ -109,7 +109,7 @@ abstract class StringHelper
      *
      * @since   1.3.0
      */
-    public static function is_ascii($str)
+    public static function is_ascii(string $str): bool
     {
         // Search for any bytes which are outside the ASCII range...
         return (preg_match('/(?:[^\x00-\x7F])/', $str) !== 1);
@@ -127,7 +127,7 @@ abstract class StringHelper
      * @link    https://www.php.net/ord
      * @since   1.4.0
      */
-    public static function ord($chr)
+    public static function ord(string $chr): int|false
     {
         return mb_ord($chr);
     }
@@ -139,20 +139,16 @@ abstract class StringHelper
      *
      * @param   string                $str     String being examined
      * @param   string                $search  String being searched for
-     * @param   integer|null|boolean  $offset  Optional, specifies the position from which the search should be performed
+     * @param   integer|null          $offset  Optional, specifies the position from which the search should be performed
      *
-     * @return  integer|boolean  Number of characters before the first match or FALSE on failure
+     * @return  integer|false  Number of characters before the first match or FALSE on failure
      *
      * @link    https://www.php.net/strpos
      * @since   1.3.0
      */
-    public static function strpos($str, $search, $offset = false)
+    public static function strpos(string $str, string $search, ?int $offset = null): int|false
     {
-        if ($offset === false) {
-            return mb_strpos($str, $search);
-        }
-
-        return mb_strpos($str, $search, $offset);
+        return mb_strpos($str, $search, $offset ?? 0);
     }
 
     /**
@@ -164,12 +160,12 @@ abstract class StringHelper
      * @param   string   $search  String being searched for.
      * @param   integer  $offset  Offset from the left of the string.
      *
-     * @return  integer|boolean  Number of characters before the last match or false on failure
+     * @return  integer|false  Number of characters before the last match or false on failure
      *
      * @link    https://www.php.net/strrpos
      * @since   1.3.0
      */
-    public static function strrpos($str, $search, $offset = 0)
+    public static function strrpos(string $str, string $search, int $offset = 0): int|false
     {
         return mb_strrpos($str, $search, $offset);
     }
@@ -181,19 +177,15 @@ abstract class StringHelper
      *
      * @param   string                $str     String being processed
      * @param   integer               $offset  Number of UTF-8 characters offset (from left)
-     * @param   integer|null|boolean  $length  Optional length in UTF-8 characters from offset
+     * @param   integer|null          $length  Optional length in UTF-8 characters from offset, null for the rest of the string
      *
-     * @return  string|boolean
+     * @return  string
      *
      * @link    https://www.php.net/substr
      * @since   1.3.0
      */
-    public static function substr($str, $offset, $length = false)
+    public static function substr(string $str, int $offset, ?int $length = null): string
     {
-        if ($length === false) {
-            return mb_substr($str, $offset);
-        }
-
         return mb_substr($str, $offset, $length);
     }
 
@@ -207,12 +199,12 @@ abstract class StringHelper
      *
      * @param   string  $str  String being processed
      *
-     * @return  string|boolean  Either string in lowercase or FALSE is UTF-8 invalid
+     * @return  string  The string in lowercase
      *
      * @link    https://www.php.net/strtolower
      * @since   1.3.0
      */
-    public static function strtolower($str)
+    public static function strtolower(string $str): string
     {
         return mb_strtolower($str);
     }
@@ -227,12 +219,12 @@ abstract class StringHelper
      *
      * @param   string  $str  String being processed
      *
-     * @return  string|boolean  Either string in uppercase or FALSE is UTF-8 invalid
+     * @return  string  The string in uppercase
      *
      * @link    https://www.php.net/strtoupper
      * @since   1.3.0
      */
-    public static function strtoupper($str)
+    public static function strtoupper(string $str): string
     {
         return mb_strtoupper($str);
     }
@@ -249,7 +241,7 @@ abstract class StringHelper
      * @link    https://www.php.net/strlen
      * @since   1.3.0
      */
-    public static function strlen($str)
+    public static function strlen(string $str): int
     {
         return mb_strlen($str);
     }
@@ -262,14 +254,14 @@ abstract class StringHelper
      * @param   string|string[]       $search   String to search
      * @param   string|string[]       $replace  Existing string to replace
      * @param   string                $str      New string to replace with
-     * @param   integer|null|boolean  $count    Optional count value to be passed by reference
+     * @param   integer|null          $count    Optional count value to be passed by reference
      *
      * @return  string  UTF-8 String
      *
      * @link    https://www.php.net/str_ireplace
      * @since   1.3.0
      */
-    public static function str_ireplace($search, $replace, $str, $count = null)
+    public static function str_ireplace(string|array $search, string|array $replace, string $str, ?int $count = null): string
     {
         if (!is_array($search)) {
             $slen = strlen($search);
@@ -328,7 +320,7 @@ abstract class StringHelper
      * @link    https://www.php.net/str_pad
      * @since   1.4.0
      */
-    public static function str_pad($input, $length, $padStr = ' ', $type = STR_PAD_RIGHT)
+    public static function str_pad(string $input, int $length, string $padStr = ' ', int $type = STR_PAD_RIGHT): string
     {
         return mb_str_pad($input, $length, $padStr, $type);
     }
@@ -341,12 +333,12 @@ abstract class StringHelper
      * @param   string   $str       UTF-8 encoded string to process
      * @param   integer  $splitLen  Number to characters to split string by
      *
-     * @return  array|string|boolean
+     * @return  string[]
      *
      * @link    https://www.php.net/str_split
      * @since   1.3.0
      */
-    public static function str_split($str, $splitLen = 1)
+    public static function str_split(string $str, int $splitLen = 1): array
     {
         return mb_str_split($str, $splitLen);
     }
@@ -358,7 +350,7 @@ abstract class StringHelper
      *
      * @param   string          $str1    string 1 to compare
      * @param   string          $str2    string 2 to compare
-     * @param   string|boolean  $locale  The locale used by strcoll or false to use classical comparison
+     * @param   string|false    $locale  The locale used by strcoll or false to use classical comparison
      *
      * @return  integer   Either < 0 if str1 is less than str2; > 0 if str1 is greater than str2, and 0 if they are equal.
      *
@@ -367,7 +359,7 @@ abstract class StringHelper
      * @link    https://www.php.net/setlocale
      * @since   1.3.0
      */
-    public static function strcasecmp($str1, $str2, $locale = false)
+    public static function strcasecmp(string $str1, string $str2, string|false $locale = false): int
     {
         if ($locale === false) {
             $strX = mb_strtolower($str1);
@@ -407,9 +399,9 @@ abstract class StringHelper
      *
      * A case sensitive string comparison.
      *
-     * @param   string  $str1    string 1 to compare
-     * @param   string  $str2    string 2 to compare
-     * @param   mixed   $locale  The locale used by strcoll or false to use classical comparison
+     * @param   string        $str1    string 1 to compare
+     * @param   string        $str2    string 2 to compare
+     * @param   string|false  $locale  The locale used by strcoll or false to use classical comparison
      *
      * @return  integer  Either < 0 if str1 is less than str2; > 0 if str1 is greater than str2, and 0 if they are equal.
      *
@@ -418,7 +410,7 @@ abstract class StringHelper
      * @link    https://www.php.net/setlocale
      * @since   1.3.0
      */
-    public static function strcmp($str1, $str2, $locale = false)
+    public static function strcmp(string $str1, string $str2, string|false $locale = false): int
     {
         if ($locale) {
             // Get current locale
@@ -455,15 +447,15 @@ abstract class StringHelper
      *
      * @param   string           $str     The string to process
      * @param   string           $mask    The mask
-     * @param   integer|boolean  $start   Optional starting character position (in characters)
-     * @param   integer|boolean  $length  Optional length
+     * @param   integer|null     $start   Optional starting character position (in characters)
+     * @param   integer|null     $length  Optional length
      *
      * @return  integer  The length of the initial segment of str1 which does not contain any of the characters in str2
      *
      * @link    https://www.php.net/strcspn
      * @since   1.3.0
      */
-    public static function strcspn($str, $mask, $start = null, $length = null)
+    public static function strcspn(string $str, string $mask, ?int $start = null, ?int $length = null): int
     {
         if (strlen($mask) == 0) {
             return 0;
@@ -472,7 +464,7 @@ abstract class StringHelper
         $mask = preg_replace('!([\\\\\\-\\]\\[/^])!', '\\\${1}', $mask);
 
         if ($start != null || $length != null) {
-            $str = mb_substr($str, $start, $length);
+            $str = mb_substr($str, $start ?? 0, $length);
         }
 
         preg_match('/^[^' . $mask . ']+/u', $str, $matches);
@@ -493,12 +485,12 @@ abstract class StringHelper
      * @param   string  $str     The haystack
      * @param   string  $search  The needle
      *
-     * @return  string|boolean
+     * @return  string|false
      *
      * @link    https://www.php.net/stristr
      * @since   1.3.0
      */
-    public static function stristr($str, $search)
+    public static function stristr(string $str, string $search): string|false
     {
         return mb_stristr($str, $search);
     }
@@ -515,7 +507,7 @@ abstract class StringHelper
      * @link    https://www.php.net/strrev
      * @since   1.3.0
      */
-    public static function strrev($str)
+    public static function strrev(string $str): string
     {
         preg_match_all('/./us', $str, $ar);
         return join('', array_reverse($ar[0]));
@@ -536,7 +528,7 @@ abstract class StringHelper
      * @link    https://www.php.net/strspn
      * @since   1.3.0
      */
-    public static function strspn($str, $mask, $start = null, $length = null)
+    public static function strspn(string $str, string $mask, ?int $start = null, ?int $length = null): int
     {
         $mask = preg_replace('!([\\\\\\-\\]\\[/^])!', '\\\${1}', $mask);
 
@@ -566,18 +558,18 @@ abstract class StringHelper
      * @param   string                $str     The haystack
      * @param   string                $repl    The replacement string
      * @param   integer               $start   Start
-     * @param   integer|boolean|null  $length  Length (optional)
+     * @param   integer|null          $length  Length (optional)
      *
      * @return  string
      *
      * @link    https://www.php.net/substr_replace
      * @since   1.3.0
      */
-    public static function substr_replace($str, $repl, $start, $length = null)
+    public static function substr_replace(string $str, string $repl, int $start, ?int $length = null): string
     {
         preg_match_all('/./us', $str, $ar);
         preg_match_all('/./us', $repl, $rar);
-        if ($length === null || $length === false) {
+        if ($length === null) {
             $length = mb_strlen($str);
         }
         array_splice($ar[0], $start, $length, $rar[0]);
@@ -591,14 +583,14 @@ abstract class StringHelper
      * optional arg and it contains UTF-8 characters. Otherwise ltrim will work normally on a UTF-8 string.
      *
      * @param   string          $str       The string to be trimmed
-     * @param   string|boolean  $charlist  The optional charlist of additional characters to trim
+     * @param   string|false    $charlist  The optional charlist of additional characters to trim
      *
      * @return  string  The trimmed string
      *
      * @link    https://www.php.net/ltrim
      * @since   1.3.0
      */
-    public static function ltrim($str, $charlist = false)
+    public static function ltrim(string $str, string|false $charlist = false): string
     {
         if (empty($charlist) && $charlist !== false) {
             return $str;
@@ -618,14 +610,14 @@ abstract class StringHelper
      * optional arg and it contains UTF-8 characters. Otherwise rtrim will work normally on a UTF-8 string.
      *
      * @param   string          $str       The string to be trimmed
-     * @param   string|boolean  $charlist  The optional charlist of additional characters to trim
+     * @param   string|false    $charlist  The optional charlist of additional characters to trim
      *
      * @return  string  The trimmed string
      *
      * @link    https://www.php.net/rtrim
      * @since   1.3.0
      */
-    public static function rtrim($str, $charlist = false)
+    public static function rtrim(string $str, string|false $charlist = false): string
     {
         if (empty($charlist) && $charlist !== false) {
             return $str;
@@ -645,14 +637,14 @@ abstract class StringHelper
      * optional arg and it contains UTF-8 characters. Otherwise trim will work normally on a UTF-8 string
      *
      * @param   string          $str       The string to be trimmed
-     * @param   string|boolean  $charlist  The optional charlist of additional characters to trim
+     * @param   string|false    $charlist  The optional charlist of additional characters to trim
      *
      * @return  string  The trimmed string
      *
      * @link    https://www.php.net/trim
      * @since   1.3.0
      */
-    public static function trim($str, $charlist = false)
+    public static function trim(string $str, string|false $charlist = false): string
     {
         if (empty($charlist) && $charlist !== false) {
             return $str;
@@ -681,7 +673,7 @@ abstract class StringHelper
      * @link    https://www.php.net/ucfirst
      * @since   1.3.0
      */
-    public static function ucfirst($str, $delimiter = null, $newDelimiter = null)
+    public static function ucfirst(string $str, ?string $delimiter = null, ?string $newDelimiter = null): string
     {
         if ($delimiter === null) {
             return mb_ucfirst($str);
@@ -706,7 +698,7 @@ abstract class StringHelper
      * @link    https://www.php.net/ucwords
      * @since   1.3.0
      */
-    public static function ucwords($str)
+    public static function ucwords(string $str): string
     {
         // Note: [\x0c\x09\x0b\x0a\x0d\x20] matches;
         // form feeds, horizontal tabs, vertical tabs, linefeeds and carriage returns
@@ -728,13 +720,13 @@ abstract class StringHelper
      * @param   string  $fromEncoding  The source encoding.
      * @param   string  $toEncoding    The target encoding.
      *
-     * @return  string|null  The transcoded string, or null if the source was not a string.
+     * @return  string|false  The transcoded string, or false on failure.
      *
      * @link    https://bugs.php.net/bug.php?id=48147
      *
      * @since   1.3.0
      */
-    public static function transcode($source, $fromEncoding, $toEncoding)
+    public static function transcode(string $source, string $fromEncoding, string $toEncoding): string|false
     {
         switch (ICONV_IMPL) {
             case 'glibc':
@@ -760,7 +752,7 @@ abstract class StringHelper
      * @see     compliant
      * @since   1.3.0
      */
-    public static function valid($str)
+    public static function valid(string $str): bool
     {
         $mState = 0;     // cached expected number of octets after the current octet
         // until the beginning of the next UTF8 character sequence
@@ -893,7 +885,7 @@ abstract class StringHelper
      * @link    https://www.php.net/manual/en/reference.pcre.pattern.modifiers.php#54805
      * @since   1.3.0
      */
-    public static function compliant($str)
+    public static function compliant(string $str): bool
     {
         if (strlen($str) == 0) {
             return true;
@@ -914,7 +906,7 @@ abstract class StringHelper
      *
      * @since   1.3.0
      */
-    public static function unicode_to_utf8($str)
+    public static function unicode_to_utf8(string $str): string
     {
         if (\extension_loaded('mbstring')) {
             return preg_replace_callback(
@@ -938,7 +930,7 @@ abstract class StringHelper
      *
      * @since   1.3.0
      */
-    public static function unicode_to_utf16($str)
+    public static function unicode_to_utf16(string $str): string
     {
         if (\extension_loaded('mbstring')) {
             return preg_replace_callback(
