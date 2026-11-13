@@ -436,6 +436,8 @@ class StringHelperTest extends TestCase
             ["\xFBa", false],
             ["\xFDa", false],
             ["foo\xF7bar", false],
+            'five octet sequence' => ["\xF8\x88\x80\x80\x80", false],
+            'six octet sequence' => ["\xFC\x84\x80\x80\x80\x80", false],
             ['george Мога Ž Ψυχοφθόρα ฉันกินกระจกได้ 我能吞下玻璃而不伤身体 ', true],
             ["\xFF ABC", false],
             ["0xfffd ABC", true],
