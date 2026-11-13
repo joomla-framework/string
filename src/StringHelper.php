@@ -880,10 +880,8 @@ abstract class StringHelper
     /**
      * Tests whether a string complies as UTF-8.
      *
-     * This will be much faster than StringHelper::valid() but will pass five and six octet UTF-8 sequences, which are not supported by Unicode and
-     * so cannot be displayed correctly in a browser. In other words it is not as strict as StringHelper::valid() but it's faster. If you use it to
-     * validate user input, you place yourself at the risk that attackers will be able to inject 5 and 6 byte sequences (which may or may not be a
-     * significant risk, depending on what you are are doing).
+     * Uses the UTF-8 validation of PCRE, which rejects five and six octet sequences, overlong forms, surrogates, code points above U+10FFFF
+     * and incomplete multi-byte sequences.
      *
      * @param   string  $str  UTF-8 string to check
      *
