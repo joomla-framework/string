@@ -440,6 +440,14 @@ class StringHelperTest extends TestCase
             ["\xFF ABC", false],
             ["0xfffd ABC", true],
             ['', true],
+            'truncated 2-byte sequence at the end' => ["abc\xC3", false],
+            'truncated 3-byte sequence at the end' => ["abc\xE2\x82", false],
+            'truncated 4-byte sequence at the end' => ["abc\xF0\x9F\x98", false],
+            'truncated 5-byte sequence at the end' => ["\xDF\xA3\xFB\x88", false],
+            'overlong encoding' => ["\xC0\xAF", false],
+            'surrogate' => ["\xED\xA0\x80", false],
+            'code point above U+10FFFF' => ["\xF4\x90\x80\x80", false],
+            'complete 4-byte sequence' => ["\xF0\x9F\x98\x80", true],
         ];
     }
 
