@@ -405,6 +405,9 @@ class StringHelperTest extends TestCase
             ['мога', 'Мога'],
             ['αβγ δεζ', 'Αβγ Δεζ'],
             ['åbc öde', 'Åbc Öde'],
+            'form feed separator' => ["a\x0cbc def", "A\x0cBc Def"],
+            'vertical tab separator' => ["a\x0bbc def", "A\x0bBc Def"],
+            'several separators and leading whitespace' => [" \t\x0c åbc\x0c\x0cöde", " \t\x0c Åbc\x0c\x0cÖde"],
         ];
     }
 
