@@ -246,4 +246,56 @@ class InflectorTest extends TestCase
             "'glass' should not be singularised'"
         );
     }
+
+    /**
+     * @testdox  Using the deprecated Inflector class triggers a deprecation notice
+     */
+    public function testPluralizeTriggersDeprecation()
+    {
+        $this->expectUserDeprecationMessage(
+            'Since joomla/string __DEPLOY_VERSION__: The Joomla\String\Inflector class is deprecated and will be removed in 5.0.'
+            . ' Use the doctrine/inflector package instead.'
+        );
+
+        $this->assertSame('houses', Inflector::pluralize('house'));
+    }
+
+    /**
+     * @testdox  rules() has no effect and triggers a deprecation notice
+     */
+    public function testRulesTriggersDeprecation()
+    {
+        $this->expectUserDeprecationMessage(
+            'Since joomla/string __DEPLOY_VERSION__: Joomla\String\Inflector::rules() has no effect and will be removed in 5.0.'
+            . ' Configure the rules of doctrine/inflector with InflectorFactory::create()->withSingularRules() and withPluralRules() instead.'
+        );
+
+        Inflector::rules('plural', ['/^house$/i' => 'housen']);
+
+        $this->assertSame('houses', Inflector::pluralize('house'));
+    }
+
+    /**
+     * @testdox  reset() has no effect and triggers a deprecation notice
+     */
+    public function testResetTriggersDeprecation()
+    {
+        $this->expectUserDeprecationMessage(
+            'Since joomla/string __DEPLOY_VERSION__: Joomla\String\Inflector::reset() has no effect and will be removed in 5.0.'
+            . ' Configure the rules of doctrine/inflector with InflectorFactory::create()->withSingularRules() and withPluralRules() instead.'
+        );
+
+        Inflector::reset();
+    }
+
+    /**
+     * @testdox  The Doctrine inflector is built once and reused
+     */
+    public function testDoctrineInflectorIsReused()
+    {
+        $this->assertSame(
+            TestHelper::invoke($this->inflector, 'getInflector'),
+            TestHelper::invoke($this->inflector, 'getInflector')
+        );
+    }
 }
