@@ -455,6 +455,9 @@ class StringHelperTest extends TestCase
         return [
             ["\u0422\u0435\u0441\u0442 \u0441\u0438\u0441\u0442\u0435\u043c\u044b", "Тест системы"],
             ["\u00dcberpr\u00fcfung der Systemumstellung", "Überprüfung der Systemumstellung"],
+            'surrogate pair' => ['\uD83D\uDE00 smile', '😀 smile'],
+            'surrogate pair in lowercase' => ['\ud83d\ude00', '😀'],
+            'surrogate pair next to a BMP character' => ['\u00e9\uD83D\uDE00\u00e9', 'é😀é'],
         ];
     }
 
@@ -470,6 +473,9 @@ class StringHelperTest extends TestCase
         return [
             ["\u0422\u0435\u0441\u0442 \u0441\u0438\u0441\u0442\u0435\u043c\u044b", "Тест системы"],
             ["\u00dcberpr\u00fcfung der Systemumstellung", "Überprüfung der Systemumstellung"],
+            'surrogate pair' => ['\uD83D\uDE00 smile', '😀 smile'],
+            'surrogate pair in lowercase' => ['\ud83d\ude00', '😀'],
+            'surrogate pair next to a BMP character' => ['\u00e9\uD83D\uDE00\u00e9', 'é😀é'],
         ];
     }
 
